@@ -117,32 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SearchWebHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SearchWebHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ErrorArchiveDirectoryNotFound" xml:space="preserve">
+    <value>Das ausgewählte Archiv-Verzeichnis kann nicht verwendet werden. Bitte klicken Sie auf die Schaltfläche "..." und wählen Sie ein anderes Verzeichnis auf Ihrem Computer zum Archivieren der Geocaches.</value>
   </data>
-  <data name="HomeHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\HomeHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ErrorEnterGeocacheId" xml:space="preserve">
+    <value>Bitte geben Sie eine gültige Geocaching.com oder Opencaching.de Geocache ID ein. Beispiele: GC12345 oder OC12345.</value>
   </data>
-  <data name="NavBack" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\NavBack.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ErrorGarminNotFound" xml:space="preserve">
+    <value>Bitte verbinden Sie Ihr GPS-Gerät mit dem Computer und wählen Sie es in der Liste aus. Falls das Gerät nicht in der Liste aufgeführt wird, klicken Sie bitte auf die Schaltfläche "Erkennen".</value>
   </data>
-  <data name="saveHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\saveHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
+    <value>Fehler beim Speichern des Geocaches. Bitte navigieren Sie zu einer Detailseite eines Geocaches und klicken Sie dann auf die "Speichern" Schaltfläche. Falls das Problem weiterhin besteht, hat der Anbieter eventuell das Layout der Webseiten geändert. Das Programm ist ggf. nicht mehr kompatibel zur Webseite. Weitere Hinweise zum Fehler finden Sie in der Log-Datei: {0}</value>
   </data>
-  <data name="pda" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pda.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FilterGpxFiles" xml:space="preserve">
+    <value>GPX-Dateien (*.gpx)|*.gpx|Alle Dateien (*.*)|*.*</value>
   </data>
-  <data name="book_reportHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\book_reportHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FilterLogFiles" xml:space="preserve">
+    <value>Protokoll-Dateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*</value>
   </data>
-  <data name="DeleteFolderHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\DeleteFolderHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="MessageArchiveBrowseFolder" xml:space="preserve">
+    <value>Wählen Sie ein Verzeichnis auf Ihrem Computer zum Speichern der GPX-Dateien:</value>
   </data>
-  <data name="DeleteHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\DeleteHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PromptArchive" xml:space="preserve">
+    <value>Geocaches auf dem Computer archivieren und vom GPS-Gerät entfernen?</value>
   </data>
-  <data name="openfolderHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\openfolderHS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PromptDeleteFieldLog" xml:space="preserve">
+    <value>Feld-Protokoll vollständig löschen?</value>
+  </data>
+  <data name="PromptDeleteFieldLogEntries" xml:space="preserve">
+    <value>{0} Einträge aus dem Feld-Protokoll löschen?</value>
+  </data>
+  <data name="PromptDeleteGeocacheFiles" xml:space="preserve">
+    <value>{0} Geocaches vom Gerät entfernen?</value>
+  </data>
+  <data name="TitleArchive" xml:space="preserve">
+    <value>Geocaches archivieren</value>
+  </data>
+  <data name="TitleDeleteFieldLog" xml:space="preserve">
+    <value>Feld-Protokoll löschen</value>
+  </data>
+  <data name="TitleDeleteGeocache" xml:space="preserve">
+    <value>Geocaches löschen</value>
+  </data>
+  <data name="TitleDownload" xml:space="preserve">
+    <value>Geocache speichern </value>
+  </data>
+  <data name="TitleSearch" xml:space="preserve">
+    <value>Geocache suchen</value>
+  </data>
+  <data name="TitleSettings" xml:space="preserve">
+    <value>Einstellungen</value>
   </data>
 </root>

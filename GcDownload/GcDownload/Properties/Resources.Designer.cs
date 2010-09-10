@@ -81,73 +81,10 @@ namespace GcDownload.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to The chosen archive directory is not valid. Please click on the browse button &apos;...&apos; for selecting a directory where geocache files should be archived..
-        /// </summary>
-        internal static string ErrorArchiveDirectoryNotFound {
-            get {
-                return ResourceManager.GetString("ErrorArchiveDirectoryNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please enter a valid Geocaching.com or Opencaching.de Geocache ID. Examples: GC12345 or OC12345..
-        /// </summary>
-        internal static string ErrorEnterGeocacheId {
-            get {
-                return ResourceManager.GetString("ErrorEnterGeocacheId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please connect your Garmin device to the computer and select it in the drop down list above. If the device is not listed, click the &apos;Detect&apos; button..
-        /// </summary>
-        internal static string ErrorGarminNotFound {
-            get {
-                return ResourceManager.GetString("ErrorGarminNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not download geocache. Please browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the GcDownload is no longer compatible. For more detailed error information please refer to the log file: {0}.
-        /// </summary>
-        internal static string ErrorNoGeocachePageSelected {
-            get {
-                return ResourceManager.GetString("ErrorNoGeocachePageSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GPX files (*.gpx)|*.gpx|All files (*.*)|*.*.
-        /// </summary>
-        internal static string FilterGpxFiles {
-            get {
-                return ResourceManager.GetString("FilterGpxFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Log files (*.txt)|*.txt|All files (*.*)|*.*.
-        /// </summary>
-        internal static string FilterLogFiles {
-            get {
-                return ResourceManager.GetString("FilterLogFiles", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap HomeHS {
             get {
                 object obj = ResourceManager.GetObject("HomeHS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Choose a folder on your computer for storing the gpx files:.
-        /// </summary>
-        internal static string MessageArchiveBrowseFolder {
-            get {
-                return ResourceManager.GetString("MessageArchiveBrowseFolder", resourceCulture);
             }
         }
         
@@ -172,42 +109,6 @@ namespace GcDownload.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Archive corresponding gpx files of found geocaches on your computer? This will remove the files from your device..
-        /// </summary>
-        internal static string PromptArchive {
-            get {
-                return ResourceManager.GetString("PromptArchive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete the complete field log?.
-        /// </summary>
-        internal static string PromptDeleteFieldLog {
-            get {
-                return ResourceManager.GetString("PromptDeleteFieldLog", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete {0} field log entries?.
-        /// </summary>
-        internal static string PromptDeleteFieldLogEntries {
-            get {
-                return ResourceManager.GetString("PromptDeleteFieldLogEntries", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Permanently delete {0} geocaches from your device?.
-        /// </summary>
-        internal static string PromptDeleteGeocacheFiles {
-            get {
-                return ResourceManager.GetString("PromptDeleteGeocacheFiles", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap saveHS {
             get {
                 object obj = ResourceManager.GetObject("saveHS", resourceCulture);
@@ -219,60 +120,6 @@ namespace GcDownload.Properties {
             get {
                 object obj = ResourceManager.GetObject("SearchWebHS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Archive Geocaches.
-        /// </summary>
-        internal static string TitleArchive {
-            get {
-                return ResourceManager.GetString("TitleArchive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete Field Log.
-        /// </summary>
-        internal static string TitleDeleteFieldLog {
-            get {
-                return ResourceManager.GetString("TitleDeleteFieldLog", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete Geocaches.
-        /// </summary>
-        internal static string TitleDeleteGeocache {
-            get {
-                return ResourceManager.GetString("TitleDeleteGeocache", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Geocache Download.
-        /// </summary>
-        internal static string TitleDownload {
-            get {
-                return ResourceManager.GetString("TitleDownload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Geocache Search.
-        /// </summary>
-        internal static string TitleSearch {
-            get {
-                return ResourceManager.GetString("TitleSearch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        internal static string TitleSettings {
-            get {
-                return ResourceManager.GetString("TitleSettings", resourceCulture);
             }
         }
     }

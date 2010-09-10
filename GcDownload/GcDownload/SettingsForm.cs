@@ -94,7 +94,7 @@ namespace GcDownload
             folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
             folderBrowserDialog.ShowNewFolderButton = true;
             folderBrowserDialog.SelectedPath = settings.ArchivePath;
-            folderBrowserDialog.Description = Properties.Resources.MessageArchiveBrowseFolder;
+            folderBrowserDialog.Description = GcDownload.Strings.MessageArchiveBrowseFolder;
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
@@ -116,12 +116,12 @@ namespace GcDownload
             settings.GarminRootDir = GetDriveName(ref comboBoxGarminDrive);
             if (!settings.isArchivePathValid())
             {
-                MessageBox.Show(Properties.Resources.ErrorGarminNotFound, Properties.Resources.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(GcDownload.Strings.ErrorGarminNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;
             }
             if (!settings.isGarminDirectoryOk())
             {
-                MessageBox.Show(Properties.Resources.ErrorArchiveDirectoryNotFound, Properties.Resources.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(GcDownload.Strings.ErrorArchiveDirectoryNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;
             }
             if (!cancel)

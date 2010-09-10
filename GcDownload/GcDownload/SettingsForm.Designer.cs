@@ -41,93 +41,60 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Garmin:";
             // 
             // comboBoxGarminDrive
             // 
-            this.comboBoxGarminDrive.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.comboBoxGarminDrive, "comboBoxGarminDrive");
             this.comboBoxGarminDrive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGarminDrive.FormattingEnabled = true;
-            this.comboBoxGarminDrive.Location = new System.Drawing.Point(126, 12);
             this.comboBoxGarminDrive.Name = "comboBoxGarminDrive";
-            this.comboBoxGarminDrive.Size = new System.Drawing.Size(341, 21);
-            this.comboBoxGarminDrive.TabIndex = 2;
             // 
             // buttonOk
             // 
-            this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(311, 116);
+            resources.ApplyResources(this.buttonOk, "buttonOk");
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(75, 23);
-            this.buttonOk.TabIndex = 4;
-            this.buttonOk.Text = "&OK";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.buttonCancel, "buttonCancel");
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(392, 116);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 5;
-            this.buttonCancel.Text = "&Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 44);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Archive directory:";
             // 
             // textBoxArchivPath
             // 
-            this.textBoxArchivPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxArchivPath.Location = new System.Drawing.Point(126, 41);
+            resources.ApplyResources(this.textBoxArchivPath, "textBoxArchivPath");
             this.textBoxArchivPath.Name = "textBoxArchivPath";
             this.textBoxArchivPath.ReadOnly = true;
-            this.textBoxArchivPath.Size = new System.Drawing.Size(308, 20);
-            this.textBoxArchivPath.TabIndex = 8;
             // 
             // buttonBrowseArchivDirectory
             // 
-            this.buttonBrowseArchivDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowseArchivDirectory.Location = new System.Drawing.Point(440, 39);
+            resources.ApplyResources(this.buttonBrowseArchivDirectory, "buttonBrowseArchivDirectory");
             this.buttonBrowseArchivDirectory.Name = "buttonBrowseArchivDirectory";
-            this.buttonBrowseArchivDirectory.Size = new System.Drawing.Size(27, 23);
-            this.buttonBrowseArchivDirectory.TabIndex = 9;
-            this.buttonBrowseArchivDirectory.Text = "...";
             this.buttonBrowseArchivDirectory.UseVisualStyleBackColor = true;
             this.buttonBrowseArchivDirectory.Click += new System.EventHandler(this.buttonBrowseArchivDirectory_Click);
             // 
             // buttonDetect
             // 
-            this.buttonDetect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDetect.Location = new System.Drawing.Point(230, 116);
+            resources.ApplyResources(this.buttonDetect, "buttonDetect");
             this.buttonDetect.Name = "buttonDetect";
-            this.buttonDetect.Size = new System.Drawing.Size(75, 23);
-            this.buttonDetect.TabIndex = 10;
-            this.buttonDetect.Text = "&Detect";
             this.buttonDetect.UseVisualStyleBackColor = true;
             this.buttonDetect.Click += new System.EventHandler(this.buttonDetect_Click);
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(479, 155);
             this.Controls.Add(this.buttonDetect);
             this.Controls.Add(this.buttonBrowseArchivDirectory);
             this.Controls.Add(this.textBoxArchivPath);
@@ -136,9 +103,7 @@
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.comboBoxGarminDrive);
             this.Controls.Add(this.label1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingsForm";
-            this.Text = "Settings";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1365,7 +1365,7 @@ namespace GcDownload
             }
             else
             {
-                MessageBox.Show(Properties.Resources.ErrorEnterGeocacheId, Properties.Resources.TitleSearch, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(GcDownload.Strings.ErrorEnterGeocacheId, GcDownload.Strings.TitleSearch, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1403,7 +1403,7 @@ namespace GcDownload
                     fileDialog.FileName = geocacheGpx.GcId + ".gpx";
                     fileDialog.OverwritePrompt = true;
                     fileDialog.ValidateNames = true;
-                    fileDialog.Filter = Properties.Resources.FilterGpxFiles;
+                    fileDialog.Filter = GcDownload.Strings.FilterGpxFiles;
                     fileDialog.FilterIndex = 1;
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
@@ -1430,8 +1430,8 @@ namespace GcDownload
             }
             else
             {
-                string message = String.Format(Properties.Resources.ErrorNoGeocachePageSelected, LogfileName());
-                MessageBox.Show(message, Properties.Resources.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected, LogfileName());
+                MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1598,14 +1598,14 @@ namespace GcDownload
 
                             if (FieldLog.Count != count)
                             {
-                                string prompt = Properties.Resources.PromptDeleteFieldLog;
+                                string prompt = GcDownload.Strings.PromptDeleteFieldLog;
 
                                 if (FieldLog.Count > 0)
                                 {
-                                    prompt = string.Format(Properties.Resources.PromptDeleteFieldLogEntries, count - FieldLog.Count);
+                                    prompt = string.Format(GcDownload.Strings.PromptDeleteFieldLogEntries, count - FieldLog.Count);
                                 }
 
-                                if (MessageBox.Show(prompt, Properties.Resources.TitleDeleteFieldLog, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (MessageBox.Show(prompt, GcDownload.Strings.TitleDeleteFieldLog, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
                                     StreamWriter writer = new StreamWriter(settings.FieldLogPath, false, Encoding.Unicode);
 
@@ -1619,7 +1619,7 @@ namespace GcDownload
 
                                     if (fieldLogForm.FoundCacheIds.Count > 0)
                                     {
-                                        if (MessageBox.Show(Properties.Resources.PromptArchive, Properties.Resources.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                        if (MessageBox.Show(GcDownload.Strings.PromptArchive, GcDownload.Strings.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                         {
                                             if (!settings.isArchivePathValid())
                                             {
@@ -1698,7 +1698,7 @@ namespace GcDownload
 
                             if (listCachesForm.DeletedCacheIds.Count > 0)
                             {
-                                if (MessageBox.Show(string.Format(Properties.Resources.PromptDeleteGeocacheFiles, listCachesForm.DeletedCacheIds.Count.ToString()), Properties.Resources.TitleDeleteGeocache, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (MessageBox.Show(string.Format(GcDownload.Strings.PromptDeleteGeocacheFiles, listCachesForm.DeletedCacheIds.Count.ToString()), GcDownload.Strings.TitleDeleteGeocache, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
                                     foreach (string cacheId in listCachesForm.DeletedCacheIds)
                                     {
