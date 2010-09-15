@@ -138,6 +138,9 @@
   <data name="MessageArchiveBrowseFolder" xml:space="preserve">
     <value>Wählen Sie ein Verzeichnis auf Ihrem Computer zum Speichern der GPX-Dateien:</value>
   </data>
+  <data name="MessageArchivedToDirectory" xml:space="preserve">
+    <value>{0} gpx Dateien in Verzeichnis {1} verschoben.</value>
+  </data>
   <data name="PromptArchive" xml:space="preserve">
     <value>Geocaches auf dem Computer archivieren und vom GPS-Gerät entfernen?</value>
   </data>

@@ -138,6 +138,9 @@
   <data name="MessageArchiveBrowseFolder" xml:space="preserve">
     <value>Choose a folder on your computer for storing the gpx files:</value>
   </data>
+  <data name="MessageArchivedToDirectory" xml:space="preserve">
+    <value>Moved {0} gpx files to directory '{1}'.</value>
+  </data>
   <data name="PromptArchive" xml:space="preserve">
     <value>Archive corresponding gpx files of found geocaches on your computer? This will remove the files from your device.</value>
   </data>

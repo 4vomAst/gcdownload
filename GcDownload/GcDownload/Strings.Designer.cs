@@ -124,6 +124,15 @@ namespace GcDownload {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Moved {0} gpx files to directory &apos;{1}&apos;..
+        /// </summary>
+        internal static string MessageArchivedToDirectory {
+            get {
+                return ResourceManager.GetString("MessageArchivedToDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive corresponding gpx files of found geocaches on your computer? This will remove the files from your device..
         /// </summary>
         internal static string PromptArchive {

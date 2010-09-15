@@ -126,6 +126,7 @@ namespace GcDownload
             }
             if (!cancel)
             {
+                settings.saveSettings();
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 Close();
             }

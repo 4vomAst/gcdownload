@@ -1322,9 +1322,8 @@ namespace GcDownload
             WriteToLogfile(System.Environment.Version.ToString(), true);
 
 
+            settings.readSettings();
             settings.autoDetectGarmin();
-
-            readSettings();
         }
 
         private void search(string geocacheId)
@@ -1419,8 +1418,6 @@ namespace GcDownload
                         {
                             WriteToLogfile("Writing to file failed: " + ex.Message, true);
                         }
-
-                        saveSettings();
                     }
                 }
                 catch (Exception ex)
@@ -1641,6 +1638,9 @@ namespace GcDownload
                                                         WriteToLogfile("Archiving file failed: " + source + ", " + ex.Message, true);
                                                     }
                                                 }
+
+                                                string message = String.Format(GcDownload.Strings.MessageArchivedToDirectory, fieldLogForm.FoundCacheIds.Count, settings.ArchivePath);
+                                                MessageBox.Show(message, GcDownload.Strings.TitleArchive, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                             };
                                         }
                                     }
@@ -1749,32 +1749,6 @@ namespace GcDownload
 
             return false;
         }
-
-        private void readSettings()
-        {
-            try
-            {
-                settings.readSettings();
-            }
-            catch (Exception ex)
-            {
-                WriteToLogfile("Load settings from registry failed: " + ex.Message, true);
-            }
-
-        }
-
-        private void saveSettings()
-        {
-            try
-            {
-                settings.saveSettings();
-            }
-            catch (Exception ex)
-            {
-                WriteToLogfile("Write settings to registry failed: " + ex.Message, true);
-            }
-        }
-
     }
 }
 
