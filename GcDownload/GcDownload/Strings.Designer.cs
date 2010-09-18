@@ -61,7 +61,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The chosen archive directory is not valid. Please click on the browse button &apos;...&apos; for selecting a directory where geocache files should be archived..
+        ///   Looks up a localized string similar to The chosen archive directory is not valid. Click on the browse button &apos;...&apos; for selecting a directory where Geocache files should be archived..
         /// </summary>
         internal static string ErrorArchiveDirectoryNotFound {
             get {
@@ -70,7 +70,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter a valid Geocaching.com or Opencaching.de Geocache ID. Examples: GC12345 or OC12345..
+        ///   Looks up a localized string similar to Enter a valid Geocaching.com or Opencaching.de Geocache ID. Examples: GC12345 or OC12345..
         /// </summary>
         internal static string ErrorEnterGeocacheId {
             get {
@@ -79,7 +79,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please connect your Garmin device to the computer and select it in the drop down list above. If the device is not listed, click the &apos;Detect&apos; button..
+        ///   Looks up a localized string similar to Connect your GPS device to the computer and select it in the drop down list above. If the device is not listed, click the &apos;Detect&apos; button..
         /// </summary>
         internal static string ErrorGarminNotFound {
             get {
@@ -88,7 +88,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not download geocache. Please browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the GcDownload is no longer compatible. For more detailed error information please refer to the log file: {0}.
+        ///   Looks up a localized string similar to Could not download Geocache file. Browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the application is no longer compatible. For more detailed error information please refer to the log file: {0}.
         /// </summary>
         internal static string ErrorNoGeocachePageSelected {
             get {
@@ -97,7 +97,16 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GPX files (*.gpx)|*.gpx|All files (*.*)|*.*.
+        ///   Looks up a localized string similar to Select the drive that is assigned to the internal SD card of your GPS device. If the drive is not listed, click the &apos;Detect&apos; button. Ensure that the directory &apos;garmin\gpx&apos; does exist on the SD card..
+        /// </summary>
+        internal static string ErrorSdCardNotFound {
+            get {
+                return ResourceManager.GetString("ErrorSdCardNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geocache files (*.gpx)|*.gpx|All files (*.*)|*.*.
         /// </summary>
         internal static string FilterGpxFiles {
             get {
@@ -115,7 +124,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a folder on your computer for storing the gpx files:.
+        ///   Looks up a localized string similar to Choose a folder on your computer for storing the Geocache files:.
         /// </summary>
         internal static string MessageArchiveBrowseFolder {
             get {
@@ -133,7 +142,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archive corresponding gpx files of found geocaches on your computer? This will remove the files from your device..
+        ///   Looks up a localized string similar to Archive corresponding Geocache files of found Geocaches on your computer? This will remove the files from your device..
         /// </summary>
         internal static string PromptArchive {
             get {
@@ -160,7 +169,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permanently delete {0} geocaches from your device?.
+        ///   Looks up a localized string similar to Permanently delete {0} Geocache files from your device?.
         /// </summary>
         internal static string PromptDeleteGeocacheFiles {
             get {
@@ -169,7 +178,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archive Geocaches.
+        ///   Looks up a localized string similar to Archive Geocache Files.
         /// </summary>
         internal static string TitleArchive {
             get {
@@ -187,7 +196,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete Geocaches.
+        ///   Looks up a localized string similar to Delete Geocache Files.
         /// </summary>
         internal static string TitleDeleteGeocache {
             get {
@@ -196,7 +205,7 @@ namespace GcDownload {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Geocache Download.
+        ///   Looks up a localized string similar to Geocache File Download.
         /// </summary>
         internal static string TitleDownload {
             get {

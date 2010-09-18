@@ -33,9 +33,12 @@ namespace GcDownload
 	public class CSettings
 	{
         private string garminRootDir = "";
+        private string sdCardRootDir = "";
         private string fieldlogFileName = "geocache_visits.txt";
         private string archivePath = "";
         private bool garminFound = false;
+        private bool sdCardFound = false;
+        private bool storeCachesOnSdCard = false;
 
         public string GarminRootDir
         {
@@ -43,11 +46,30 @@ namespace GcDownload
             set { garminRootDir = value; }
         }
 
+        public string SdCardRootDir
+        {
+            get { return sdCardRootDir; }
+            set { sdCardRootDir = value; }
+        }
+
+        public bool StoreCachesOnSdCard
+        {
+            get { return storeCachesOnSdCard; }
+            set { storeCachesOnSdCard = value; }
+        }
+
         public string GpxPath
         {
             get
             {
-                return garminRootDir + "garmin\\gpx";
+                if (storeCachesOnSdCard && isSdCardConnected())
+                {
+                    return sdCardRootDir + "garmin\\gpx";
+                }
+                else
+                {
+                    return garminRootDir + "garmin\\gpx";
+                }
             }
         }
 
@@ -71,7 +93,7 @@ namespace GcDownload
             return Directory.Exists(archivePath);
         }
 
-        public bool isGarminDirectoryOk()
+        public bool isGarminConnected()
         {
             garminFound = false;
 
@@ -84,6 +106,18 @@ namespace GcDownload
             };
 
             return garminFound;
+        }
+
+        public bool isSdCardConnected()
+        {
+            sdCardFound = false;
+
+            if (Directory.Exists(sdCardRootDir + "garmin\\gpx"))
+            {
+                sdCardFound = true;
+            };
+
+            return sdCardFound;
         }
 
         public string[] getDriveNames()
@@ -110,22 +144,39 @@ namespace GcDownload
         public bool autoDetectGarmin()
         {
             garminFound = false;
+            sdCardFound = false;
             DriveInfo[] drives = DriveInfo.GetDrives();
 
             foreach (DriveInfo drive in drives)
             {
                 string rootPath = drive.Name;
-                if (drive.IsReady)
+                if (drive.IsReady && (drive.DriveType == DriveType.Removable))
                 {
-                    if (!garminFound)
+                    if (    (File.Exists(rootPath + "garmin\\GarminDevice.xml"))
+                        &&  (File.Exists(rootPath + "garmin\\system.xml"))
+                        &&  (Directory.Exists(rootPath + "garmin\\gpx"))
+                        )
                     {
-                        if (    (File.Exists(rootPath + "garmin\\GarminDevice.xml"))
-                            &&  (File.Exists(rootPath + "garmin\\system.xml"))
-                            &&  (Directory.Exists(rootPath + "garmin\\gpx"))
-                            )
+                        garminFound = true;
+                        garminRootDir = rootPath;
+                        break;
+                    }
+                }
+            }
+
+            if (garminFound)
+            {
+                foreach (DriveInfo drive in drives)
+                {
+                    if (drive.Name == garminRootDir) continue;
+
+                    string rootPath = drive.Name;
+                    if (drive.IsReady && (drive.DriveType == DriveType.Removable))
+                    {
+                        if (Directory.Exists(rootPath + "garmin\\gpx"))
                         {
-                            garminFound = true;
-                            garminRootDir = rootPath;
+                            sdCardFound = true;
+                            sdCardRootDir = rootPath;
                             break;
                         }
                     }
@@ -144,6 +195,7 @@ namespace GcDownload
 
 
             garminRootDir = (string)rKeyGpxDownload.GetValue("garminRootDir", "");
+            sdCardRootDir = (string)rKeyGpxDownload.GetValue("sdCardRootDir", "");
             archivePath = (string)rKeyGpxDownload.GetValue("archivepath", "");
 
             rKeySoftware.Close();
@@ -159,6 +211,7 @@ namespace GcDownload
             Microsoft.Win32.RegistryKey rKeyGpxDownload = rKeyWb.CreateSubKey("GpxDownload");
 
             rKeyGpxDownload.SetValue("garminRootDir", garminRootDir);
+            rKeyGpxDownload.SetValue("sdCardRootDir", sdCardRootDir);
             rKeyGpxDownload.SetValue("archivepath", archivePath);
 
             rKeySoftware.Close();

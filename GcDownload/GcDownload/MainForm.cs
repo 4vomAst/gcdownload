@@ -1732,7 +1732,7 @@ namespace GcDownload
 
         private bool ensureGarminAvailable()
         {
-            if (settings.isGarminDirectoryOk()) return true;
+            if (settings.isGarminConnected()) return true;
             if (settings.autoDetectGarmin()) return true;
             if (showSettings()) return true;
             return false;
@@ -1748,6 +1748,11 @@ namespace GcDownload
             }
 
             return false;
+        }
+
+        private void linkLabelProjectHomepage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            webBrowserPreview.Navigate("http://code.google.com/p/gcdownload/");
         }
     }
 }

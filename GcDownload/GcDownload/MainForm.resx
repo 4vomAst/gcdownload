@@ -125,10 +125,10 @@
     <value>100, 25</value>
   </data>
   <data name="&gt;&gt;buttonHome.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="&gt;&gt;buttonDownload.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="&gt;&gt;buttonBack.Name" xml:space="preserve">
     <value>buttonBack</value>
@@ -137,7 +137,7 @@
     <value>&amp;Field Log</value>
   </data>
   <data name="&gt;&gt;buttonBack.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="comboBoxWebsite.Size" type="System.Drawing.Size, System.Drawing">
     <value>158, 21</value>
@@ -158,14 +158,23 @@
     <value>560, 18</value>
   </data>
   <data name="&gt;&gt;labelWebSite.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="&gt;&gt;labelWebSite.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
+  <data name="webBrowserPreview.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1000, 499</value>
+  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="comboBoxWebsite.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="&gt;&gt;buttonFieldLog.Name" xml:space="preserve">
+    <value>buttonFieldLog</value>
+  </data>
+  <data name="&gt;&gt;linkLabelProjectHomepage.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="labelWebSite.Text" xml:space="preserve">
     <value>&amp;Website:</value>
@@ -176,17 +185,24 @@
   <data name="&gt;&gt;buttonHome.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;labelCacheId.Name" xml:space="preserve">
-    <value>labelCacheId</value>
+  <data name="&gt;&gt;buttonSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
   </data>
   <data name="&gt;&gt;labelCacheId.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="linkLabelProjectHomepage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
   </data>
   <data name="labelWebSite.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="webBrowserPreview.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1000, 499</value>
+  <data name="&gt;&gt;textBoxGeocacheId.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonBack.Parent" xml:space="preserve">
     <value>$this</value>
@@ -203,18 +219,26 @@
   <data name="buttonSettings.Text" xml:space="preserve">
     <value>S&amp;ettings</value>
   </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+  <data name="linkLabelProjectHomepage.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;buttonBrowseCaches.Name" xml:space="preserve">
-    <value>buttonBrowseCaches</value>
+  <data name="&gt;&gt;linkLabelProjectHomepage.Name" xml:space="preserve">
+    <value>linkLabelProjectHomepage</value>
   </data>
   <data name="&gt;&gt;buttonSettings.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonSettings.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
+  <data name="&gt;&gt;comboBoxWebsite.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonDownload.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="linkLabelProjectHomepage.Text" xml:space="preserve">
+    <value>Project Homepage</value>
+  </data>
+  <data name="&gt;&gt;linkLabelProjectHomepage.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="buttonHome.Location" type="System.Drawing.Point, System.Drawing">
     <value>16, 12</value>
@@ -222,20 +246,17 @@
   <data name="&gt;&gt;labelCacheId.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="buttonDownload.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 25</value>
-  </data>
   <data name="buttonDownload.Location" type="System.Drawing.Point, System.Drawing">
     <value>122, 12</value>
   </data>
   <data name="&gt;&gt;comboBoxWebsite.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="buttonBrowseCaches.Text" xml:space="preserve">
-    <value>&amp;List Caches</value>
+  <data name="&gt;&gt;buttonFieldLog.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
-  <data name="buttonSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+  <data name="buttonSearch.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
   </data>
   <data name="&gt;&gt;buttonSearch.Parent" xml:space="preserve">
     <value>$this</value>
@@ -243,8 +264,11 @@
   <data name="webBrowserPreview.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
+  <data name="&gt;&gt;linkLabelProjectHomepage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;buttonSearch.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="buttonDownload.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -252,17 +276,17 @@
   <data name="&gt;&gt;webBrowserPreview.Type" xml:space="preserve">
     <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="buttonBack.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
   <data name="buttonBack.Location" type="System.Drawing.Point, System.Drawing">
     <value>16, 43</value>
   </data>
   <data name="&gt;&gt;textBoxGeocacheId.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="labelWebSite.Size" type="System.Drawing.Size, System.Drawing">
     <value>49, 13</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Paperless Geocaching</value>
   </data>
   <data name="buttonBrowseCaches.Location" type="System.Drawing.Point, System.Drawing">
     <value>122, 43</value>
@@ -273,11 +297,11 @@
   <data name="buttonBack.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
   </data>
-  <data name="buttonHome.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="buttonSettings.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
   </data>
-  <data name="&gt;&gt;buttonDownload.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="buttonSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 25</value>
   </data>
   <data name="buttonBrowseCaches.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -285,14 +309,11 @@
   <data name="comboBoxWebsite.Location" type="System.Drawing.Point, System.Drawing">
     <value>615, 15</value>
   </data>
-  <data name="buttonHome.Text" xml:space="preserve">
-    <value>&amp;Home</value>
-  </data>
   <data name="buttonDownload.Text" xml:space="preserve">
     <value>&amp;Download</value>
   </data>
   <data name="&gt;&gt;webBrowserPreview.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="buttonHome.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -304,13 +325,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;comboBoxWebsite.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
-  <data name="buttonSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>228, 12</value>
+  <data name="buttonSearch.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
   </data>
   <data name="buttonFieldLog.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
+  </data>
+  <data name="buttonBrowseCaches.Text" xml:space="preserve">
+    <value>&amp;List Caches</value>
   </data>
   <data name="&gt;&gt;buttonDownload.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -319,7 +343,10 @@
     <value>5</value>
   </data>
   <data name="&gt;&gt;buttonBrowseCaches.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
+  </data>
+  <data name="buttonSettings.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
   </data>
   <data name="&gt;&gt;textBoxGeocacheId.Parent" xml:space="preserve">
     <value>$this</value>
@@ -333,17 +360,23 @@
   <data name="buttonHome.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
   </data>
+  <data name="labelCacheId.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
   <data name="buttonSettings.Location" type="System.Drawing.Point, System.Drawing">
     <value>911, 12</value>
   </data>
-  <data name="&gt;&gt;buttonSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="buttonSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>228, 12</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>1028, 585</value>
   </data>
   <data name="textBoxGeocacheId.Size" type="System.Drawing.Size, System.Drawing">
     <value>118, 20</value>
   </data>
-  <data name="buttonSettings.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+  <data name="buttonBack.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
   <data name="&gt;&gt;webBrowserPreview.Name" xml:space="preserve">
     <value>webBrowserPreview</value>
@@ -736,17 +769,23 @@
   <data name="&gt;&gt;buttonBack.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;comboBoxWebsite.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="linkLabelProjectHomepage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>921, 49</value>
   </data>
-  <data name="buttonSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 25</value>
+  <data name="&gt;&gt;labelCacheId.Name" xml:space="preserve">
+    <value>labelCacheId</value>
+  </data>
+  <data name="buttonBrowseCaches.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
   </data>
   <data name="webBrowserPreview.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Paperless Geocaching with Garmin Dakota</value>
+  <data name="&gt;&gt;buttonBrowseCaches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabelProjectHomepage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>95, 13</value>
   </data>
   <data name="labelCacheId.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -754,14 +793,11 @@
   <data name="&gt;&gt;buttonFieldLog.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;textBoxGeocacheId.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonFieldLog.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="&gt;&gt;labelWebSite.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonSettings.Size" type="System.Drawing.Size, System.Drawing">
+    <value>105, 25</value>
   </data>
   <data name="labelWebSite.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -769,26 +805,29 @@
   <data name="buttonSearch.Text" xml:space="preserve">
     <value>&amp;Search</value>
   </data>
-  <data name="buttonSearch.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
+  <data name="&gt;&gt;buttonBrowseCaches.Name" xml:space="preserve">
+    <value>buttonBrowseCaches</value>
   </data>
-  <data name="&gt;&gt;buttonFieldLog.Name" xml:space="preserve">
-    <value>buttonFieldLog</value>
+  <data name="buttonBack.Text" xml:space="preserve">
+    <value>&amp;Back</value>
   </data>
   <data name="&gt;&gt;buttonBrowseCaches.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;buttonBrowseCaches.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="buttonHome.Text" xml:space="preserve">
+    <value>&amp;Home</value>
   </data>
   <data name="&gt;&gt;buttonSettings.Name" xml:space="preserve">
     <value>buttonSettings</value>
   </data>
-  <data name="&gt;&gt;webBrowserPreview.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="linkLabelProjectHomepage.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
   </data>
-  <data name="buttonSettings.Size" type="System.Drawing.Size, System.Drawing">
-    <value>105, 25</value>
+  <data name="linkLabelProjectHomepage.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
+  </data>
+  <data name="buttonHome.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="buttonBack.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -796,17 +835,14 @@
   <data name="&gt;&gt;buttonSearch.Name" xml:space="preserve">
     <value>buttonSearch</value>
   </data>
-  <data name="buttonBrowseCaches.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1028, 585</value>
+  <data name="buttonDownload.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 25</value>
   </data>
   <data name="buttonFieldLog.Location" type="System.Drawing.Point, System.Drawing">
     <value>228, 43</value>
   </data>
-  <data name="labelCacheId.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="&gt;&gt;webBrowserPreview.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;labelWebSite.Name" xml:space="preserve">
     <value>labelWebSite</value>
@@ -815,10 +851,7 @@
     <value>textBoxGeocacheId</value>
   </data>
   <data name="&gt;&gt;buttonSettings.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="buttonBack.Text" xml:space="preserve">
-    <value>&amp;Back</value>
+    <value>1</value>
   </data>
   <data name="&gt;&gt;comboBoxWebsite.Name" xml:space="preserve">
     <value>comboBoxWebsite</value>

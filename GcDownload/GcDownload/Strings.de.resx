@@ -118,31 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorArchiveDirectoryNotFound" xml:space="preserve">
-    <value>Das ausgewählte Archiv-Verzeichnis kann nicht verwendet werden. Bitte klicken Sie auf die Schaltfläche "..." und wählen Sie ein anderes Verzeichnis auf Ihrem Computer zum Archivieren der Geocaches.</value>
+    <value>Das ausgewählte Archiv-Verzeichnis kann nicht verwendet werden. Klicken Sie auf die Schaltfläche "..." und wählen Sie ein anderes Verzeichnis auf Ihrem Computer zum Archivieren der Geocache-Dateien.</value>
   </data>
   <data name="ErrorEnterGeocacheId" xml:space="preserve">
-    <value>Bitte geben Sie eine gültige Geocaching.com oder Opencaching.de Geocache ID ein. Beispiele: GC12345 oder OC12345.</value>
+    <value>Geben Sie eine gültige Geocaching.com oder Opencaching.de Geocache ID ein. Beispiele: GC12345 oder OC12345.</value>
   </data>
   <data name="ErrorGarminNotFound" xml:space="preserve">
-    <value>Bitte verbinden Sie Ihr GPS-Gerät mit dem Computer und wählen Sie es in der Liste aus. Falls das Gerät nicht in der Liste aufgeführt wird, klicken Sie bitte auf die Schaltfläche "Erkennen".</value>
+    <value>Verbinden Sie Ihr GPS-Gerät mit dem Computer und wählen Sie es in der Liste aus. Falls das Gerät nicht in der Liste aufgeführt wird, klicken Sie auf die Schaltfläche "Erkennen".</value>
   </data>
   <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
-    <value>Fehler beim Speichern des Geocaches. Bitte navigieren Sie zu einer Detailseite eines Geocaches und klicken Sie dann auf die "Speichern" Schaltfläche. Falls das Problem weiterhin besteht, hat der Anbieter eventuell das Layout der Webseiten geändert. Das Programm ist ggf. nicht mehr kompatibel zur Webseite. Weitere Hinweise zum Fehler finden Sie in der Log-Datei: {0}</value>
+    <value>Fehler beim Speichern des Geocaches. Navigieren Sie zu einer Detailseite eines Geocaches und klicken Sie dann auf die "Speichern" Schaltfläche. Falls das Problem weiterhin besteht, hat der Anbieter eventuell das Layout der Webseiten geändert. Das Programm ist ggf. nicht mehr kompatibel zur Webseite. Weitere Hinweise zum Fehler finden Sie in der Log-Datei: {0}</value>
+  </data>
+  <data name="ErrorSdCardNotFound" xml:space="preserve">
+    <value>Wählen Sie das Laufwerk, welches der internen SD-Karte Ihres GPS-Gerätes zugeordnet ist. Wenn das Laufwerk nicht angezeigt wird, klicken Sie auf die Schaltfläche "Erkennen". Stellen Sie sicher, dass auf der SD-Karte das Verzeichnis "Garmin\gpx" vorhanden ist.</value>
   </data>
   <data name="FilterGpxFiles" xml:space="preserve">
-    <value>GPX-Dateien (*.gpx)|*.gpx|Alle Dateien (*.*)|*.*</value>
+    <value>Geocache-Dateien (*.gpx)|*.gpx|Alle Dateien (*.*)|*.*</value>
   </data>
   <data name="FilterLogFiles" xml:space="preserve">
     <value>Protokoll-Dateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*</value>
   </data>
   <data name="MessageArchiveBrowseFolder" xml:space="preserve">
-    <value>Wählen Sie ein Verzeichnis auf Ihrem Computer zum Speichern der GPX-Dateien:</value>
+    <value>Wählen Sie ein Verzeichnis auf Ihrem Computer zum Speichern der Geocache-Dateien:</value>
   </data>
   <data name="MessageArchivedToDirectory" xml:space="preserve">
-    <value>{0} gpx Dateien in Verzeichnis {1} verschoben.</value>
+    <value>{0} Geocache-Dateien in Verzeichnis {1} verschoben.</value>
   </data>
   <data name="PromptArchive" xml:space="preserve">
-    <value>Geocaches auf dem Computer archivieren und vom GPS-Gerät entfernen?</value>
+    <value>Geocache-Dateien auf dem Computer archivieren und vom GPS-Gerät entfernen?</value>
   </data>
   <data name="PromptDeleteFieldLog" xml:space="preserve">
     <value>Feld-Protokoll vollständig löschen?</value>
@@ -151,19 +154,19 @@
     <value>{0} Einträge aus dem Feld-Protokoll löschen?</value>
   </data>
   <data name="PromptDeleteGeocacheFiles" xml:space="preserve">
-    <value>{0} Geocaches vom Gerät entfernen?</value>
+    <value>{0} Geocache-Dateien vom Gerät entfernen?</value>
   </data>
   <data name="TitleArchive" xml:space="preserve">
-    <value>Geocaches archivieren</value>
+    <value>Geocache-Dateien archivieren</value>
   </data>
   <data name="TitleDeleteFieldLog" xml:space="preserve">
     <value>Feld-Protokoll löschen</value>
   </data>
   <data name="TitleDeleteGeocache" xml:space="preserve">
-    <value>Geocaches löschen</value>
+    <value>Geocache-Dateien löschen</value>
   </data>
   <data name="TitleDownload" xml:space="preserve">
-    <value>Geocache speichern </value>
+    <value>Geocache-Datei speichern </value>
   </data>
   <data name="TitleSearch" xml:space="preserve">
     <value>Geocache suchen</value>

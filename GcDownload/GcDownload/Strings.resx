@@ -118,31 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorArchiveDirectoryNotFound" xml:space="preserve">
-    <value>The chosen archive directory is not valid. Please click on the browse button '...' for selecting a directory where geocache files should be archived.</value>
+    <value>The chosen archive directory is not valid. Click on the browse button '...' for selecting a directory where Geocache files should be archived.</value>
   </data>
   <data name="ErrorEnterGeocacheId" xml:space="preserve">
-    <value>Please enter a valid Geocaching.com or Opencaching.de Geocache ID. Examples: GC12345 or OC12345.</value>
+    <value>Enter a valid Geocaching.com or Opencaching.de Geocache ID. Examples: GC12345 or OC12345.</value>
   </data>
   <data name="ErrorGarminNotFound" xml:space="preserve">
-    <value>Please connect your Garmin device to the computer and select it in the drop down list above. If the device is not listed, click the 'Detect' button.</value>
+    <value>Connect your GPS device to the computer and select it in the drop down list above. If the device is not listed, click the 'Detect' button.</value>
   </data>
   <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
-    <value>Could not download geocache. Please browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the GcDownload is no longer compatible. For more detailed error information please refer to the log file: {0}</value>
+    <value>Could not download Geocache file. Browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the application is no longer compatible. For more detailed error information please refer to the log file: {0}</value>
+  </data>
+  <data name="ErrorSdCardNotFound" xml:space="preserve">
+    <value>Select the drive that is assigned to the internal SD card of your GPS device. If the drive is not listed, click the 'Detect' button. Ensure that the directory 'garmin\gpx' does exist on the SD card.</value>
   </data>
   <data name="FilterGpxFiles" xml:space="preserve">
-    <value>GPX files (*.gpx)|*.gpx|All files (*.*)|*.*</value>
+    <value>Geocache files (*.gpx)|*.gpx|All files (*.*)|*.*</value>
   </data>
   <data name="FilterLogFiles" xml:space="preserve">
     <value>Log files (*.txt)|*.txt|All files (*.*)|*.*</value>
   </data>
   <data name="MessageArchiveBrowseFolder" xml:space="preserve">
-    <value>Choose a folder on your computer for storing the gpx files:</value>
+    <value>Choose a folder on your computer for storing the Geocache files:</value>
   </data>
   <data name="MessageArchivedToDirectory" xml:space="preserve">
     <value>Moved {0} gpx files to directory '{1}'.</value>
   </data>
   <data name="PromptArchive" xml:space="preserve">
-    <value>Archive corresponding gpx files of found geocaches on your computer? This will remove the files from your device.</value>
+    <value>Archive corresponding Geocache files of found Geocaches on your computer? This will remove the files from your device.</value>
   </data>
   <data name="PromptDeleteFieldLog" xml:space="preserve">
     <value>Delete the complete field log?</value>
@@ -151,19 +154,19 @@
     <value>Delete {0} field log entries?</value>
   </data>
   <data name="PromptDeleteGeocacheFiles" xml:space="preserve">
-    <value>Permanently delete {0} geocaches from your device?</value>
+    <value>Permanently delete {0} Geocache files from your device?</value>
   </data>
   <data name="TitleArchive" xml:space="preserve">
-    <value>Archive Geocaches</value>
+    <value>Archive Geocache Files</value>
   </data>
   <data name="TitleDeleteFieldLog" xml:space="preserve">
     <value>Delete Field Log</value>
   </data>
   <data name="TitleDeleteGeocache" xml:space="preserve">
-    <value>Delete Geocaches</value>
+    <value>Delete Geocache Files</value>
   </data>
   <data name="TitleDownload" xml:space="preserve">
-    <value>Geocache Download</value>
+    <value>Geocache File Download</value>
   </data>
   <data name="TitleSearch" xml:space="preserve">
     <value>Geocache Search</value>

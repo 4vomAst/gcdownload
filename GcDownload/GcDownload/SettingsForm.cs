@@ -43,25 +43,27 @@ namespace GcDownload
             settings = s;
             InitializeComponent();
 
-            UpdateDriveList();
-            SelectConfiguredDrive();
-
+            UpdateDriveLists();
+            SelectConfiguredDrives();
+            checkBoxStoreCachesOnSdCard.Checked = settings.StoreCachesOnSdCard;
             textBoxArchivPath.Text = settings.ArchivePath;
         }
 
-        public void UpdateDriveList()
+        public void UpdateDriveLists()
         {
             string[] driveNames = settings.getDriveNames();
 
             comboBoxGarminDrive.ResetText();
+            comboBoxSdCardDrive.ResetText();
 
             foreach (string name in driveNames)
             {
                 comboBoxGarminDrive.Items.Add(name);
+                comboBoxSdCardDrive.Items.Add(name);
             }
         }
 
-        public void SelectConfiguredDrive()
+        public void SelectConfiguredDrives()
         {
             int i;
             i = comboBoxGarminDrive.FindString(settings.GarminRootDir);
@@ -73,17 +75,27 @@ namespace GcDownload
             {
                 comboBoxGarminDrive.SelectedIndex = 0;
             }
+
+            i = comboBoxSdCardDrive.FindString(settings.SdCardRootDir);
+            if (i != -1)
+            {
+                comboBoxSdCardDrive.SelectedIndex = i;
+            }
+            else
+            {
+                comboBoxSdCardDrive.SelectedIndex = 0;
+            }
         }
 
         private void buttonDetect_Click(object sender, EventArgs e)
         {
             if (settings != null)
             {
-                UpdateDriveList();
+                UpdateDriveLists();
 
                 if (settings.autoDetectGarmin())
                 {
-                    SelectConfiguredDrive();
+                    SelectConfiguredDrives();
                 }
             }
         }
@@ -114,12 +126,19 @@ namespace GcDownload
         {
             bool cancel = false;
             settings.GarminRootDir = GetDriveName(ref comboBoxGarminDrive);
-            if (!settings.isArchivePathValid())
+            settings.SdCardRootDir = GetDriveName(ref comboBoxSdCardDrive);
+            settings.StoreCachesOnSdCard = checkBoxStoreCachesOnSdCard.Checked;
+            if (!settings.isGarminConnected())
             {
                 MessageBox.Show(GcDownload.Strings.ErrorGarminNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;
             }
-            if (!settings.isGarminDirectoryOk())
+            if (settings.StoreCachesOnSdCard && (!settings.isSdCardConnected()))
+            {
+                MessageBox.Show(GcDownload.Strings.ErrorSdCardNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                cancel = true;
+            }
+            if (!settings.isArchivePathValid())
             {
                 MessageBox.Show(GcDownload.Strings.ErrorArchiveDirectoryNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;

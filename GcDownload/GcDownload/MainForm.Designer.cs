@@ -41,6 +41,7 @@
             this.buttonFieldLog = new System.Windows.Forms.Button();
             this.buttonBrowseCaches = new System.Windows.Forms.Button();
             this.buttonSettings = new System.Windows.Forms.Button();
+            this.linkLabelProjectHomepage = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // labelCacheId
@@ -132,11 +133,19 @@
             this.buttonSettings.UseVisualStyleBackColor = true;
             this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
             // 
+            // linkLabelProjectHomepage
+            // 
+            resources.ApplyResources(this.linkLabelProjectHomepage, "linkLabelProjectHomepage");
+            this.linkLabelProjectHomepage.Name = "linkLabelProjectHomepage";
+            this.linkLabelProjectHomepage.TabStop = true;
+            this.linkLabelProjectHomepage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelProjectHomepage_LinkClicked);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.buttonSearch;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.linkLabelProjectHomepage);
             this.Controls.Add(this.buttonSettings);
             this.Controls.Add(this.buttonBrowseCaches);
             this.Controls.Add(this.buttonFieldLog);
@@ -170,6 +179,7 @@
         private System.Windows.Forms.Button buttonFieldLog;
         private System.Windows.Forms.Button buttonBrowseCaches;
         private System.Windows.Forms.Button buttonSettings;
+        private System.Windows.Forms.LinkLabel linkLabelProjectHomepage;
     }
 }
 
