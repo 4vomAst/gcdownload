@@ -143,8 +143,20 @@ namespace GcDownload
             public string ShortDescription = "";
             public string LongDescription = "";
             public string Hint = "";
+            public bool Available = true;
+            public bool Archived = false;
             public DateTime Timestamp = DateTime.Now;
             List<LogEntry> Log = new List<LogEntry>();
+
+            string BoolToString(bool val)
+            {
+                if (val) return "True"; else return "False";
+            }
+
+            bool StringToBool(string val)
+            {
+                return val.ToLower() != "false";
+            }
 
             public string Decrypt(string encryptedString)
             {
@@ -399,6 +411,25 @@ namespace GcDownload
                     {
                         WriteToLogfile("Extract numeric cache id failed: " + ex.Message, true);
                     }
+
+                    try
+                    {
+                        if (document.Body.InnerText.Contains("This cache is temporarily unavailable."))
+                        {
+                            Available = false;
+                            Archived = true;
+                        }
+                        else if (document.Body.InnerText.Contains("This cache has been archived"))
+                        {
+                            Available = false;
+                            Archived = false;
+                        }                        
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteToLogfile("Extract cache status failed: " + ex.Message, true);
+                    }
+
 
                     //try
                     //{
@@ -815,6 +846,24 @@ namespace GcDownload
                                     NumericCacheId = rnd.Next(1, 65000).ToString();
                                 }
                             }
+                            else if (baseInfoLines[i].Trim().Contains("Status:"))
+                            {
+                                if ( (baseInfoLines[i].Trim().Contains("Kann gesucht weden")) || (baseInfoLines[i].Trim().Contains("Available")) )
+                                {
+                                    Available = true;
+                                    Archived = false;
+                                }
+                                else if ( (baseInfoLines[i].Trim().Contains("Archiviert")) || (baseInfoLines[i].Trim().Contains("Archived")) )
+                                {
+                                    Available = false;
+                                    Archived = true;
+                                }
+                                else if ((baseInfoLines[i].Trim().Contains("Momentan nicht verfügbar")) || (baseInfoLines[i].Trim().Contains("Temporarily not available")))
+                                {
+                                    Available = false;
+                                    Archived = false;
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -1060,6 +1109,21 @@ namespace GcDownload
                     numberFormat.NegativeSign = "-";
                     numberFormat.NumberGroupSeparator = "";
 
+                    if ( (!Available))
+                    {
+                        LongDescription = GcDownload.Strings.UnAvailableGeocacheDescriptionPrefix + LongDescription;
+                    }
+                    if (Archived)
+                    {
+                        LongDescription = GcDownload.Strings.ArchivedGeocacheDescriptionPrefix + LongDescription;
+                    }
+
+                    string namePrefix = "";
+                    if ((!Available) || Archived)
+                    {
+                        namePrefix = "(x) ";
+                    }
+
                     gpxTrack.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                     gpxTrack.AppendLine("<gpx xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" version=\"1.1\" creator=\"http://www.groundspeak.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">");
                     gpxTrack.AppendLine(String.Format("<wpt {0}>", LatLon));
@@ -1068,9 +1132,9 @@ namespace GcDownload
                     gpxTrack.AppendLine("<sym>Geocache</sym>");
                     gpxTrack.AppendLine(String.Format("<type>Geocache|{0}</type>", Quote(Type)));
                     gpxTrack.AppendLine("<extensions>");
-                    gpxTrack.AppendLine(String.Format("<cache id=\"{0}\" available=\"True\" archived=\"False\" xmlns=\"http://www.groundspeak.com/cache/1/0\">", Quote(NumericCacheId)));
+                    gpxTrack.AppendLine(String.Format("<cache id=\"{0}\" available=\"{1}\" archived=\"{2}\" xmlns=\"http://www.groundspeak.com/cache/1/0\">", Quote(NumericCacheId), BoolToString(Available), BoolToString(Archived)));
                     gpxTrack.AppendLine(String.Format("<time>{0}</time>", Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z")));
-                    gpxTrack.AppendLine(String.Format("<name>{0}</name>", Quote(Name)));
+                    gpxTrack.AppendLine(String.Format("<name>{0}</name>", Quote(namePrefix + Name)));
                     gpxTrack.AppendLine(String.Format("<placed_by>{0}</placed_by>", Quote(Author)));
                     gpxTrack.AppendLine(String.Format("<type>{0}</type>", Quote(Type)));
                     gpxTrack.AppendLine(String.Format("<container>{0}</container>", Quote(Container)));
@@ -1142,6 +1206,8 @@ namespace GcDownload
                                         {
                                             case "cache":
                                                 NumericCacheId = extensionsChildnode.Attributes.GetNamedItem("id").Value;
+                                                Available = StringToBool(extensionsChildnode.Attributes.GetNamedItem("available").Value);
+                                                Archived = StringToBool(extensionsChildnode.Attributes.GetNamedItem("archived").Value);
                                                 foreach (XmlNode cacheChildnode in extensionsChildnode.ChildNodes)
                                                 {
                                                     switch (cacheChildnode.LocalName.ToLower())
@@ -1306,7 +1372,7 @@ namespace GcDownload
 
         public MainForm()
         {
-            WriteToLogfile("MainForm", true);
+            WriteToLogfile("Starting...", false);
             InitializeComponent();
             webBrowserPreview.ScriptErrorsSuppressed = true;
 
@@ -1316,11 +1382,10 @@ namespace GcDownload
             this.Text += "    V" + GetType().Assembly.GetName().Version.ToString(3);
 
             WriteToLogfile(this.Text, true);
-            WriteToLogfile(System.Environment.MachineName, true);
-            WriteToLogfile(System.Environment.UserName, true);
+            //WriteToLogfile(System.Environment.MachineName, true);
+            //WriteToLogfile(System.Environment.UserName, true);
             WriteToLogfile(System.Environment.OSVersion.VersionString, true);
             WriteToLogfile(System.Environment.Version.ToString(), true);
-
 
             settings.readSettings();
             settings.autoDetectGarmin();

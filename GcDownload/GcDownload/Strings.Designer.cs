@@ -61,6 +61,15 @@ namespace GcDownload {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archived. .
+        /// </summary>
+        internal static string ArchivedGeocacheDescriptionPrefix {
+            get {
+                return ResourceManager.GetString("ArchivedGeocacheDescriptionPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The chosen archive directory is not valid. Click on the browse button &apos;...&apos; for selecting a directory where Geocache files should be archived..
         /// </summary>
         internal static string ErrorArchiveDirectoryNotFound {
@@ -228,6 +237,15 @@ namespace GcDownload {
         internal static string TitleSettings {
             get {
                 return ResourceManager.GetString("TitleSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently unavailable. .
+        /// </summary>
+        internal static string UnAvailableGeocacheDescriptionPrefix {
+            get {
+                return ResourceManager.GetString("UnAvailableGeocacheDescriptionPrefix", resourceCulture);
             }
         }
     }
