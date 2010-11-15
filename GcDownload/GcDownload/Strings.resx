@@ -129,6 +129,9 @@
   <data name="ErrorGarminNotFound" xml:space="preserve">
     <value>Connect your GPS device to the computer and select it in the drop down list above. If the device is not listed, click the 'Detect' button.</value>
   </data>
+  <data name="ErrorInvalidGpxFile" xml:space="preserve">
+    <value>Geocache file {0} is invalid or cannot be opened.</value>
+  </data>
   <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
     <value>Could not download Geocache file. Browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the application is no longer compatible. For more detailed error information please refer to the log file: {0}</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="TitleDownload" xml:space="preserve">
     <value>Geocache File Download</value>
+  </data>
+  <data name="TitleGeneric" xml:space="preserve">
+    <value>Paperless Geocaching</value>
   </data>
   <data name="TitleSearch" xml:space="preserve">
     <value>Geocache Search</value>

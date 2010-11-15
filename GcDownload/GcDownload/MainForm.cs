@@ -1740,13 +1740,27 @@ namespace GcDownload
                 {
                     GeocacheGpx geocache = new GeocacheGpx();
                     geocache.ImportFromGpxFile(filename);
-                    geocacheList.Add(geocache);
+                    if (geocache.IsValid())
+                    {
+                        geocacheList.Add(geocache);
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format(GcDownload.Strings.ErrorInvalidGpxFile, filename), GcDownload.Strings.TitleGeneric, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    };
                 }
                 foreach (string filename in ocFiles)
                 {
                     GeocacheGpx geocache = new GeocacheGpx();
                     geocache.ImportFromGpxFile(filename);
-                    geocacheList.Add(geocache);
+                    if (geocache.IsValid())
+                    {
+                        geocacheList.Add(geocache);
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format(GcDownload.Strings.ErrorInvalidGpxFile, filename), GcDownload.Strings.TitleGeneric, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    };
                 }
 
                 ListCachesForm listCachesForm = new ListCachesForm();

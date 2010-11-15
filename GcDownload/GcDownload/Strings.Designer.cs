@@ -97,6 +97,15 @@ namespace GcDownload {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Geocache file {0} is invalid or cannot be opened..
+        /// </summary>
+        internal static string ErrorInvalidGpxFile {
+            get {
+                return ResourceManager.GetString("ErrorInvalidGpxFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not download Geocache file. Browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the application is no longer compatible. For more detailed error information please refer to the log file: {0}.
         /// </summary>
         internal static string ErrorNoGeocachePageSelected {
@@ -219,6 +228,15 @@ namespace GcDownload {
         internal static string TitleDownload {
             get {
                 return ResourceManager.GetString("TitleDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paperless Geocaching.
+        /// </summary>
+        internal static string TitleGeneric {
+            get {
+                return ResourceManager.GetString("TitleGeneric", resourceCulture);
             }
         }
         

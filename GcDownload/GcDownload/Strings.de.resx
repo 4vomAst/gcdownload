@@ -129,6 +129,9 @@
   <data name="ErrorGarminNotFound" xml:space="preserve">
     <value>Verbinden Sie Ihr GPS-Gerät mit dem Computer und wählen Sie es in der Liste aus. Falls das Gerät nicht in der Liste aufgeführt wird, klicken Sie auf die Schaltfläche "Erkennen".</value>
   </data>
+  <data name="ErrorInvalidGpxFile" xml:space="preserve">
+    <value>Die Geocache-Datei {0} ist fehlerhaft oder kann nicht geöffnet werden.</value>
+  </data>
   <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
     <value>Fehler beim Speichern des Geocaches. Navigieren Sie zu einer Detailseite eines Geocaches und klicken Sie dann auf die "Speichern" Schaltfläche. Falls das Problem weiterhin besteht, hat der Anbieter eventuell das Layout der Webseiten geändert. Das Programm ist ggf. nicht mehr kompatibel zur Webseite. Weitere Hinweise zum Fehler finden Sie in der Log-Datei: {0}</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="TitleDownload" xml:space="preserve">
     <value>Geocache-Datei speichern </value>
+  </data>
+  <data name="TitleGeneric" xml:space="preserve">
+    <value>Papierloses Geocachen</value>
   </data>
   <data name="TitleSearch" xml:space="preserve">
     <value>Geocache suchen</value>
