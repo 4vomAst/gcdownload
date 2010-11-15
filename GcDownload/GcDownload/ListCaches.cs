@@ -36,8 +36,9 @@ namespace GcDownload
     public partial class ListCachesForm : Form
     {
         public List<MainForm.GeocacheGpx> geocacheList = new List<MainForm.GeocacheGpx>();
-        public string CacheIdToSearch = "";
-        public List<string> DeletedCacheIds = new List<string>();
+        public string cacheIdToSearch = "";
+        public List<string> deletedCacheIds = new List<string>();
+        public List<string> updateCacheIds = new List<string>();
 
         public ListCachesForm()
         {
@@ -46,8 +47,9 @@ namespace GcDownload
 
         private void ListCaches_Load(object sender, EventArgs e)
         {
-            CacheIdToSearch = "";
-            DeletedCacheIds.Clear();
+            cacheIdToSearch = "";
+            deletedCacheIds.Clear();
+            updateCacheIds.Clear();
 
             listViewCaches.Items.Clear();
 
@@ -74,6 +76,7 @@ namespace GcDownload
 
             buttonSearch.Enabled = false;
             buttonDeleteEntry.Enabled = false;
+            buttonUpdateAll.Enabled = listViewCaches.Items.Count > 0;
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -86,7 +89,7 @@ namespace GcDownload
         {
             if (listViewCaches.SelectedItems.Count > 0)
             {
-                CacheIdToSearch = listViewCaches.SelectedItems[0].Text;
+                cacheIdToSearch = listViewCaches.SelectedItems[0].Text;
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -96,9 +99,10 @@ namespace GcDownload
         {
             if (listViewCaches.SelectedItems.Count == 1)
             {
-                DeletedCacheIds.Add(listViewCaches.SelectedItems[0].Text);
+                deletedCacheIds.Add(listViewCaches.SelectedItems[0].Text);
                 listViewCaches.Items.Remove(listViewCaches.SelectedItems[0]);
             }
+            buttonUpdateAll.Enabled = listViewCaches.Items.Count > 0;
         }
 
         private void listViewCaches_SelectedIndexChanged(object sender, EventArgs e)
@@ -111,10 +115,21 @@ namespace GcDownload
         {
             if (listViewCaches.SelectedItems.Count == 1)
             {
-                CacheIdToSearch = listViewCaches.SelectedItems[0].Text;
+                cacheIdToSearch = listViewCaches.SelectedItems[0].Text;
                 DialogResult = DialogResult.OK;
                 Close();
             }
+        }
+
+        private void buttonUpdateAll_Click(object sender, EventArgs e)
+        {
+            updateCacheIds.Clear();
+            foreach (ListViewItem item in listViewCaches.Items)
+            {
+                updateCacheIds.Add(item.Text);
+            };
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

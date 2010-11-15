@@ -117,21 +117,179 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="buttonClose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 25</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="listViewCaches.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="buttonSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>448, 519</value>
+  <data name="columnHeaderId.Text" xml:space="preserve">
+    <value>Cache ID</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="columnHeaderId.Width" type="System.Int32, mscorlib">
+    <value>101</value>
+  </data>
+  <data name="columnHeaderName.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="columnHeaderName.Width" type="System.Int32, mscorlib">
+    <value>107</value>
+  </data>
+  <data name="columnHeaderAuthor.Text" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="columnHeaderAuthor.Width" type="System.Int32, mscorlib">
+    <value>103</value>
+  </data>
+  <data name="columnHeaderShortDescription.Text" xml:space="preserve">
+    <value>Short Description</value>
+  </data>
+  <data name="columnHeaderShortDescription.Width" type="System.Int32, mscorlib">
+    <value>164</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="listViewCaches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="listViewCaches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>641, 500</value>
+  </data>
+  <data name="listViewCaches.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;listViewCaches.Name" xml:space="preserve">
+    <value>listViewCaches</value>
+  </data>
+  <data name="&gt;&gt;listViewCaches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;listViewCaches.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;listViewCaches.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="buttonClose.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="buttonClose.Location" type="System.Drawing.Point, System.Drawing">
     <value>554, 519</value>
   </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+  <data name="buttonClose.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 25</value>
+  </data>
+  <data name="buttonClose.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="buttonClose.Text" xml:space="preserve">
+    <value>&amp;Close</value>
+  </data>
+  <data name="&gt;&gt;buttonClose.Name" xml:space="preserve">
+    <value>buttonClose</value>
   </data>
   <data name="&gt;&gt;buttonClose.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonClose.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonClose.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="buttonSearch.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="buttonSearch.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="buttonSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>444, 519</value>
+  </data>
+  <data name="buttonSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 25</value>
+  </data>
+  <data name="buttonSearch.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="buttonSearch.Text" xml:space="preserve">
+    <value>&amp;Search</value>
+  </data>
+  <data name="&gt;&gt;buttonSearch.Name" xml:space="preserve">
+    <value>buttonSearch</value>
+  </data>
+  <data name="&gt;&gt;buttonSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonSearch.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonSearch.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="buttonDeleteEntry.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="buttonDeleteEntry.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="buttonDeleteEntry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 519</value>
+  </data>
+  <data name="buttonDeleteEntry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 25</value>
+  </data>
+  <data name="buttonDeleteEntry.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="buttonDeleteEntry.Text" xml:space="preserve">
+    <value>&amp;Delete</value>
+  </data>
+  <data name="&gt;&gt;buttonDeleteEntry.Name" xml:space="preserve">
+    <value>buttonDeleteEntry</value>
+  </data>
+  <data name="&gt;&gt;buttonDeleteEntry.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonDeleteEntry.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonDeleteEntry.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="buttonUpdateAll.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="buttonUpdateAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>334, 519</value>
+  </data>
+  <data name="buttonUpdateAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 25</value>
+  </data>
+  <data name="buttonUpdateAll.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="buttonUpdateAll.Text" xml:space="preserve">
+    <value>S&amp;ynchronize</value>
+  </data>
+  <data name="&gt;&gt;buttonUpdateAll.Name" xml:space="preserve">
+    <value>buttonUpdateAll</value>
+  </data>
+  <data name="&gt;&gt;buttonUpdateAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonUpdateAll.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonUpdateAll.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>666, 556</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -512,168 +670,37 @@
         AADwAwAA8AMAAPADccTwA/X/8APH//AD///wA2n/8AOc//ADkP/wA3//8Ad9/w==
 </value>
   </data>
-  <data name="buttonSearch.Text" xml:space="preserve">
-    <value>&amp;Search</value>
-  </data>
-  <data name="columnHeaderId.Text" xml:space="preserve">
-    <value>Cache ID</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonSearch.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonDeleteEntry.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="buttonDeleteEntry.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;columnHeaderAuthor.Name" xml:space="preserve">
-    <value>columnHeaderAuthor</value>
-  </data>
-  <data name="&gt;&gt;columnHeaderName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="buttonDeleteEntry.Text" xml:space="preserve">
-    <value>&amp;Delete</value>
-  </data>
-  <data name="buttonDeleteEntry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 519</value>
-  </data>
-  <data name="buttonClose.Text" xml:space="preserve">
-    <value>&amp;Close</value>
-  </data>
-  <data name="&gt;&gt;buttonSearch.Name" xml:space="preserve">
-    <value>buttonSearch</value>
-  </data>
-  <data name="columnHeaderName.Width" type="System.Int32, mscorlib">
-    <value>107</value>
-  </data>
-  <data name="columnHeaderShortDescription.Text" xml:space="preserve">
-    <value>Short Description</value>
-  </data>
-  <data name="listViewCaches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>641, 500</value>
-  </data>
-  <data name="&gt;&gt;buttonClose.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>666, 556</value>
-  </data>
-  <data name="&gt;&gt;columnHeaderShortDescription.Name" xml:space="preserve">
-    <value>columnHeaderShortDescription</value>
-  </data>
-  <data name="&gt;&gt;buttonSearch.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;buttonClose.Name" xml:space="preserve">
-    <value>buttonClose</value>
-  </data>
-  <data name="buttonClose.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="&gt;&gt;columnHeaderAuthor.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="buttonSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 25</value>
-  </data>
-  <data name="listViewCaches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 13</value>
-  </data>
-  <data name="columnHeaderId.Width" type="System.Int32, mscorlib">
-    <value>101</value>
-  </data>
-  <data name="buttonSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;listViewCaches.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="columnHeaderName.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="&gt;&gt;buttonDeleteEntry.Name" xml:space="preserve">
-    <value>buttonDeleteEntry</value>
-  </data>
-  <data name="&gt;&gt;columnHeaderName.Name" xml:space="preserve">
-    <value>columnHeaderName</value>
-  </data>
-  <data name="&gt;&gt;listViewCaches.Name" xml:space="preserve">
-    <value>listViewCaches</value>
-  </data>
-  <data name="columnHeaderAuthor.Text" xml:space="preserve">
-    <value>Owner</value>
-  </data>
-  <data name="listViewCaches.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="columnHeaderShortDescription.Width" type="System.Int32, mscorlib">
-    <value>164</value>
-  </data>
-  <data name="buttonDeleteEntry.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 25</value>
-  </data>
-  <data name="&gt;&gt;buttonSearch.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;listViewCaches.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonDeleteEntry.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonClose.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonDeleteEntry.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="columnHeaderAuthor.Width" type="System.Int32, mscorlib">
-    <value>103</value>
-  </data>
-  <data name="&gt;&gt;listViewCaches.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeaderId.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="buttonSearch.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>ListCachesForm</value>
-  </data>
-  <data name="&gt;&gt;buttonDeleteEntry.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="buttonClose.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="buttonDeleteEntry.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Geocaches on Device</value>
   </data>
   <data name="&gt;&gt;columnHeaderId.Name" xml:space="preserve">
     <value>columnHeaderId</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Geocaches on Device</value>
+  <data name="&gt;&gt;columnHeaderId.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="listViewCaches.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
+  <data name="&gt;&gt;columnHeaderName.Name" xml:space="preserve">
+    <value>columnHeaderName</value>
+  </data>
+  <data name="&gt;&gt;columnHeaderName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeaderAuthor.Name" xml:space="preserve">
+    <value>columnHeaderAuthor</value>
+  </data>
+  <data name="&gt;&gt;columnHeaderAuthor.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeaderShortDescription.Name" xml:space="preserve">
+    <value>columnHeaderShortDescription</value>
   </data>
   <data name="&gt;&gt;columnHeaderShortDescription.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;buttonSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ListCachesForm</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

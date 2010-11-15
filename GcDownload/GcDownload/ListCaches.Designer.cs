@@ -37,6 +37,7 @@
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.buttonDeleteEntry = new System.Windows.Forms.Button();
+            this.buttonUpdateAll = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listViewCaches
@@ -95,10 +96,19 @@
             this.buttonDeleteEntry.UseVisualStyleBackColor = true;
             this.buttonDeleteEntry.Click += new System.EventHandler(this.buttonDeleteEntry_Click);
             // 
+            // buttonUpdateAll
+            // 
+            this.buttonUpdateAll.Image = global::GcDownload.Properties.Resources.RefreshDocViewHS;
+            resources.ApplyResources(this.buttonUpdateAll, "buttonUpdateAll");
+            this.buttonUpdateAll.Name = "buttonUpdateAll";
+            this.buttonUpdateAll.UseVisualStyleBackColor = true;
+            this.buttonUpdateAll.Click += new System.EventHandler(this.buttonUpdateAll_Click);
+            // 
             // ListCachesForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonUpdateAll);
             this.Controls.Add(this.buttonDeleteEntry);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.buttonClose);
@@ -119,5 +129,6 @@
         private System.Windows.Forms.Button buttonDeleteEntry;
         private System.Windows.Forms.ColumnHeader columnHeaderAuthor;
         private System.Windows.Forms.ColumnHeader columnHeaderShortDescription;
+        private System.Windows.Forms.Button buttonUpdateAll;
     }
 }

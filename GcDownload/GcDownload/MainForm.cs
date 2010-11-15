@@ -39,6 +39,7 @@ namespace GcDownload
         private static Mutex traceMutex = new Mutex(false);
         private CSettings settings = new CSettings();
         private Provider provider = Provider.ProviderGeocachingCom;
+        private List<string> updateCacheIds = new List<string>();
 
         enum Provider
         {
@@ -1439,6 +1440,16 @@ namespace GcDownload
 
             if (!ensureGarminAvailable()) return;
 
+            download(true);
+
+        }
+
+        private void download(bool promptForFilename)
+        {
+            WriteToLogfile("doGeocacheDownload", true);
+
+            if (!ensureGarminAvailable()) return;
+
             GeocacheGpx geocacheGpx = new GeocacheGpx();
 
             switch (provider)
@@ -1458,24 +1469,37 @@ namespace GcDownload
 
                 try
                 {
-                    System.Windows.Forms.SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog();
-                    fileDialog.InitialDirectory = settings.GpxPath;
-                    fileDialog.AddExtension = true;
-                    fileDialog.AutoUpgradeEnabled = true;
-                    fileDialog.CheckPathExists = true;
-                    fileDialog.DefaultExt = "gpx";
-                    fileDialog.FileName = geocacheGpx.GcId + ".gpx";
-                    fileDialog.OverwritePrompt = true;
-                    fileDialog.ValidateNames = true;
-                    fileDialog.Filter = GcDownload.Strings.FilterGpxFiles;
-                    fileDialog.FilterIndex = 1;
+                    string fullGpxFilePath = "";
+                    if (promptForFilename)
+                    {
+                        System.Windows.Forms.SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog();
+                        fileDialog.InitialDirectory = settings.GpxPath;
+                        fileDialog.AddExtension = true;
+                        fileDialog.AutoUpgradeEnabled = true;
+                        fileDialog.CheckPathExists = true;
+                        fileDialog.DefaultExt = "gpx";
+                        fileDialog.FileName = geocacheGpx.GcId + ".gpx";
+                        fileDialog.OverwritePrompt = true;
+                        fileDialog.ValidateNames = true;
+                        fileDialog.Filter = GcDownload.Strings.FilterGpxFiles;
+                        fileDialog.FilterIndex = 1;
 
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                        if (fileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            fullGpxFilePath = fileDialog.FileName;
+                        }
+                    }
+                    else
+                    {
+                        fullGpxFilePath = System.IO.Path.Combine(settings.GpxPath, geocacheGpx.GcId + ".gpx");                        
+                    }
+
+                    if (!string.IsNullOrEmpty(fullGpxFilePath))
                     {
                         try
                         {
-                            WriteToLogfile("Write to file: " + fileDialog.FileName, true);
-                            StreamWriter writer = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8);
+                            WriteToLogfile("Write to file: " + fullGpxFilePath, true);
+                            StreamWriter writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8);
                             writer.Write(fileContent);
                             writer.Close();
                         }
@@ -1516,6 +1540,16 @@ namespace GcDownload
 
         private void webBrowserPreview_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            if (e.Url.ToString().ToLower().Contains("opencaching"))
+            {
+                selectProvider(Provider.ProviderOpencachingDe);
+            }
+            else if (e.Url.ToString().ToLower().Contains("geocaching.com"))
+            {
+                selectProvider(Provider.ProviderGeocachingCom);
+            }
+
+            triggerAutoDownload(e.Url.ToString());
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -1769,17 +1803,19 @@ namespace GcDownload
                 {
                     case DialogResult.OK:
                         {
-                            if (listCachesForm.CacheIdToSearch.Length > 0)
+                            updateCacheIds = listCachesForm.updateCacheIds;
+
+                            if (listCachesForm.cacheIdToSearch.Length > 0)
                             {
-                                textBoxGeocacheId.Text = listCachesForm.CacheIdToSearch;
-                                search(listCachesForm.CacheIdToSearch);
+                                textBoxGeocacheId.Text = listCachesForm.cacheIdToSearch;
+                                search(listCachesForm.cacheIdToSearch);
                             }
 
-                            if (listCachesForm.DeletedCacheIds.Count > 0)
+                            if (listCachesForm.deletedCacheIds.Count > 0)
                             {
-                                if (MessageBox.Show(string.Format(GcDownload.Strings.PromptDeleteGeocacheFiles, listCachesForm.DeletedCacheIds.Count.ToString()), GcDownload.Strings.TitleDeleteGeocache, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (MessageBox.Show(string.Format(GcDownload.Strings.PromptDeleteGeocacheFiles, listCachesForm.deletedCacheIds.Count.ToString()), GcDownload.Strings.TitleDeleteGeocache, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
-                                    foreach (string cacheId in listCachesForm.DeletedCacheIds)
+                                    foreach (string cacheId in listCachesForm.deletedCacheIds)
                                     {
                                         try
                                         {
@@ -1793,6 +1829,8 @@ namespace GcDownload
                                     }
                                 }
                             }
+
+                            triggerAutoSearch();
                         }
                         break;
                 }
@@ -1832,6 +1870,32 @@ namespace GcDownload
         private void linkLabelProjectHomepage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             webBrowserPreview.Navigate("http://code.google.com/p/gcdownload/");
+        }
+
+        private void triggerAutoSearch()
+        {
+            if (updateCacheIds.Count > 0)
+            {
+                search(updateCacheIds[0]);
+            };
+        }
+
+        private void triggerAutoDownload(string url)
+        {
+            if (updateCacheIds.Count > 0)
+            {
+                if (url.ToLower().Contains(updateCacheIds[0].ToLower()))
+                {
+                    updateCacheIds.RemoveAt(0);
+                    download(false);
+
+                    if (updateCacheIds.Count > 0)
+                    {
+                        System.Threading.Thread.Sleep(3000);
+                        triggerAutoSearch();
+                    }
+                }
+            };
         }
     }
 }

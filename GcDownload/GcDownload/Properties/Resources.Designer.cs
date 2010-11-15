@@ -109,6 +109,13 @@ namespace GcDownload.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap RefreshDocViewHS {
+            get {
+                object obj = ResourceManager.GetObject("RefreshDocViewHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap saveHS {
             get {
                 object obj = ResourceManager.GetObject("saveHS", resourceCulture);

@@ -132,7 +132,13 @@
   <data name="buttonDeleteEntry.Text" xml:space="preserve">
     <value>&amp;Entfernen</value>
   </data>
+  <data name="buttonUpdateAll.Text" xml:space="preserve">
+    <value>S&amp;ynchronisieren</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonUpdateAll.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAMDAAAAEACACoDgAAZgAAACAgAAABAAgAqAgAAA4PAAAQEAAAAQAIAGgFAAC2FwAAMDAAAAEA
