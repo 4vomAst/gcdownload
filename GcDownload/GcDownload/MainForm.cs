@@ -147,6 +147,7 @@ namespace GcDownload
             public bool Available = true;
             public bool Archived = false;
             public DateTime Timestamp = DateTime.Now;
+            public DateTime FileTimestamp = DateTime.Now;
             List<LogEntry> Log = new List<LogEntry>();
 
             string BoolToString(bool val)
@@ -685,8 +686,14 @@ namespace GcDownload
                 {
                     try
                     {
-                        string seachString = " - Geocaching in Deutschland";
+                        string seachString = " - ";
                         Name = document.Title;
+
+                        if (Name.StartsWith("OC"))
+                        {
+                            Name = Name.Substring(Name.IndexOf(" ") + 1);
+                        }
+
                         if (Name.Contains(seachString))
                         {
                             Name = Name.Substring(0, Name.IndexOf(seachString));
@@ -1180,6 +1187,9 @@ namespace GcDownload
                 {
                     XmlDocument document = new XmlDocument();
                     XmlNodeList nodeListWaypoint;
+
+                    System.IO.FileInfo fileInfo = new FileInfo(filename);
+                    FileTimestamp = fileInfo.LastWriteTime;
 
                     document.Load(filename);
 

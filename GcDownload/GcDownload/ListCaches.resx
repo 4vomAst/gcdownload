@@ -140,6 +140,12 @@
   <data name="columnHeaderAuthor.Width" type="System.Int32, mscorlib">
     <value>103</value>
   </data>
+  <data name="columnHeaderDownloadTimestamp.Text" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="columnHeaderDownloadTimestamp.Width" type="System.Int32, mscorlib">
+    <value>123</value>
+  </data>
   <data name="columnHeaderShortDescription.Text" xml:space="preserve">
     <value>Short Description</value>
   </data>
@@ -151,7 +157,7 @@
     <value>13, 13</value>
   </data>
   <data name="listViewCaches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>641, 500</value>
+    <value>842, 500</value>
   </data>
   <data name="listViewCaches.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -172,7 +178,7 @@
     <value>Bottom, Right</value>
   </data>
   <data name="buttonClose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>554, 519</value>
+    <value>755, 519</value>
   </data>
   <data name="buttonClose.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
@@ -202,7 +208,7 @@
     <value>MiddleLeft</value>
   </data>
   <data name="buttonSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>444, 519</value>
+    <value>645, 519</value>
   </data>
   <data name="buttonSearch.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
@@ -255,11 +261,14 @@
   <data name="&gt;&gt;buttonDeleteEntry.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="buttonUpdateAll.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
   <data name="buttonUpdateAll.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
   <data name="buttonUpdateAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>334, 519</value>
+    <value>535, 519</value>
   </data>
   <data name="buttonUpdateAll.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
@@ -289,7 +298,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>666, 556</value>
+    <value>867, 556</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -689,6 +698,12 @@
     <value>columnHeaderAuthor</value>
   </data>
   <data name="&gt;&gt;columnHeaderAuthor.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeaderDownloadTimestamp.Name" xml:space="preserve">
+    <value>columnHeaderDownloadTimestamp</value>
+  </data>
+  <data name="&gt;&gt;columnHeaderDownloadTimestamp.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderShortDescription.Name" xml:space="preserve">

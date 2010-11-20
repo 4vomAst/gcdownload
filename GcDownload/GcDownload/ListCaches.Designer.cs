@@ -33,6 +33,7 @@
             this.columnHeaderId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderAuthor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderDownloadTimestamp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderShortDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonSearch = new System.Windows.Forms.Button();
@@ -47,10 +48,10 @@
             this.columnHeaderId,
             this.columnHeaderName,
             this.columnHeaderAuthor,
+            this.columnHeaderDownloadTimestamp,
             this.columnHeaderShortDescription});
             this.listViewCaches.FullRowSelect = true;
             this.listViewCaches.GridLines = true;
-            this.listViewCaches.MultiSelect = false;
             this.listViewCaches.Name = "listViewCaches";
             this.listViewCaches.UseCompatibleStateImageBehavior = false;
             this.listViewCaches.View = System.Windows.Forms.View.Details;
@@ -68,6 +69,10 @@
             // columnHeaderAuthor
             // 
             resources.ApplyResources(this.columnHeaderAuthor, "columnHeaderAuthor");
+            // 
+            // columnHeaderDownloadTimestamp
+            // 
+            resources.ApplyResources(this.columnHeaderDownloadTimestamp, "columnHeaderDownloadTimestamp");
             // 
             // columnHeaderShortDescription
             // 
@@ -98,8 +103,8 @@
             // 
             // buttonUpdateAll
             // 
-            this.buttonUpdateAll.Image = global::GcDownload.Properties.Resources.RefreshDocViewHS;
             resources.ApplyResources(this.buttonUpdateAll, "buttonUpdateAll");
+            this.buttonUpdateAll.Image = global::GcDownload.Properties.Resources.RefreshDocViewHS;
             this.buttonUpdateAll.Name = "buttonUpdateAll";
             this.buttonUpdateAll.UseVisualStyleBackColor = true;
             this.buttonUpdateAll.Click += new System.EventHandler(this.buttonUpdateAll_Click);
@@ -130,5 +135,6 @@
         private System.Windows.Forms.ColumnHeader columnHeaderAuthor;
         private System.Windows.Forms.ColumnHeader columnHeaderShortDescription;
         private System.Windows.Forms.Button buttonUpdateAll;
+        private System.Windows.Forms.ColumnHeader columnHeaderDownloadTimestamp;
     }
 }

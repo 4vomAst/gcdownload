@@ -62,6 +62,7 @@ namespace GcDownload
                     //item.SubItems.Add(logEntry.Type);
                     item.SubItems.Add(geocache.Name);
                     item.SubItems.Add(geocache.Author);
+                    item.SubItems.Add(geocache.FileTimestamp.ToShortDateString());
                     item.SubItems.Add(geocache.ShortDescription);
 
                     //item.Checked = false;
@@ -72,6 +73,7 @@ namespace GcDownload
                 listViewCaches.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
                 listViewCaches.Columns[2].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
                 listViewCaches.Columns[3].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+                listViewCaches.Columns[4].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
 
             buttonSearch.Enabled = false;
@@ -97,18 +99,21 @@ namespace GcDownload
 
         private void buttonDeleteEntry_Click(object sender, EventArgs e)
         {
-            if (listViewCaches.SelectedItems.Count == 1)
+            if (listViewCaches.SelectedItems.Count > 0)
             {
-                deletedCacheIds.Add(listViewCaches.SelectedItems[0].Text);
-                listViewCaches.Items.Remove(listViewCaches.SelectedItems[0]);
+                foreach (ListViewItem item in listViewCaches.SelectedItems)
+                {
+                    deletedCacheIds.Add(item.Text);
+                    listViewCaches.Items.Remove(item);
+                }
             }
-            buttonUpdateAll.Enabled = listViewCaches.Items.Count > 0;
         }
 
         private void listViewCaches_SelectedIndexChanged(object sender, EventArgs e)
         {
             buttonSearch.Enabled = (listViewCaches.SelectedItems.Count == 1);
-            buttonDeleteEntry.Enabled = (listViewCaches.SelectedItems.Count == 1);
+            buttonDeleteEntry.Enabled = (listViewCaches.SelectedItems.Count > 0);
+            buttonUpdateAll.Enabled = listViewCaches.Items.Count > 0;
         }
 
         private void listViewCaches_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -124,7 +129,7 @@ namespace GcDownload
         private void buttonUpdateAll_Click(object sender, EventArgs e)
         {
             updateCacheIds.Clear();
-            foreach (ListViewItem item in listViewCaches.Items)
+            foreach (ListViewItem item in listViewCaches.SelectedItems)
             {
                 updateCacheIds.Add(item.Text);
             };
