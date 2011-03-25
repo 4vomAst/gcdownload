@@ -759,7 +759,8 @@ namespace GcDownload
                                         }
                                     }
                                     double minutesLat = System.Convert.ToDouble(LatLonComponents[1]);
-                                    double decLat = System.Math.Round(minutesLat * 100000.0 / 60.0, 0);
+                                    int decLat = (int)System.Math.Round(minutesLat * 100000.0 / 60.0, 0);
+
 
                                     LatLonComponents[2] = LatLonComponents[2].Trim();
                                     LatLonComponents[2] = LatLonComponents[2].Replace("E ", "");
@@ -790,10 +791,10 @@ namespace GcDownload
                                         }
                                     }
                                     double minutesLon = System.Convert.ToDouble(LatLonComponents[3]);
-                                    double decLon = System.Math.Round(minutesLon * 100000.0 / 60.0, 0);
+                                    int decLon = (int)System.Math.Round(minutesLon * 100000.0 / 60.0, 0);
 
-
-                                    LatLon = String.Format("lat=\"{0}.{1}\" lon=\"{2}.{3}\"", LatLonComponents[0], decLat.ToString(), LatLonComponents[2], decLon.ToString());
+                                    System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("en-us");
+                                    LatLon = String.Format("lat=\"{0}.{1}\" lon=\"{2}.{3}\"", LatLonComponents[0], decLat.ToString("D5", ci), LatLonComponents[2], decLon.ToString("D5", ci));
                                 }
                             }
                             else if ((baseInfoLines[i].Trim().StartsWith("Größe")) || (baseInfoLines[i].Trim().StartsWith("Size")))
