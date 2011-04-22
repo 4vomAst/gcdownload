@@ -1139,34 +1139,75 @@ namespace GcDownload
                     gpxTrack.AppendLine(String.Format("<name>{0}</name>", Quote(GcId)));
                     gpxTrack.AppendLine(String.Format("<desc>{0} by {1}, {2}</desc>", Quote(Name), Quote(Author), Quote(Type)));
                     gpxTrack.AppendLine("<sym>Geocache</sym>");
-                    gpxTrack.AppendLine(String.Format("<type>Geocache|{0}</type>", Quote(Type)));
+                    if (!string.IsNullOrEmpty(Type)) gpxTrack.AppendLine(String.Format("<type>Geocache|{0}</type>", Quote(Type)));
                     gpxTrack.AppendLine("<extensions>");
-                    gpxTrack.AppendLine(String.Format("<cache id=\"{0}\" available=\"{1}\" archived=\"{2}\" xmlns=\"http://www.groundspeak.com/cache/1/0\">", Quote(NumericCacheId), BoolToString(Available), BoolToString(Archived)));
-                    gpxTrack.AppendLine(String.Format("<time>{0}</time>", Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z")));
-                    gpxTrack.AppendLine(String.Format("<name>{0}</name>", Quote(namePrefix + Name)));
-                    gpxTrack.AppendLine(String.Format("<placed_by>{0}</placed_by>", Quote(Author)));
-                    gpxTrack.AppendLine(String.Format("<type>{0}</type>", Quote(Type)));
-                    gpxTrack.AppendLine(String.Format("<container>{0}</container>", Quote(Container)));
-                    gpxTrack.AppendLine(String.Format("<difficulty>{0}</difficulty>", Quote(Difficulty)));
-                    gpxTrack.AppendLine(String.Format("<terrain>{0}</terrain>", Quote(Terrain)));
-                    gpxTrack.AppendLine(String.Format("<short_description html=\"False\">{0}</short_description>", Quote(ShortDescription)));
-                    gpxTrack.AppendLine(String.Format("<long_description html=\"False\">{0}</long_description>", Quote(LongDescription)));
-                    gpxTrack.AppendLine(String.Format("<encoded_hints>{0}</encoded_hints>", Quote(Hint)));
-                    if (Log.Count > 0)
+                    try
                     {
-                        gpxTrack.AppendLine("<logs>");
-                        foreach (LogEntry logEntry in Log)
+                        if (!string.IsNullOrEmpty(NumericCacheId))
                         {
-                            gpxTrack.AppendLine(String.Format("<log id=\"{0}\">", Quote(logEntry.Id)));
-                            gpxTrack.AppendLine(String.Format("<date>{0}</date>", logEntry.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z"))); //2010-05-09T19:01:15.8760502Z
-                            gpxTrack.AppendLine(String.Format("<type>{0}</type>", Quote(logEntry.Type)));
-                            gpxTrack.AppendLine(String.Format("<finder id=\"{0}\">{1}</finder>", Quote(logEntry.FinderId), Quote(logEntry.FinderName)));
-                            gpxTrack.AppendLine(String.Format("<text encoded=\"{0}\">{1}</text>", Quote(logEntry.TextEncoded), Quote(logEntry.Text)));
-                            gpxTrack.AppendLine("</log>");
+                            gpxTrack.AppendLine(String.Format("<cache id=\"{0}\" available=\"{1}\" archived=\"{2}\" xmlns=\"http://www.groundspeak.com/cache/1/0\">", Quote(NumericCacheId), BoolToString(Available), BoolToString(Archived)));
+                            try
+                            {
+                                gpxTrack.AppendLine(String.Format("<time>{0}</time>", Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z")));
+                                if (!string.IsNullOrEmpty(Name)) gpxTrack.AppendLine(String.Format("<name>{0}</name>", Quote(namePrefix + Name)));
+                                if (!string.IsNullOrEmpty(Author)) gpxTrack.AppendLine(String.Format("<placed_by>{0}</placed_by>", Quote(Author)));
+                                if (!string.IsNullOrEmpty(Type)) gpxTrack.AppendLine(String.Format("<type>{0}</type>", Quote(Type)));
+                                if (!string.IsNullOrEmpty(Container)) gpxTrack.AppendLine(String.Format("<container>{0}</container>", Quote(Container)));
+                                if (!string.IsNullOrEmpty(Difficulty)) gpxTrack.AppendLine(String.Format("<difficulty>{0}</difficulty>", Quote(Difficulty)));
+                                if (!string.IsNullOrEmpty(Terrain)) gpxTrack.AppendLine(String.Format("<terrain>{0}</terrain>", Quote(Terrain)));
+                                if (!string.IsNullOrEmpty(ShortDescription)) gpxTrack.AppendLine(String.Format("<short_description html=\"False\">{0}</short_description>", Quote(ShortDescription)));
+                                if (!string.IsNullOrEmpty(LongDescription)) gpxTrack.AppendLine(String.Format("<long_description html=\"False\">{0}</long_description>", Quote(LongDescription)));
+                                if (!string.IsNullOrEmpty(Hint)) gpxTrack.AppendLine(String.Format("<encoded_hints>{0}</encoded_hints>", Quote(Hint)));
+                                if (Log.Count > 0)
+                                {
+                                    gpxTrack.AppendLine("<logs>");
+                                    try
+                                    {
+                                        foreach (LogEntry logEntry in Log)
+                                        {
+                                            if (string.IsNullOrEmpty(logEntry.Id)) continue;
+
+                                            gpxTrack.AppendLine(String.Format("<log id=\"{0}\">", Quote(logEntry.Id)));
+
+                                            try
+                                            {
+                                                gpxTrack.AppendLine(String.Format("<date>{0}</date>", logEntry.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z"))); //2010-05-09T19:01:15.8760502Z
+                                                if (!string.IsNullOrEmpty(logEntry.Type)) gpxTrack.AppendLine(String.Format("<type>{0}</type>", Quote(logEntry.Type)));
+                                                if ((!string.IsNullOrEmpty(logEntry.FinderId)) && (!string.IsNullOrEmpty(logEntry.FinderName)))
+                                                {
+                                                    gpxTrack.AppendLine(String.Format("<finder id=\"{0}\">{1}</finder>", Quote(logEntry.FinderId), Quote(logEntry.FinderName)));
+                                                }
+                                                if ((!string.IsNullOrEmpty(logEntry.TextEncoded)) && (!string.IsNullOrEmpty(logEntry.Text)))
+                                                {
+                                                    gpxTrack.AppendLine(String.Format("<text encoded=\"{0}\">{1}</text>", Quote(logEntry.TextEncoded), Quote(logEntry.Text)));
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                WriteToLogfile("<log> export failed: " + ex.Message, true);
+                                            }
+
+                                            gpxTrack.AppendLine("</log>");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteToLogfile("<logs> export failed: " + ex.Message, true);
+                                    }
+                                    gpxTrack.AppendLine("</logs>");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteToLogfile("<cache> export failed: " + ex.Message, true);
+                            }
+                            gpxTrack.AppendLine("</cache>");
                         }
-                        gpxTrack.AppendLine("</logs>");
                     }
-                    gpxTrack.AppendLine("</cache>");
+                    catch (Exception ex)
+                    {
+                        WriteToLogfile("<extensions> export failed: " + ex.Message, true);
+                    }
                     gpxTrack.AppendLine("</extensions>");
                     gpxTrack.AppendLine("</wpt>");
                     gpxTrack.AppendLine("</gpx>");
