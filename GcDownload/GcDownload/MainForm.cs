@@ -263,7 +263,8 @@ namespace GcDownload
 
                     try
                     {
-                        GcId = document.GetElementById("ctl00_uxWaypointName").InnerText;
+                        //GcId = document.GetElementById("ctl00_uxWaypointName").InnerText;
+                        GcId = document.GetElementById("ctl00_ContentBody_uxWaypointName").InnerText;
                     }
                     catch (Exception ex)
                     {
@@ -400,7 +401,7 @@ namespace GcDownload
                         foreach (HtmlElement element in document.Links)
                         {
                             string alternate = element.GetAttribute("href");
-                            string searchString = "http://www.geocaching.com/seek/log.aspx?ID=";
+                            string searchString = "http://www.geocaching.com/seek/log.aspx?ID="; // "http://www.geocaching.com/seek/log.aspx?ID=";
 
                             if (alternate.StartsWith(searchString))
                             {
@@ -497,7 +498,22 @@ namespace GcDownload
 
                     try
                     {
-                        ShortDescription = document.GetElementById("ctl00_ContentBody_ShortDescription").InnerText;
+                        HtmlElementCollection metaEntries = document.GetElementsByTagName("meta");
+                        bool weAreClose = false;
+
+                        foreach (HtmlElement metaEntry in metaEntries)
+                        {
+                            if (metaEntry.GetAttribute("name") == "og:description")
+                            {
+                                weAreClose = true;
+                            }
+                            if (weAreClose && (metaEntry.GetAttribute("name") == "description") )
+                            {
+                                ShortDescription = metaEntry.GetAttribute("content");
+                                break;
+                            }
+                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -535,7 +551,7 @@ namespace GcDownload
 
                         foreach (HtmlElement table in tables)
                         {
-                            if (table.OuterHtml.Contains("<TABLE class=\"LogsTable Table\">"))
+                            if (table.OuterHtml.Contains("<TABLE class=LogsTable"))
                             {
                                 cacheLogTable = table;
                                 break;
