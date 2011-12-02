@@ -264,7 +264,8 @@ namespace GcDownload
                     try
                     {
                         //GcId = document.GetElementById("ctl00_uxWaypointName").InnerText;
-                        GcId = document.GetElementById("ctl00_ContentBody_uxWaypointName").InnerText;
+                        //GcId = document.GetElementById("ctl00_ContentBody_uxWaypointName").InnerText;
+                        GcId = document.GetElementById("ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode").InnerText;
                     }
                     catch (Exception ex)
                     {
@@ -1516,7 +1517,7 @@ namespace GcDownload
         {
             WriteToLogfile("doGeocacheDownload", true);
 
-            if (!ensureGarminAvailable()) return;
+           if (!ensureGarminAvailable()) return;
 
             GeocacheGpx geocacheGpx = new GeocacheGpx();
 
