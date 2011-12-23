@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2010 Wolfgang Bruessler
+Copyright (c) 2010-2012 Wolfgang Wallhaeuser
 
 http://code.google.com/p/gcdownload/
 
@@ -547,143 +547,77 @@ namespace GcDownload
                     try
                     {
                         // HtmlElement cacheLogTable = document.GetElementById("ctl00_ContentBody_CacheLogs");
-                        HtmlElement cacheLogTable = null;
-                        HtmlElementCollection tables = document.GetElementsByTagName("table");
+                        int logsStartPos = document.Body.InnerHtml.IndexOf("initalLogs = ");
+                        int logsEndPos = document.Body.InnerHtml.IndexOf("};", logsStartPos);
 
-                        foreach (HtmlElement table in tables)
+                        if ( (logsStartPos != -1) && (logsEndPos != -1) )
                         {
-                            if (table.OuterHtml.Contains("<TABLE class=LogsTable"))
-                            {
-                                cacheLogTable = table;
-                                break;
-                            }
-                        }
-
-                        if (cacheLogTable != null)
-                        {
+                            string logsString = document.Body.InnerHtml.Substring(logsStartPos, logsEndPos - logsStartPos + 2);
                             int iLogId = 4711000;
                             int iFinderId = 4242000;
 
-                            foreach (HtmlElement cacheLogTableRow in cacheLogTable.GetElementsByTagName("td"))
+                            const string logTypeMagic = "LogType\":\"";
+                            const string logTextMagic = "LogText\":\"";
+                            const string logTimestampMagic = "Created\":\"";
+                            const string logUserNameMagic = "UserName\":\"";
+                            const string logIsEncodedMagic = "IsEncoded\":";
+
+                            int pos = logsString.IndexOf(logTypeMagic);
+
+                            while (pos != -1)
                             {
-                                if (cacheLogTableRow.InnerText == null)
+                                LogEntry logEntry = new LogEntry();
+                                int startValPos = pos + logTypeMagic.Length;
+                                int endValPos = logsString.IndexOf("\",", startValPos);
+                                logEntry.Type = logsString.Substring(startValPos, endValPos - startValPos);
+
+                                pos = logsString.IndexOf(logTextMagic, pos);
+                                startValPos = pos + logTextMagic.Length;
+                                endValPos = logsString.IndexOf("\",", startValPos);
+                                logEntry.Text = logsString.Substring(startValPos, endValPos - startValPos);
+
+                                pos = logsString.IndexOf(logTimestampMagic, pos);
+                                startValPos = pos + logTimestampMagic.Length;
+                                endValPos = logsString.IndexOf("\",", startValPos);
+
+                                try
                                 {
-                                    continue;
+                                    System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
+                                    logEntry.Timestamp = DateTime.Parse(logsString.Substring(startValPos, endValPos - startValPos), usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
                                 }
-                                LogEntry logEntry = new LogEntry(); //" May 16 by jan-lennart (104 found)\r\n\r\nheute noch mal geocoins gedroppt\r\n\r\nView This Log "
-                                string[] stringSeparators = new string[] { "\r\n" };
-                                string[] logEntryLines = cacheLogTableRow.InnerText.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                if (logEntryLines.Length > 1)
+                                catch (Exception ex)
                                 {
-                                    logEntryLines[0] = logEntryLines[0].Trim();
-                                    string[] headerStringSeparators = new string[] { " by ", " (" };
-                                    string[] headerElements = logEntryLines[0].Split(headerStringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    if (headerElements.Length > 1)
+                                    WriteToLogfile("Extract log timestamp failed: " + ex.Message, true);
+                                };
+
+                                pos = logsString.IndexOf(logUserNameMagic, pos);
+                                startValPos = pos + logUserNameMagic.Length;
+                                endValPos = logsString.IndexOf("\",", startValPos);
+                                logEntry.FinderName = logsString.Substring(startValPos, endValPos - startValPos);
+
+                                pos = logsString.IndexOf(logIsEncodedMagic, pos);
+                                startValPos = pos + logIsEncodedMagic.Length;
+                                endValPos = logsString.IndexOf(",", startValPos);
+                                logEntry.TextEncoded= logsString.Substring(startValPos, endValPos - startValPos);
+
+                                if (logEntry.TextEncoded == "True")
+                                {
+                                    if (logEntry.Text.EndsWith("(decrypt)"))
                                     {
-                                        try
-                                        {
-                                            System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                                            logEntry.Timestamp = DateTime.Parse(headerElements[0], usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            WriteToLogfile("Extract log timestamp failed: " + ex.Message, true);
-                                        }
-
-                                        try
-                                        {
-                                            logEntry.FinderName = headerElements[1];
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            WriteToLogfile("Extract log finder name failed: " + ex.Message, true);
-                                        }
-
-                                        try
-                                        {
-                                            logEntry.Type = "Write note";
-                                            foreach (HtmlElement imgElement in cacheLogTableRow.GetElementsByTagName("img"))
-                                            {
-                                                string src = imgElement.GetAttribute("src");
-
-                                                if (src.Contains("icon_smile.gif"))
-                                                {
-                                                    logEntry.Type = "Found it";
-                                                    break;
-                                                }
-                                                else if (src.Contains("icon_sad.gif"))
-                                                {
-                                                    logEntry.Type = "Didn't find it";
-                                                    break;
-                                                }
-                                                else if (src.Contains("icon_note.gif"))
-                                                {
-                                                    logEntry.Type = "Write note";
-                                                    break;
-                                                }
-                                                else if (src.Contains("icon_needsmaint.gif"))
-                                                {
-                                                    logEntry.Type = "Needs Maintenance";
-                                                    break;
-                                                }
-                                                else if (src.Contains("icon_maint.gif"))
-                                                {
-                                                    logEntry.Type = "Owner Maintenance";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            WriteToLogfile("Extract log type failed: " + ex.Message, true);
-                                        }
-
-                                        try
-                                        {
-                                            logEntry.TextEncoded = "False";
-                                            foreach (HtmlElement linkElement in cacheLogTableRow.GetElementsByTagName("a"))
-                                            {
-                                                string title = linkElement.GetAttribute("title");
-
-                                                if (title == "Decrypt")
-                                                {
-                                                    logEntry.TextEncoded = "True";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            WriteToLogfile("Extract log text failed: " + ex.Message, true);
-                                        }
-
-                                        for (int iLine = 1; iLine < logEntryLines.Length - 1; iLine++)
-                                        {
-                                            if (logEntry.Text.Length > 0)
-                                            {
-                                                logEntry.Text += "\r\n";
-                                            }
-                                            logEntry.Text += logEntryLines[iLine];
-                                        }
-
-                                        if (logEntry.TextEncoded == "True")
-                                        {
-                                            if (logEntry.Text.EndsWith("(decrypt)"))
-                                            {
-                                                logEntry.Text = logEntry.Text.Substring(0, logEntry.Text.Length - 9);
-                                            }
-                                            logEntry.Text = Decrypt(logEntry.Text);
-                                        }
-
-                                        logEntry.Id = iLogId.ToString();
-                                        logEntry.FinderId = iFinderId.ToString();
-                                        Log.Add(logEntry);
-                                        iLogId++;
-                                        iFinderId++;
+                                        logEntry.Text = logEntry.Text.Substring(0, logEntry.Text.Length - 9);
                                     }
-                                }
-                            }
-                        }
+                                    logEntry.Text = Decrypt(logEntry.Text);
+                                };
+
+                                logEntry.Id = iLogId.ToString();
+                                logEntry.FinderId = iFinderId.ToString();
+                                Log.Add(logEntry);
+                                iLogId++;
+                                iFinderId++;
+
+                                pos = logsString.IndexOf(logTypeMagic, pos);
+                            };
+                        };
                     }
                     catch (Exception ex)
                     {
@@ -1459,6 +1393,8 @@ namespace GcDownload
 
             settings.readSettings();
             settings.autoDetectGarmin();
+
+            //this.textBoxGeocacheId.Text = "";
         }
 
         private void search(string geocacheId)
@@ -1960,7 +1896,7 @@ namespace GcDownload
 
                     if (updateCacheIds.Count > 0)
                     {
-                        System.Threading.Thread.Sleep(3000);
+                        System.Threading.Thread.Sleep(5000);
                         triggerAutoSearch();
                     }
                 }

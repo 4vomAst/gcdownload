@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2010 Wolfgang Bruessler
+Copyright (c) 2010-2012 Wolfgang Wallhaeuser
 
 http://code.google.com/p/gcdownload/
 
