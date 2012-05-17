@@ -474,6 +474,7 @@ namespace GcDownload
                     try
                     {
                         string searchString = "Hidden : ";
+                        if (document.Body.InnerText.IndexOf(searchString) == -1) searchString = "Versteckt : ";
                         int posDate = document.Body.InnerText.IndexOf(searchString) + searchString.Length;
                         int lenDate = document.Body.InnerText.IndexOf(" ", posDate) - posDate;
                         string Date = document.Body.InnerText.Substring(posDate, lenDate);
@@ -842,7 +843,7 @@ namespace GcDownload
 
                             if (src.Contains(searchString))
                             {
-                                Difficulty = alternate.Substring(alternate.IndexOf(':') + 2, 3);
+                                Difficulty = alternate.Substring(alternate.IndexOf(':') + 2, 1);
                                 break;
                             }
                         }
@@ -863,7 +864,7 @@ namespace GcDownload
 
                             if (src.Contains(searchString))
                             {
-                                Terrain = alternate.Substring(alternate.IndexOf(':') + 2, 3);
+                                Terrain = alternate.Substring(alternate.IndexOf(':') + 2, 1);
                                 break;
                             }
                         }
@@ -1394,7 +1395,7 @@ namespace GcDownload
             settings.readSettings();
             settings.autoDetectGarmin();
 
-            //this.textBoxGeocacheId.Text = "";
+            //this.textBoxGeocacheId.Text = "GC135N5";
         }
 
         private void search(string geocacheId)
