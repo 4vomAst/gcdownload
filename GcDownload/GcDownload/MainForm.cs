@@ -658,174 +658,194 @@ namespace GcDownload
 
                     try
                     {
-                        string baseInfoText = document.GetElementById("viewcache-baseinfo").InnerText;
-
-                        string[] stringSeparators = new string[] { "\r\n" };
-                        string[] baseInfoLines = baseInfoText.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-
-                        WriteToLogfile("viewcache-baseinfo", true);
-                        foreach (string line in baseInfoLines)
+                        foreach (HtmlElement element in document.GetElementsByTagName("div"))
                         {
-                            WriteToLogfile(line, true);
-                        }
+                            string className = "";
 
-                        for (int i = 0; i < baseInfoLines.Length; i++)
-                        {
-                            if (baseInfoLines[i].Contains("(WGS84)"))
+                            try
                             {
-                                string coordinates = baseInfoLines[i].Trim();
-                                coordinates = coordinates.Remove(coordinates.IndexOf("(WGS84)"));
-                                coordinates = coordinates.Trim();
+                                className = element.GetAttribute("class");
+                            }
+                            catch (Exception ex)
+                            {
 
-                                string[] LatLonComponents = coordinates.Split(new Char[] { '°', '\'' }, StringSplitOptions.RemoveEmptyEntries);
+                            }
 
-                                if (LatLonComponents.Length == 4)
+                            if (className != "content2-container") continue;
+
+                            string baseInfoText = element.InnerText;
+
+                            string[] stringSeparators = new string[] { "\r\n" };
+                            string[] baseInfoLines = baseInfoText.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+
+                            WriteToLogfile("viewcache-baseinfo", true);
+                            foreach (string line in baseInfoLines)
+                            {
+                                WriteToLogfile(line, true);
+                            }
+
+                            for (int i = 0; i < baseInfoLines.Length; i++)
+                            {
+                                if (baseInfoLines[i].Contains("(WGS84)"))
                                 {
-                                    LatLonComponents[0] = LatLonComponents[0].Trim();
-                                    LatLonComponents[0] = LatLonComponents[0].Replace("N ", "");
-                                    LatLonComponents[0] = LatLonComponents[0].Replace("S ", "-");
+                                    string coordinates = baseInfoLines[i].Trim();
+                                    coordinates = coordinates.Remove(coordinates.IndexOf("(WGS84)"));
+                                    coordinates = coordinates.Trim();
 
-                                    while (LatLonComponents[0].StartsWith("0"))
-                                    {
-                                        LatLonComponents[0] = LatLonComponents[0].Remove(0, 1);
-                                    }
-                                    while (LatLonComponents[0].StartsWith("-0"))
-                                    {
-                                        LatLonComponents[0] = LatLonComponents[0].Remove(1, 1);
-                                    }
+                                    string[] LatLonComponents = coordinates.Split(new Char[] { '°', '\'' }, StringSplitOptions.RemoveEmptyEntries);
 
-                                    LatLonComponents[1] = LatLonComponents[1].Trim();
-                                    if (System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.Length > 0)
+                                    if (LatLonComponents.Length == 4)
                                     {
-                                        string decimalSeparator = System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-                                        if (LatLonComponents[1].IndexOf(decimalSeparator) == -1)
+                                        LatLonComponents[0] = LatLonComponents[0].Trim();
+                                        LatLonComponents[0] = LatLonComponents[0].Replace("N ", "");
+                                        LatLonComponents[0] = LatLonComponents[0].Replace("S ", "-");
+
+                                        while (LatLonComponents[0].StartsWith("0"))
                                         {
-                                            if (decimalSeparator == ".")
+                                            LatLonComponents[0] = LatLonComponents[0].Remove(0, 1);
+                                        }
+                                        while (LatLonComponents[0].StartsWith("-0"))
+                                        {
+                                            LatLonComponents[0] = LatLonComponents[0].Remove(1, 1);
+                                        }
+
+                                        LatLonComponents[1] = LatLonComponents[1].Trim();
+                                        if (System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.Length > 0)
+                                        {
+                                            string decimalSeparator = System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+                                            if (LatLonComponents[1].IndexOf(decimalSeparator) == -1)
                                             {
-                                                LatLonComponents[1] = LatLonComponents[1].Replace(',', '.');
-                                            }
-                                            else if (decimalSeparator == ",")
-                                            {
-                                                LatLonComponents[1] = LatLonComponents[1].Replace('.', ',');
+                                                if (decimalSeparator == ".")
+                                                {
+                                                    LatLonComponents[1] = LatLonComponents[1].Replace(',', '.');
+                                                }
+                                                else if (decimalSeparator == ",")
+                                                {
+                                                    LatLonComponents[1] = LatLonComponents[1].Replace('.', ',');
+                                                }
                                             }
                                         }
-                                    }
-                                    double minutesLat = System.Convert.ToDouble(LatLonComponents[1]);
-                                    int decLat = (int)System.Math.Round(minutesLat * 100000.0 / 60.0, 0);
+                                        double minutesLat = System.Convert.ToDouble(LatLonComponents[1]);
+                                        int decLat = (int)System.Math.Round(minutesLat * 100000.0 / 60.0, 0);
 
 
-                                    LatLonComponents[2] = LatLonComponents[2].Trim();
-                                    LatLonComponents[2] = LatLonComponents[2].Replace("E ", "");
-                                    LatLonComponents[2] = LatLonComponents[2].Replace("W ", "-");
-                                    while (LatLonComponents[2].StartsWith("0"))
-                                    {
-                                        LatLonComponents[2] = LatLonComponents[2].Remove(0, 1);
-                                    }
-                                    while (LatLonComponents[2].StartsWith("-0"))
-                                    {
-                                        LatLonComponents[2] = LatLonComponents[2].Remove(1, 1);
-                                    }
-
-                                    LatLonComponents[3] = LatLonComponents[3].Trim();
-                                    if (System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.Length > 0)
-                                    {
-                                        string decimalSeparator = System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-                                        if (LatLonComponents[3].IndexOf(decimalSeparator) == -1)
+                                        LatLonComponents[2] = LatLonComponents[2].Trim();
+                                        LatLonComponents[2] = LatLonComponents[2].Replace("E ", "");
+                                        LatLonComponents[2] = LatLonComponents[2].Replace("W ", "-");
+                                        while (LatLonComponents[2].StartsWith("0"))
                                         {
-                                            if (decimalSeparator == ".")
+                                            LatLonComponents[2] = LatLonComponents[2].Remove(0, 1);
+                                        }
+                                        while (LatLonComponents[2].StartsWith("-0"))
+                                        {
+                                            LatLonComponents[2] = LatLonComponents[2].Remove(1, 1);
+                                        }
+
+                                        LatLonComponents[3] = LatLonComponents[3].Trim();
+                                        if (System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.Length > 0)
+                                        {
+                                            string decimalSeparator = System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+                                            if (LatLonComponents[3].IndexOf(decimalSeparator) == -1)
                                             {
-                                                LatLonComponents[3] = LatLonComponents[3].Replace(',', '.');
-                                            }
-                                            else if (decimalSeparator == ",")
-                                            {
-                                                LatLonComponents[3] = LatLonComponents[3].Replace('.', ',');
+                                                if (decimalSeparator == ".")
+                                                {
+                                                    LatLonComponents[3] = LatLonComponents[3].Replace(',', '.');
+                                                }
+                                                else if (decimalSeparator == ",")
+                                                {
+                                                    LatLonComponents[3] = LatLonComponents[3].Replace('.', ',');
+                                                }
                                             }
                                         }
+                                        double minutesLon = System.Convert.ToDouble(LatLonComponents[3]);
+                                        int decLon = (int)System.Math.Round(minutesLon * 100000.0 / 60.0, 0);
+
+                                        System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("en-us");
+                                        LatLon = String.Format("lat=\"{0}.{1}\" lon=\"{2}.{3}\"", LatLonComponents[0], decLat.ToString("D5", ci), LatLonComponents[2], decLon.ToString("D5", ci));
                                     }
-                                    double minutesLon = System.Convert.ToDouble(LatLonComponents[3]);
-                                    int decLon = (int)System.Math.Round(minutesLon * 100000.0 / 60.0, 0);
+                                }
+                                else if ((baseInfoLines[i].Trim().StartsWith("Größe")) || (baseInfoLines[i].Trim().StartsWith("Size")))
+                                {
+                                    Container = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf(":") + 2).Trim();
 
-                                    System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("en-us");
-                                    LatLon = String.Format("lat=\"{0}.{1}\" lon=\"{2}.{3}\"", LatLonComponents[0], decLat.ToString("D5", ci), LatLonComponents[2], decLon.ToString("D5", ci));
+                                    switch (Container.ToLower())
+                                    {
+                                        case "mikro":
+                                            Container = "Micro";
+                                            break;
+                                        case "klein":
+                                            Container = "Small";
+                                            break;
+                                        case "normal":
+                                            Container = "Regular";
+                                            break;
+                                        case "groß":
+                                            Container = "Large";
+                                            break;
+                                        case "extrem groß":
+                                            Container = "Large";
+                                            break;
+                                        case "andere größe":
+                                            Container = "Other";
+                                            break;
+                                        case "kein behälter":
+                                            Container = "Virtual";
+                                            break;
+                                    }
                                 }
-                            }
-                            else if ((baseInfoLines[i].Trim().StartsWith("Größe")) || (baseInfoLines[i].Trim().StartsWith("Size")))
-                            {
-                                Container = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf(":") + 2).Trim();
+                                else if ((baseInfoLines[i].Trim().StartsWith("Versteckt am")) || (baseInfoLines[i].Trim().StartsWith("Hidden on")))
+                                {
+                                    try
+                                    {
+                                        string Date = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf(":") + 2).Trim();
+                                        System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("de-DE", false).DateTimeFormat;
+                                        Timestamp = DateTime.Parse(Date, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteToLogfile("Extract date hidden failed: " + ex.Message, true);
+                                    }
+                                }
+                                else if ((baseInfoLines[i].Trim().StartsWith("Wegpunkt")) || (baseInfoLines[i].Trim().StartsWith("Waypoint")))
+                                {
+                                    GcId = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf("OC")).Trim();
 
-                                switch (Container.ToLower())
+                                    try
+                                    {
+                                        ulong ulNumericCacheId = System.Convert.ToUInt64(GcId.Substring(2), 16);
+                                        NumericCacheId = ulNumericCacheId.ToString();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteToLogfile("Calculation of numerical cache id failed, use random: " + ex.Message, true);
+                                        System.Random rnd = new System.Random(System.Environment.TickCount);
+                                        NumericCacheId = rnd.Next(1, 65000).ToString();
+                                    }
+                                }
+                                else if (baseInfoLines[i].Trim().Contains("Status:"))
                                 {
-                                    case "mikro":
-                                        Container = "Micro";
-                                        break;
-                                    case "klein":
-                                        Container = "Small";
-                                        break;
-                                    case "normal":
-                                        Container = "Regular";
-                                        break;
-                                    case "groß":
-                                        Container = "Large";
-                                        break;
-                                    case "extrem groß":
-                                        Container = "Large";
-                                        break;
-                                    case "andere größe":
-                                        Container = "Other";
-                                        break;
-                                    case "kein behälter":
-                                        Container = "Virtual";
-                                        break;
+                                    if ((baseInfoLines[i].Trim().Contains("Kann gesucht weden")) || (baseInfoLines[i].Trim().Contains("Available")))
+                                    {
+                                        Available = true;
+                                        Archived = false;
+                                    }
+                                    else if ((baseInfoLines[i].Trim().Contains("Archiviert")) || (baseInfoLines[i].Trim().Contains("Archived")))
+                                    {
+                                        Available = false;
+                                        Archived = true;
+                                    }
+                                    else if ((baseInfoLines[i].Trim().Contains("Momentan nicht verfügbar")) || (baseInfoLines[i].Trim().Contains("Temporarily not available")))
+                                    {
+                                        Available = false;
+                                        Archived = false;
+                                    }
                                 }
                             }
-                            else if ((baseInfoLines[i].Trim().StartsWith("Versteckt am")) || (baseInfoLines[i].Trim().StartsWith("Hidden on")))
-                            {
-                                try
-                                {
-                                    string Date = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf(":") + 2).Trim();
-                                    System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("de-DE", false).DateTimeFormat;
-                                    Timestamp = DateTime.Parse(Date, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                }
-                                catch (Exception ex)
-                                {
-                                    WriteToLogfile("Extract date hidden failed: " + ex.Message, true);
-                                }
-                            }
-                            else if ((baseInfoLines[i].Trim().StartsWith("Wegpunkt")) || (baseInfoLines[i].Trim().StartsWith("Waypoint")))
-                            {
-                                GcId = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf("OC")).Trim();
 
-                                try
-                                {
-                                    ulong ulNumericCacheId = System.Convert.ToUInt64(GcId.Substring(2), 16);
-                                    NumericCacheId = ulNumericCacheId.ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    WriteToLogfile("Calculation of numerical cache id failed, use random: " + ex.Message, true);
-                                    System.Random rnd = new System.Random(System.Environment.TickCount);
-                                    NumericCacheId = rnd.Next(1, 65000).ToString();
-                                }
-                            }
-                            else if (baseInfoLines[i].Trim().Contains("Status:"))
-                            {
-                                if ( (baseInfoLines[i].Trim().Contains("Kann gesucht weden")) || (baseInfoLines[i].Trim().Contains("Available")) )
-                                {
-                                    Available = true;
-                                    Archived = false;
-                                }
-                                else if ( (baseInfoLines[i].Trim().Contains("Archiviert")) || (baseInfoLines[i].Trim().Contains("Archived")) )
-                                {
-                                    Available = false;
-                                    Archived = true;
-                                }
-                                else if ((baseInfoLines[i].Trim().Contains("Momentan nicht verfügbar")) || (baseInfoLines[i].Trim().Contains("Temporarily not available")))
-                                {
-                                    Available = false;
-                                    Archived = false;
-                                }
-                            }
+                        
                         }
+
+
                     }
                     catch (Exception ex)
                     {
@@ -1204,41 +1224,26 @@ namespace GcDownload
                                     GcId = wptChildnode.InnerText;
                                     break;
 
+                                case "urlname":
+                                    Name = wptChildnode.InnerText;
+                                    break;
+
+                                case "desc":
+                                    ShortDescription = wptChildnode.InnerText;
+                                    break;
+
                                 case "extensions":
                                     foreach (XmlNode extensionsChildnode in wptChildnode.ChildNodes)
                                     {
                                         switch (extensionsChildnode.LocalName.ToLower())
                                         {
                                             case "cache":
-                                                NumericCacheId = extensionsChildnode.Attributes.GetNamedItem("id").Value;
                                                 Available = StringToBool(extensionsChildnode.Attributes.GetNamedItem("available").Value);
                                                 Archived = StringToBool(extensionsChildnode.Attributes.GetNamedItem("archived").Value);
                                                 foreach (XmlNode cacheChildnode in extensionsChildnode.ChildNodes)
                                                 {
                                                     switch (cacheChildnode.LocalName.ToLower())
                                                     {
-                                                        case "time":
-                                                            try
-                                                            {
-                                                                System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                                                                Timestamp = DateTime.Parse(cacheChildnode.InnerText, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                                            }
-                                                            catch (Exception ex)
-                                                            {
-                                                                WriteToLogfile("Parsing timestamp failed: " + cacheChildnode.InnerText + ", " + ex.Message, true);
-
-                                                                try
-                                                                {
-                                                                    System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("de-DE", false).DateTimeFormat;
-                                                                    Timestamp = DateTime.Parse(cacheChildnode.InnerText, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                                                }
-                                                                catch
-                                                                {
-                                                                    WriteToLogfile("Parsing timestamp failed", true);
-                                                                }
-                                                            }
-                                                            break;
-
                                                         case "name":
                                                             Name = cacheChildnode.InnerText;
                                                             break;
@@ -1247,97 +1252,12 @@ namespace GcDownload
                                                             Author = cacheChildnode.InnerText;
                                                             break;
 
-                                                        case "type":
-                                                            Type = cacheChildnode.InnerText;
-                                                            break;
-
-                                                        case "container":
-                                                            Container = cacheChildnode.InnerText;
-                                                            break;
-
-                                                        case "difficulty":
-                                                            Difficulty = cacheChildnode.InnerText;
-                                                            break;
-
-                                                        case "terrain":
-                                                            Terrain = cacheChildnode.InnerText;
-                                                            break;
-
                                                         case "short_description":
                                                             ShortDescription = cacheChildnode.InnerText;
                                                             break;
 
                                                         case "long_description":
                                                             LongDescription = cacheChildnode.InnerText;
-                                                            break;
-
-                                                        case "encoded_hints":
-                                                            Hint = cacheChildnode.InnerText;
-                                                            break;
-
-                                                        case "logs":
-                                                            foreach (XmlNode logsChildnode in cacheChildnode.ChildNodes)
-                                                            {
-                                                                switch (logsChildnode.LocalName.ToLower())
-                                                                {
-                                                                    case "log":
-                                                                        try
-                                                                        {
-                                                                            LogEntry logEntry = new LogEntry();
-
-                                                                            logEntry.Id = logsChildnode.Attributes.GetNamedItem("id").Value;
-
-                                                                            foreach (XmlNode logChildnode in logsChildnode.ChildNodes)
-                                                                            {
-                                                                                switch (logChildnode.LocalName.ToLower())
-                                                                                {
-                                                                                    case "date":
-                                                                                        try
-                                                                                        {
-                                                                                            System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                                                                                            logEntry.Timestamp = DateTime.Parse(logChildnode.InnerText, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                                                                        }
-                                                                                        catch (Exception ex)
-                                                                                        {
-                                                                                            WriteToLogfile("Parsing timestamp failed: " + logChildnode.InnerText + ", " + ex.Message, true);
-
-                                                                                            try
-                                                                                            {
-                                                                                                System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("de-DE", false).DateTimeFormat;
-                                                                                                logEntry.Timestamp = DateTime.Parse(logChildnode.InnerText, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                                                                            }
-                                                                                            catch
-                                                                                            {
-                                                                                                WriteToLogfile("Parsing timestamp failed", true);
-                                                                                            }
-                                                                                        }
-                                                                                        break;
-
-                                                                                    case "type":
-                                                                                        logEntry.Type = logChildnode.InnerText;
-                                                                                        break;
-
-                                                                                    case "finder":
-                                                                                        logEntry.FinderName = logChildnode.InnerText;
-                                                                                        logEntry.FinderId = logChildnode.Attributes.GetNamedItem("id").Value;
-                                                                                        break;
-
-                                                                                    case "text":
-                                                                                        logEntry.Text = logChildnode.InnerText;
-                                                                                        logEntry.TextEncoded = logChildnode.Attributes.GetNamedItem("encoded").Value;
-                                                                                        break;
-                                                                                }
-                                                                            }
-
-                                                                            Log.Add(logEntry);
-                                                                        }
-                                                                        catch
-                                                                        {
-                                                                            WriteToLogfile("Parsing log entry failed", true);
-                                                                        }
-                                                                        break;
-                                                                }
-                                                            }
                                                             break;
                                                     }
                                                 }
@@ -1348,12 +1268,37 @@ namespace GcDownload
                             }
                         }
                     }
+
+                    if (string.IsNullOrEmpty(Name))
+                    {
+                        XmlNodeList nodeList = document.GetElementsByTagName("groundspeak:name");
+
+                        if (nodeList.Count > 0)
+                        {
+                            Name = nodeList[0].InnerText;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(Author))
+                    {
+                        XmlNodeList nodeList = document.GetElementsByTagName("groundspeak:placed_by");
+
+                        if (nodeList.Count > 0)
+                        {
+                            Author = nodeList[0].InnerText;
+                        }
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     WriteToLogfile("Parsing xml file failed: " + ex.Message, true);
                 }
+
+
+
             }
+
 
             public bool IsValid()
             {
@@ -1395,7 +1340,8 @@ namespace GcDownload
             settings.readSettings();
             settings.autoDetectGarmin();
 
-            //this.textBoxGeocacheId.Text = "GC135N5";
+            //this.textBoxGeocacheId.Text = "GC11EJ8";
+            this.textBoxGeocacheId.Text = "OCF6E8";
         }
 
         private void search(string geocacheId)
@@ -1450,82 +1396,122 @@ namespace GcDownload
 
         }
 
-        private void download(bool promptForFilename)
+        string getFullGpxFilePath(bool promptForFilename, string gcid)
         {
-            WriteToLogfile("doGeocacheDownload", true);
-
-           if (!ensureGarminAvailable()) return;
-
-            GeocacheGpx geocacheGpx = new GeocacheGpx();
-
-            switch (provider)
+            string fullGpxFilePath = "";
+            if (promptForFilename)
             {
-                case Provider.ProviderGeocachingCom:
-                    geocacheGpx.ImportFromGeocachingCom(webBrowserPreview.Document);
-                    break;
+                System.Windows.Forms.SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog();
+                fileDialog.InitialDirectory = settings.GpxPath;
+                fileDialog.AddExtension = true;
+                fileDialog.AutoUpgradeEnabled = true;
+                fileDialog.CheckPathExists = true;
+                fileDialog.DefaultExt = "gpx";
+                fileDialog.FileName = gcid + ".gpx";
+                fileDialog.OverwritePrompt = true;
+                fileDialog.ValidateNames = true;
+                fileDialog.Filter = GcDownload.Strings.FilterGpxFiles;
+                fileDialog.FilterIndex = 1;
 
-                case Provider.ProviderOpencachingDe:
-                    geocacheGpx.ImportFromOpencachingDe(webBrowserPreview.Document);
-                    break;
-            }
-
-            if (geocacheGpx.IsValid())
-            {
-                string fileContent = geocacheGpx.ExportToGpx();
-
-                try
+                if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string fullGpxFilePath = "";
-                    if (promptForFilename)
-                    {
-                        System.Windows.Forms.SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog();
-                        fileDialog.InitialDirectory = settings.GpxPath;
-                        fileDialog.AddExtension = true;
-                        fileDialog.AutoUpgradeEnabled = true;
-                        fileDialog.CheckPathExists = true;
-                        fileDialog.DefaultExt = "gpx";
-                        fileDialog.FileName = geocacheGpx.GcId + ".gpx";
-                        fileDialog.OverwritePrompt = true;
-                        fileDialog.ValidateNames = true;
-                        fileDialog.Filter = GcDownload.Strings.FilterGpxFiles;
-                        fileDialog.FilterIndex = 1;
-
-                        if (fileDialog.ShowDialog() == DialogResult.OK)
-                        {
-                            fullGpxFilePath = fileDialog.FileName;
-                        }
-                    }
-                    else
-                    {
-                        fullGpxFilePath = System.IO.Path.Combine(settings.GpxPath, geocacheGpx.GcId + ".gpx");                        
-                    }
-
-                    if (!string.IsNullOrEmpty(fullGpxFilePath))
-                    {
-                        try
-                        {
-                            WriteToLogfile("Write to file: " + fullGpxFilePath, true);
-                            StreamWriter writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8);
-                            writer.Write(fileContent);
-                            writer.Close();
-                        }
-                        catch (Exception ex)
-                        {
-                            WriteToLogfile("Writing to file failed: " + ex.Message, true);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WriteToLogfile("Save gpx to file failed: " + ex.Message, true);
+                    fullGpxFilePath = fileDialog.FileName;
                 }
             }
             else
             {
-                string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected, LogfileName());
-                MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                fullGpxFilePath = System.IO.Path.Combine(settings.GpxPath, gcid + ".gpx");
+            }
+
+            return fullGpxFilePath;
+        }
+
+        private void download(bool promptForFilename)
+        {
+            WriteToLogfile("doGeocacheDownload", true);
+
+            if (!ensureGarminAvailable()) return;
+
+
+            switch (provider)
+            {
+                case Provider.ProviderGeocachingCom:
+                    {
+                        GeocacheGpx geocacheGpx = new GeocacheGpx();
+                        geocacheGpx.ImportFromGeocachingCom(webBrowserPreview.Document);
+
+                        if (geocacheGpx.IsValid())
+                        {
+                            string fileContent = geocacheGpx.ExportToGpx();
+
+                            try
+                            {
+                                string fullGpxFilePath = getFullGpxFilePath(promptForFilename, geocacheGpx.GcId);
+
+                                if (!string.IsNullOrEmpty(fullGpxFilePath))
+                                {
+                                    try
+                                    {
+                                        WriteToLogfile("Write to file: " + fullGpxFilePath, true);
+                                        StreamWriter writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8);
+                                        writer.Write(fileContent);
+                                        writer.Close();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteToLogfile("Writing to file failed: " + ex.Message, true);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteToLogfile("Save gpx to file failed: " + ex.Message, true);
+                            }
+                        }
+                        else
+                        {
+                            string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected, LogfileName());
+                            MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    break;
+
+                case Provider.ProviderOpencachingDe:
+                    {
+                        string title = webBrowserPreview.Document.Title;
+                        if (!title.StartsWith("OC")) return;
+                        int posBlank = title.IndexOf(" ");
+                        if (posBlank == -1) return;
+
+                        string ocCacheId = title.Substring(0, posBlank);
+
+                        DownloadViaOkapi(ocCacheId, promptForFilename);
+                    }
+                    break;
             }
         }
+
+        public void DownloadViaOkapi(string cacheId, bool promptForFilename)
+        {
+            string filename = getFullGpxFilePath(promptForFilename, cacheId);
+
+            DownloadViaOkapi(cacheId, filename);
+
+        }
+
+        public void DownloadViaOkapi(string cacheId, string filename)
+        {
+            //www.opencaching.de/okapi/services/caches/formatters/gpx?cache_codes=OC4FB6&ns_ground=true&attrs=gc:attrs|gc_ocde:attrs|desc:text&latest_logs=true&consumer_key=wgw9HbSeSXgH7xuWhM2P
+            //string url = "http://www.opencaching.de/okapi/services/caches/formatters/gpx?ns_ground=true&latest_logs=true&consumer_key=wgw9HbSeSXgH7xuWhM2P";
+            string url = "http://www.opencaching.de/okapi/services/caches/formatters/gpx?ns_ground=true&attrs=gc:attrs|desc:text&latest_logs=true&consumer_key=wgw9HbSeSXgH7xuWhM2P";
+            url += "&cache_codes=";
+            url += cacheId;
+
+            System.Net.WebClient webClient = new System.Net.WebClient();
+            webClient.DownloadFile(url, filename);
+        }
+
+
 
         private void navigateHome()
         {
