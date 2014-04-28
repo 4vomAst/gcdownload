@@ -1341,7 +1341,7 @@ namespace GcDownload
             settings.autoDetectGarmin();
 
             //this.textBoxGeocacheId.Text = "GC11EJ8";
-            this.textBoxGeocacheId.Text = "OCF6E8";
+            //this.textBoxGeocacheId.Text = "OCF6E8";
         }
 
         private void search(string geocacheId)
