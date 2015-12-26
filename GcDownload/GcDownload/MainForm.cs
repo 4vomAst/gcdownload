@@ -11,7 +11,7 @@ copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+all copies or substantial portions of the Sofdtware.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -326,9 +326,10 @@ namespace GcDownload
                             string alternate = element.GetAttribute("alt");
                             string src = element.GetAttribute("src");
                             string searchStringUrl = "http://www.geocaching.com/images/stars/";
+                            string searchStringUrl2 = "https://www.geocaching.com/images/stars/";
                             string searchStringAlt = " out of 5";
 
-                            if (src.Contains(searchStringUrl))
+                            if (src.Contains(searchStringUrl) || src.Contains(searchStringUrl2))
                             {
                                 if (alternate.EndsWith(searchStringAlt))
                                 {
@@ -402,14 +403,22 @@ namespace GcDownload
                         foreach (HtmlElement element in document.Links)
                         {
                             string alternate = element.GetAttribute("href");
-                            string searchString = "http://www.geocaching.com/seek/log.aspx?ID="; // "http://www.geocaching.com/seek/log.aspx?ID=";
+                            string searchString = "https://www.geocaching.com/seek/log.aspx?ID="; // "http://www.geocaching.com/seek/log.aspx?ID=";
+                            string searchString2 = "http://www.geocaching.com/seek/log.aspx?ID="; // "http://www.geocaching.com/seek/log.aspx?ID=";
 
                             if (alternate.StartsWith(searchString))
                             {
                                 NumericCacheId = alternate.Substring(searchString.Length);
                                 break;
                             }
+                            else if (alternate.StartsWith(searchString2))
+                            {
+                                NumericCacheId = alternate.Substring(searchString2.Length);
+                                break;
+                            }
                         }
+
+                        if (string.IsNullOrEmpty(NumericCacheId)) NumericCacheId = this.Name;
                     }
                     catch (Exception ex)
                     {
@@ -455,8 +464,14 @@ namespace GcDownload
                         {
                             string url = element.GetAttribute("href");
                             string searchString = "http://www.geocaching.com/profile/?guid=";
+                            string searchString2 = "https://www.geocaching.com/profile/?guid=";
 
                             if (url.StartsWith(searchString))
+                            {
+                                Author = element.InnerText;
+                                break;
+                            }
+                            else if (url.StartsWith(searchString2))
                             {
                                 Author = element.InnerText;
                                 break;
@@ -488,10 +503,11 @@ namespace GcDownload
 
                     try
                     {
-                        LatLon = document.GetElementById("ctl00_ContentBody_lnkConversions").GetAttribute("href");
-                        LatLon = LatLon.Replace("http://www.geocaching.com/wpt/?lat=", "lat=\"");
-                        LatLon = LatLon.Replace("&lon=", "\" lon=\"");
-                        LatLon = LatLon.Replace("&detail=1", "\"");
+                        LatLon = document.GetElementById("ctl00_ContentBody_uxViewLargerMap").GetAttribute("href");
+                        LatLon = LatLon.Replace("https://www.geocaching.com/map/default.aspx?lat=", "lat=\"");
+                        LatLon = LatLon.Replace("http://www.geocaching.com/map/default.aspx?lat=", "lat=\"");
+                        LatLon = LatLon.Replace("&lng=", "\" lon=\"");
+                        LatLon += "\"";
                     }
                     catch (Exception ex)
                     {
@@ -619,451 +635,6 @@ namespace GcDownload
                                 pos = logsString.IndexOf(logTypeMagic, pos);
                             };
                         };
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract cache logs failed: " + ex.Message, true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WriteToLogfile("Extraction failed: " + ex.Message, true);
-                }
-            }
-
-            public void ImportFromOpencachingDe(HtmlDocument document)
-            {
-                WriteToLogfile("ImportFromOpencachingDe: " + document.Url, true);
-                try
-                {
-                    try
-                    {
-                        string seachString = " - ";
-                        Name = document.Title;
-
-                        if (Name.StartsWith("OC"))
-                        {
-                            Name = Name.Substring(Name.IndexOf(" ") + 1);
-                        }
-
-                        if (Name.Contains(seachString))
-                        {
-                            Name = Name.Substring(0, Name.IndexOf(seachString));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract name failed: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        foreach (HtmlElement element in document.GetElementsByTagName("div"))
-                        {
-                            string className = "";
-
-                            try
-                            {
-                                className = element.GetAttribute("class");
-                            }
-                            catch (Exception ex)
-                            {
-
-                            }
-
-                            if (className != "content2-container") continue;
-
-                            string baseInfoText = element.InnerText;
-
-                            string[] stringSeparators = new string[] { "\r\n" };
-                            string[] baseInfoLines = baseInfoText.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-
-                            WriteToLogfile("viewcache-baseinfo", true);
-                            foreach (string line in baseInfoLines)
-                            {
-                                WriteToLogfile(line, true);
-                            }
-
-                            for (int i = 0; i < baseInfoLines.Length; i++)
-                            {
-                                if (baseInfoLines[i].Contains("(WGS84)"))
-                                {
-                                    string coordinates = baseInfoLines[i].Trim();
-                                    coordinates = coordinates.Remove(coordinates.IndexOf("(WGS84)"));
-                                    coordinates = coordinates.Trim();
-
-                                    string[] LatLonComponents = coordinates.Split(new Char[] { '°', '\'' }, StringSplitOptions.RemoveEmptyEntries);
-
-                                    if (LatLonComponents.Length == 4)
-                                    {
-                                        LatLonComponents[0] = LatLonComponents[0].Trim();
-                                        LatLonComponents[0] = LatLonComponents[0].Replace("N ", "");
-                                        LatLonComponents[0] = LatLonComponents[0].Replace("S ", "-");
-
-                                        while (LatLonComponents[0].StartsWith("0"))
-                                        {
-                                            LatLonComponents[0] = LatLonComponents[0].Remove(0, 1);
-                                        }
-                                        while (LatLonComponents[0].StartsWith("-0"))
-                                        {
-                                            LatLonComponents[0] = LatLonComponents[0].Remove(1, 1);
-                                        }
-
-                                        LatLonComponents[1] = LatLonComponents[1].Trim();
-                                        if (System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.Length > 0)
-                                        {
-                                            string decimalSeparator = System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-                                            if (LatLonComponents[1].IndexOf(decimalSeparator) == -1)
-                                            {
-                                                if (decimalSeparator == ".")
-                                                {
-                                                    LatLonComponents[1] = LatLonComponents[1].Replace(',', '.');
-                                                }
-                                                else if (decimalSeparator == ",")
-                                                {
-                                                    LatLonComponents[1] = LatLonComponents[1].Replace('.', ',');
-                                                }
-                                            }
-                                        }
-                                        double minutesLat = System.Convert.ToDouble(LatLonComponents[1]);
-                                        int decLat = (int)System.Math.Round(minutesLat * 100000.0 / 60.0, 0);
-
-
-                                        LatLonComponents[2] = LatLonComponents[2].Trim();
-                                        LatLonComponents[2] = LatLonComponents[2].Replace("E ", "");
-                                        LatLonComponents[2] = LatLonComponents[2].Replace("W ", "-");
-                                        while (LatLonComponents[2].StartsWith("0"))
-                                        {
-                                            LatLonComponents[2] = LatLonComponents[2].Remove(0, 1);
-                                        }
-                                        while (LatLonComponents[2].StartsWith("-0"))
-                                        {
-                                            LatLonComponents[2] = LatLonComponents[2].Remove(1, 1);
-                                        }
-
-                                        LatLonComponents[3] = LatLonComponents[3].Trim();
-                                        if (System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.Length > 0)
-                                        {
-                                            string decimalSeparator = System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-                                            if (LatLonComponents[3].IndexOf(decimalSeparator) == -1)
-                                            {
-                                                if (decimalSeparator == ".")
-                                                {
-                                                    LatLonComponents[3] = LatLonComponents[3].Replace(',', '.');
-                                                }
-                                                else if (decimalSeparator == ",")
-                                                {
-                                                    LatLonComponents[3] = LatLonComponents[3].Replace('.', ',');
-                                                }
-                                            }
-                                        }
-                                        double minutesLon = System.Convert.ToDouble(LatLonComponents[3]);
-                                        int decLon = (int)System.Math.Round(minutesLon * 100000.0 / 60.0, 0);
-
-                                        System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("en-us");
-                                        LatLon = String.Format("lat=\"{0}.{1}\" lon=\"{2}.{3}\"", LatLonComponents[0], decLat.ToString("D5", ci), LatLonComponents[2], decLon.ToString("D5", ci));
-                                    }
-                                }
-                                else if ((baseInfoLines[i].Trim().StartsWith("Größe")) || (baseInfoLines[i].Trim().StartsWith("Size")))
-                                {
-                                    Container = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf(":") + 2).Trim();
-
-                                    switch (Container.ToLower())
-                                    {
-                                        case "mikro":
-                                            Container = "Micro";
-                                            break;
-                                        case "klein":
-                                            Container = "Small";
-                                            break;
-                                        case "normal":
-                                            Container = "Regular";
-                                            break;
-                                        case "groß":
-                                            Container = "Large";
-                                            break;
-                                        case "extrem groß":
-                                            Container = "Large";
-                                            break;
-                                        case "andere größe":
-                                            Container = "Other";
-                                            break;
-                                        case "kein behälter":
-                                            Container = "Virtual";
-                                            break;
-                                    }
-                                }
-                                else if ((baseInfoLines[i].Trim().StartsWith("Versteckt am")) || (baseInfoLines[i].Trim().StartsWith("Hidden on")))
-                                {
-                                    try
-                                    {
-                                        string Date = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf(":") + 2).Trim();
-                                        System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("de-DE", false).DateTimeFormat;
-                                        Timestamp = DateTime.Parse(Date, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        WriteToLogfile("Extract date hidden failed: " + ex.Message, true);
-                                    }
-                                }
-                                else if ((baseInfoLines[i].Trim().StartsWith("Wegpunkt")) || (baseInfoLines[i].Trim().StartsWith("Waypoint")))
-                                {
-                                    GcId = baseInfoLines[i].Substring(baseInfoLines[i].IndexOf("OC")).Trim();
-
-                                    try
-                                    {
-                                        ulong ulNumericCacheId = System.Convert.ToUInt64(GcId.Substring(2), 16);
-                                        NumericCacheId = ulNumericCacheId.ToString();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        WriteToLogfile("Calculation of numerical cache id failed, use random: " + ex.Message, true);
-                                        System.Random rnd = new System.Random(System.Environment.TickCount);
-                                        NumericCacheId = rnd.Next(1, 65000).ToString();
-                                    }
-                                }
-                                else if (baseInfoLines[i].Trim().Contains("Status:"))
-                                {
-                                    if ((baseInfoLines[i].Trim().Contains("Kann gesucht weden")) || (baseInfoLines[i].Trim().Contains("Available")))
-                                    {
-                                        Available = true;
-                                        Archived = false;
-                                    }
-                                    else if ((baseInfoLines[i].Trim().Contains("Archiviert")) || (baseInfoLines[i].Trim().Contains("Archived")))
-                                    {
-                                        Available = false;
-                                        Archived = true;
-                                    }
-                                    else if ((baseInfoLines[i].Trim().Contains("Momentan nicht verfügbar")) || (baseInfoLines[i].Trim().Contains("Temporarily not available")))
-                                    {
-                                        Available = false;
-                                        Archived = false;
-                                    }
-                                }
-                            }
-
-                        
-                        }
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract Location / Container / GC ID: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        Difficulty = "1";
-                        foreach (HtmlElement element in document.GetElementsByTagName("img"))
-                        {
-                            string alternate = element.GetAttribute("alt");
-                            string src = element.GetAttribute("src");
-                            string searchString = "images/difficulty/diff";
-
-                            if (src.Contains(searchString))
-                            {
-                                Difficulty = alternate.Substring(alternate.IndexOf(':') + 2, 1);
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract difficulty: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        Terrain = "1";
-                        foreach (HtmlElement element in document.GetElementsByTagName("img"))
-                        {
-                            string alternate = element.GetAttribute("alt");
-                            string src = element.GetAttribute("src");
-                            string searchString = "images/difficulty/terr";
-
-                            if (src.Contains(searchString))
-                            {
-                                Terrain = alternate.Substring(alternate.IndexOf(':') + 2, 1);
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract terrain: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        Type = "Traditional Cache";
-                        foreach (HtmlElement element in document.GetElementsByTagName("img"))
-                        {
-                            string alternate = element.GetAttribute("alt");
-                            string src = element.GetAttribute("src");
-                            string searchString = "images/cacheicon";
-
-                            if (src.Contains(searchString))
-                            {
-                                Type = alternate;
-
-                                switch (Type.ToLower())
-                                {
-                                    case "normaler geocache":
-                                        Type = "Traditional Cache";
-                                        break;
-                                    case "normaler cache":
-                                        Type = "Traditional Cache";
-                                        break;
-                                    case "multicache":
-                                        Type = "Multi-Cache";
-                                        break;
-                                    case "virtueller cache":
-                                        Type = "Virtual Cache";
-                                        break;
-                                    case "virtueller geocache":
-                                        Type = "Virtual Cache";
-                                        break;
-                                    case "event geocache":
-                                        Type = "Event Cache";
-                                        break;
-                                    case "beweglicher geocache":
-                                        Type = "Locationless (Reverse) Cache";
-                                        break;
-                                    case "webcam geocache":
-                                        Type = "Webcam Cache";
-                                        break;
-                                    default:
-                                        Type = "Traditional Cache";
-                                        break;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract type failed: " + ex.Message, true);
-                    }
-
-
-                    try
-                    {
-                        foreach (HtmlElement element in document.Links)
-                        {
-                            string alternate = element.GetAttribute("alt");
-                            string href = element.GetAttribute("href");
-                            string searchString = "viewprofile.php?userid=";
-
-                            if (href.Contains(searchString))
-                            {
-                                Author = element.InnerText;
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract author failed: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        foreach (HtmlElement element in document.GetElementsByTagName("img"))
-                        {
-                            string src = element.GetAttribute("src");
-                            string searchString = "images/description/22x22-description.png";
-
-                            if (src.Contains(searchString))
-                            {
-                                LongDescription = element.Parent.Parent.NextSibling.InnerText;
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract long description failed: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        HtmlElement element = document.GetElementById("decrypt-hints");
-
-                        if (element != null)
-                        {
-                            string EncryptedHint = element.InnerText;
-                            Hint = Decrypt(EncryptedHint);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteToLogfile("Extract hint failed: " + ex.Message, true);
-                    }
-
-                    try
-                    {
-                        int iLogId = 4711000;
-                        int iFinderId = 4242000;
-
-                        try
-                        {
-                            foreach (HtmlElement element in document.GetElementsByTagName("img"))
-                            {
-                                try
-                                {
-                                    string src = element.GetAttribute("src");
-                                    string border = element.GetAttribute("border");
-                                    string searchString = "ocstyle/images/log/";
-
-                                    if (src.Contains(searchString) && (border.Length == 0))
-                                    {
-                                        LogEntry logEntry = new LogEntry();
-
-                                        //" 16. Mai 2010 Herzblatt1 hat den Geocache gefunden "
-                                        string logTitle = element.Parent.InnerText.Trim();
-                                        string[] logTitleComponents = logTitle.Split(new Char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                                        if (logTitleComponents.Length > 4)
-                                        {
-                                            logEntry.FinderName = logTitleComponents[3];
-
-                                            string Date = logTitleComponents[0] + " " + logTitleComponents[1] + " " + logTitleComponents[2];
-                                            System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("de-DE", false).DateTimeFormat;
-                                            logEntry.Timestamp = DateTime.Parse(Date, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-
-                                            logEntry.TextEncoded = "False";
-                                            logEntry.Text = element.Parent.NextSibling.InnerText;
-
-                                            logEntry.Type = "Write note";
-
-                                            if (src.Contains("16x16-found.png"))
-                                            {
-                                                logEntry.Type = "Found it";
-                                            }
-                                            else if (src.Contains("16x16-dnf.png"))
-                                            {
-                                                logEntry.Type = "Didn't find it";
-                                            }
-
-                                            logEntry.Id = iLogId.ToString();
-                                            logEntry.FinderId = iFinderId.ToString();
-                                            Log.Add(logEntry);
-                                            iLogId++;
-                                            iFinderId++;
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    WriteToLogfile("Extract log entry failed: " + ex.Message, true);
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            WriteToLogfile("Extract log failed: " + ex.Message, true);
-                        }
                     }
                     catch (Exception ex)
                     {
