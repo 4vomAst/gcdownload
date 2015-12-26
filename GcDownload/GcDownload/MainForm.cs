@@ -1,7 +1,7 @@
 ﻿/*
 Copyright (c) 2010-2012 Wolfgang Wallhaeuser
 
-http://code.google.com/p/gcdownload/
+http://github.com/4vomAst/gcdownload
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1432,7 +1432,7 @@ namespace GcDownload
 
         private void linkLabelProjectHomepage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            webBrowserPreview.Navigate("http://code.google.com/p/gcdownload/");
+            webBrowserPreview.Navigate("http://github.com/4vomAst/gcdownload");
         }
 
         private void triggerAutoSearch()
