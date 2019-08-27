@@ -272,47 +272,6 @@ namespace GcDownload
                         WriteToLogfile("Extract GC ID: " + ex.Message, true);
                     }
 
-                    //try
-                    //{
-                    //    Difficulty = "1";
-                    //    foreach (HtmlElement element in document.GetElementById("ctl00_ContentBody_Difficulty").GetElementsByTagName("img"))
-                    //    {
-                    //        //1 out of 5    1.5 out of 5
-                    //        string alternate = element.GetAttribute("alt");
-                    //        string searchString = " out of 5";
-                    //        if (alternate.EndsWith(searchString))
-                    //        {
-                    //            Difficulty = alternate.Substring(0, alternate.Length - searchString.Length);
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    WriteToLogfile("Extract difficulty: " + ex.Message, true);
-                    //}
-
-                    //try
-                    //{
-                    //    Terrain = "1";
-                    //    foreach (HtmlElement element in document.GetElementById("ctl00_ContentBody_Terrain").GetElementsByTagName("img"))
-                    //    {
-                    //        //1 out of 5    1.5 out of 5
-                    //        string alternate = element.GetAttribute("alt");
-                    //        string searchString = " out of 5";
-                    //        if (alternate.EndsWith(searchString))
-                    //        {
-                    //            Terrain = alternate.Substring(0, alternate.Length - searchString.Length);
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    WriteToLogfile("Extract terrain: " + ex.Message, true);
-                    //}
-
-
                     try
                     {
                         bool foundDifficulty = false;
@@ -349,6 +308,8 @@ namespace GcDownload
                                     }
                                 }
                             }
+
+                            if (foundDifficulty && foundTerrain) break;
                         }
                     }
                     catch (Exception ex)
@@ -379,18 +340,16 @@ namespace GcDownload
                     try
                     {
                         Type = "Traditional Cache";
-                        foreach (HtmlElement element in document.GetElementsByTagName("img"))
-                        {
-                            string alternate = element.GetAttribute("alt");
-                            string src = element.GetAttribute("src");
-                            string searchString = "/images/WptTypes/";
 
-                            if (src.Contains(searchString))
-                            {
-                                Type = alternate;
-                                break;
-                            }
+                        var cacheImage = document.GetElementById("uxCacheImage").InnerHtml;
+                        var posTitle = cacheImage.IndexOf("<title>");
+                        var posTitleEnd = cacheImage.IndexOf("</title>");
+
+                        if ( (posTitle != -1) && (posTitleEnd != -1) )
+                        {
+                            Type = cacheImage.Substring(posTitle + 7, posTitleEnd - posTitle - 7);
                         }
+
                     }
                     catch (Exception ex)
                     {
@@ -416,6 +375,11 @@ namespace GcDownload
                                 NumericCacheId = alternate.Substring(searchString2.Length);
                                 break;
                             }
+                        }
+
+                        if (!string.IsNullOrEmpty(NumericCacheId) && NumericCacheId.Contains("&"))
+                        {
+                            NumericCacheId = NumericCacheId.Substring(0, NumericCacheId.IndexOf("&"));
                         }
 
                         if (string.IsNullOrEmpty(NumericCacheId)) NumericCacheId = this.Name;
@@ -503,11 +467,15 @@ namespace GcDownload
 
                     try
                     {
-                        LatLon = document.GetElementById("ctl00_ContentBody_uxViewLargerMap").GetAttribute("href");
-                        LatLon = LatLon.Replace("https://www.geocaching.com/map/default.aspx?lat=", "lat=\"");
-                        LatLon = LatLon.Replace("http://www.geocaching.com/map/default.aspx?lat=", "lat=\"");
-                        LatLon = LatLon.Replace("&lng=", "\" lon=\"");
-                        LatLon += "\"";
+                        var mapLinks = document.GetElementById("ctl00_ContentBody_MapLinks_MapLinks");
+                        var mapLink = mapLinks.FirstChild.FirstChild;
+                        LatLon = mapLink.InnerHtml;
+
+                        //"<a href=\"https://www.geocaching.com/play/map?lat=49.03842&amp;lng=8.38852\" target=\"_blank\" rel=\"noopener noreferrer\">Geocaching.com-Karte</a>"
+
+                        LatLon = LatLon.Replace("<a href=\"https://www.geocaching.com/play/map?lat=", "lat=\"");
+                        LatLon = LatLon.Replace("&amp;lng=", "\" lon=\"");
+                        LatLon = LatLon.Substring(0, LatLon.IndexOf(" target="));
                     }
                     catch (Exception ex)
                     {
@@ -564,12 +532,11 @@ namespace GcDownload
                     try
                     {
                         // HtmlElement cacheLogTable = document.GetElementById("ctl00_ContentBody_CacheLogs");
-                        int logsStartPos = document.Body.InnerHtml.IndexOf("initalLogs = ");
-                        int logsEndPos = document.Body.InnerHtml.IndexOf("};", logsStartPos);
+                        int logsStartPos = document.Body.InnerText.IndexOf("initialLogs = {");
 
-                        if ( (logsStartPos != -1) && (logsEndPos != -1) )
+                        if (logsStartPos != -1)
                         {
-                            string logsString = document.Body.InnerHtml.Substring(logsStartPos, logsEndPos - logsStartPos + 2);
+                            string logsString = document.Body.InnerText.Substring(logsStartPos);
                             int iLogId = 4711000;
                             int iFinderId = 4242000;
 
@@ -583,54 +550,61 @@ namespace GcDownload
 
                             while (pos != -1)
                             {
-                                LogEntry logEntry = new LogEntry();
-                                int startValPos = pos + logTypeMagic.Length;
-                                int endValPos = logsString.IndexOf("\",", startValPos);
-                                logEntry.Type = logsString.Substring(startValPos, endValPos - startValPos);
-
-                                pos = logsString.IndexOf(logTextMagic, pos);
-                                startValPos = pos + logTextMagic.Length;
-                                endValPos = logsString.IndexOf("\",", startValPos);
-                                logEntry.Text = logsString.Substring(startValPos, endValPos - startValPos);
-
-                                pos = logsString.IndexOf(logTimestampMagic, pos);
-                                startValPos = pos + logTimestampMagic.Length;
-                                endValPos = logsString.IndexOf("\",", startValPos);
-
                                 try
                                 {
-                                    System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                                    logEntry.Timestamp = DateTime.Parse(logsString.Substring(startValPos, endValPos - startValPos), usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                }
-                                catch (Exception ex)
-                                {
-                                    WriteToLogfile("Extract log timestamp failed: " + ex.Message, true);
-                                };
+                                    LogEntry logEntry = new LogEntry();
+                                    int startValPos = pos + logTypeMagic.Length;
+                                    int endValPos = logsString.IndexOf("\",", startValPos);
+                                    logEntry.Type = logsString.Substring(startValPos, endValPos - startValPos);
 
-                                pos = logsString.IndexOf(logUserNameMagic, pos);
-                                startValPos = pos + logUserNameMagic.Length;
-                                endValPos = logsString.IndexOf("\",", startValPos);
-                                logEntry.FinderName = logsString.Substring(startValPos, endValPos - startValPos);
+                                    pos = logsString.IndexOf(logTextMagic, pos);
+                                    startValPos = pos + logTextMagic.Length;
+                                    endValPos = logsString.IndexOf("\",", startValPos);
+                                    logEntry.Text = logsString.Substring(startValPos, endValPos - startValPos);
 
-                                pos = logsString.IndexOf(logIsEncodedMagic, pos);
-                                startValPos = pos + logIsEncodedMagic.Length;
-                                endValPos = logsString.IndexOf(",", startValPos);
-                                logEntry.TextEncoded= logsString.Substring(startValPos, endValPos - startValPos);
+                                    pos = logsString.IndexOf(logTimestampMagic, pos);
+                                    startValPos = pos + logTimestampMagic.Length;
+                                    endValPos = logsString.IndexOf("\",", startValPos);
 
-                                if (logEntry.TextEncoded == "True")
-                                {
-                                    if (logEntry.Text.EndsWith("(decrypt)"))
+                                    try
                                     {
-                                        logEntry.Text = logEntry.Text.Substring(0, logEntry.Text.Length - 9);
+                                        System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
+                                        logEntry.Timestamp = DateTime.Parse(logsString.Substring(startValPos, endValPos - startValPos), usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
                                     }
-                                    logEntry.Text = Decrypt(logEntry.Text);
-                                };
+                                    catch (Exception ex)
+                                    {
+                                        WriteToLogfile("Extract log timestamp failed: " + ex.Message, true);
+                                    };
 
-                                logEntry.Id = iLogId.ToString();
-                                logEntry.FinderId = iFinderId.ToString();
-                                Log.Add(logEntry);
-                                iLogId++;
-                                iFinderId++;
+                                    pos = logsString.IndexOf(logUserNameMagic, pos);
+                                    startValPos = pos + logUserNameMagic.Length;
+                                    endValPos = logsString.IndexOf("\",", startValPos);
+                                    logEntry.FinderName = logsString.Substring(startValPos, endValPos - startValPos);
+
+                                    pos = logsString.IndexOf(logIsEncodedMagic, pos);
+                                    startValPos = pos + logIsEncodedMagic.Length;
+                                    endValPos = logsString.IndexOf(",", startValPos);
+                                    logEntry.TextEncoded = logsString.Substring(startValPos, endValPos - startValPos);
+
+                                    if (logEntry.TextEncoded == "True")
+                                    {
+                                        if (logEntry.Text.EndsWith("(decrypt)"))
+                                        {
+                                            logEntry.Text = logEntry.Text.Substring(0, logEntry.Text.Length - 9);
+                                        }
+                                        logEntry.Text = Decrypt(logEntry.Text);
+                                    };
+
+                                    logEntry.Id = iLogId.ToString();
+                                    logEntry.FinderId = iFinderId.ToString();
+                                    Log.Add(logEntry);
+                                    iLogId++;
+                                    iFinderId++;
+                                }
+                                catch (Exception)
+                                {
+
+                                }
 
                                 pos = logsString.IndexOf(logTypeMagic, pos);
                             };
