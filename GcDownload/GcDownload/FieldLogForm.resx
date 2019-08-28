@@ -151,7 +151,7 @@
     <value>13, 13</value>
   </data>
   <data name="listViewFieldLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>641, 500</value>
+    <value>638, 479</value>
   </data>
   <data name="listViewFieldLog.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -172,7 +172,7 @@
     <value>Bottom, Right</value>
   </data>
   <data name="buttonClose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>554, 519</value>
+    <value>551, 498</value>
   </data>
   <data name="buttonClose.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
@@ -202,7 +202,7 @@
     <value>MiddleLeft</value>
   </data>
   <data name="buttonSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>448, 519</value>
+    <value>445, 498</value>
   </data>
   <data name="buttonSearch.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
@@ -232,7 +232,7 @@
     <value>MiddleLeft</value>
   </data>
   <data name="buttonDeleteLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 520</value>
+    <value>13, 499</value>
   </data>
   <data name="buttonDeleteLog.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 25</value>
@@ -262,7 +262,7 @@
     <value>MiddleLeft</value>
   </data>
   <data name="buttonDeleteEntry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>119, 520</value>
+    <value>119, 499</value>
   </data>
   <data name="buttonDeleteEntry.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 25</value>
@@ -292,7 +292,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>666, 556</value>
+    <value>663, 535</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

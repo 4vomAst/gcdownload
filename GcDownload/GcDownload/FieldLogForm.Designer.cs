@@ -51,6 +51,7 @@
             this.columnHeaderNote});
             this.listViewFieldLog.FullRowSelect = true;
             this.listViewFieldLog.GridLines = true;
+            this.listViewFieldLog.HideSelection = false;
             this.listViewFieldLog.MultiSelect = false;
             this.listViewFieldLog.Name = "listViewFieldLog";
             this.listViewFieldLog.UseCompatibleStateImageBehavior = false;

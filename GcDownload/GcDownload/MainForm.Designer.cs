@@ -57,7 +57,6 @@
             // webBrowserPreview
             // 
             resources.ApplyResources(this.webBrowserPreview, "webBrowserPreview");
-            this.webBrowserPreview.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserPreview.Name = "webBrowserPreview";
             this.webBrowserPreview.ScriptErrorsSuppressed = true;
             this.webBrowserPreview.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.WebBrowserPreview_DocumentCompleted);
@@ -69,59 +68,59 @@
             // 
             // comboBoxWebsite
             // 
-            resources.ApplyResources(this.comboBoxWebsite, "comboBoxWebsite");
             this.comboBoxWebsite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxWebsite.FormattingEnabled = true;
             this.comboBoxWebsite.Items.AddRange(new object[] {
             resources.GetString("comboBoxWebsite.Items"),
             resources.GetString("comboBoxWebsite.Items1")});
+            resources.ApplyResources(this.comboBoxWebsite, "comboBoxWebsite");
             this.comboBoxWebsite.Name = "comboBoxWebsite";
             this.comboBoxWebsite.SelectedIndexChanged += new System.EventHandler(this.ComboBoxWebsite_SelectedIndexChanged);
             // 
             // buttonBack
             // 
-            resources.ApplyResources(this.buttonBack, "buttonBack");
             this.buttonBack.Image = global::GcDownload.Properties.Resources.NavBack;
+            resources.ApplyResources(this.buttonBack, "buttonBack");
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.UseVisualStyleBackColor = true;
             this.buttonBack.Click += new System.EventHandler(this.ButtonBack_Click);
             // 
             // buttonHome
             // 
-            resources.ApplyResources(this.buttonHome, "buttonHome");
             this.buttonHome.Image = global::GcDownload.Properties.Resources.HomeHS;
+            resources.ApplyResources(this.buttonHome, "buttonHome");
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.UseVisualStyleBackColor = true;
             this.buttonHome.Click += new System.EventHandler(this.ButtonHome_Click);
             // 
             // buttonSearch
             // 
-            resources.ApplyResources(this.buttonSearch, "buttonSearch");
             this.buttonSearch.Image = global::GcDownload.Properties.Resources.SearchWebHS;
+            resources.ApplyResources(this.buttonSearch, "buttonSearch");
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.UseVisualStyleBackColor = true;
             this.buttonSearch.Click += new System.EventHandler(this.ButtonSearch_Click);
             // 
             // buttonDownload
             // 
-            resources.ApplyResources(this.buttonDownload, "buttonDownload");
             this.buttonDownload.Image = global::GcDownload.Properties.Resources.saveHS;
+            resources.ApplyResources(this.buttonDownload, "buttonDownload");
             this.buttonDownload.Name = "buttonDownload";
             this.buttonDownload.UseVisualStyleBackColor = true;
             this.buttonDownload.Click += new System.EventHandler(this.ButtonDownload_Click);
             // 
             // buttonFieldLog
             // 
-            resources.ApplyResources(this.buttonFieldLog, "buttonFieldLog");
             this.buttonFieldLog.Image = global::GcDownload.Properties.Resources.book_reportHS;
+            resources.ApplyResources(this.buttonFieldLog, "buttonFieldLog");
             this.buttonFieldLog.Name = "buttonFieldLog";
             this.buttonFieldLog.UseVisualStyleBackColor = true;
             this.buttonFieldLog.Click += new System.EventHandler(this.ButtonFieldLog_Click);
             // 
             // buttonBrowseCaches
             // 
-            resources.ApplyResources(this.buttonBrowseCaches, "buttonBrowseCaches");
             this.buttonBrowseCaches.Image = global::GcDownload.Properties.Resources.openfolderHS;
+            resources.ApplyResources(this.buttonBrowseCaches, "buttonBrowseCaches");
             this.buttonBrowseCaches.Name = "buttonBrowseCaches";
             this.buttonBrowseCaches.UseVisualStyleBackColor = true;
             this.buttonBrowseCaches.Click += new System.EventHandler(this.ButtonBrowseCaches_Click);
