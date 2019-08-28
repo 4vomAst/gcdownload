@@ -23,52 +23,27 @@ THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace GcDownload
 {
 	public class CSettings
 	{
-        private string garminRootDir = "";
-        private string sdCardRootDir = "";
-        private string fieldlogFileName = "geocache_visits.txt";
-        private string archivePath = "";
-        private bool garminFound = false;
-        private bool sdCardFound = false;
-        private bool storeCachesOnSdCard = false;
-
-        public string GarminRootDir
-        {
-            get { return garminRootDir; }
-            set { garminRootDir = value; }
-        }
-
-        public string SdCardRootDir
-        {
-            get { return sdCardRootDir; }
-            set { sdCardRootDir = value; }
-        }
-
-        public bool StoreCachesOnSdCard
-        {
-            get { return storeCachesOnSdCard; }
-            set { storeCachesOnSdCard = value; }
-        }
+        public string GarminRootDir { get; set; } = string.Empty;
+        public string SdCardRootDir { get; set; } = string.Empty;
+        public bool StoreCachesOnSdCard { get; set; } = false;
 
         public string GpxPath
         {
             get
             {
-                if (storeCachesOnSdCard && isSdCardConnected())
+                if (StoreCachesOnSdCard && IsSdCardConnected)
                 {
-                    return sdCardRootDir + "garmin\\gpx";
+                    return SdCardRootDir + "garmin\\gpx";
                 }
                 else
                 {
-                    return garminRootDir + "garmin\\gpx";
+                    return GarminRootDir + "garmin\\gpx";
                 }
             }
         }
@@ -77,79 +52,49 @@ namespace GcDownload
         {
             get
             {
-                return garminRootDir + "garmin\\" + fieldlogFileName;
+                return GarminRootDir + "garmin\\geocache_visits.txt";
             }
         }
 
-        public string ArchivePath
-        {
-            get { return archivePath; }
-            set { archivePath = value; }
-        }
+        public string ArchivePath { get; set; } = string.Empty;
 
-        public bool isArchivePathValid()
-        {
-            if (string.IsNullOrEmpty(archivePath)) return false;
-            return Directory.Exists(archivePath);
-        }
+        public bool IsArchivePathValid => Directory.Exists(ArchivePath);
 
-        public bool isGarminConnected()
-        {
-            garminFound = false;
+        public bool IsGarminConnected => File.Exists(GarminRootDir + "garmin\\GarminDevice.xml")
+                    && File.Exists(GarminRootDir + "garmin\\system.xml")
+                    && Directory.Exists(GarminRootDir + "garmin\\gpx");
 
-            if ((File.Exists(garminRootDir + "garmin\\GarminDevice.xml"))
-                && (File.Exists(garminRootDir + "garmin\\system.xml"))
-                && (Directory.Exists(garminRootDir + "garmin\\gpx"))
-                )
+        public bool IsSdCardConnected => Directory.Exists(SdCardRootDir + "garmin\\gpx");
+
+        public string[] GetDriveNames()
+        {
+            var drives = DriveInfo.GetDrives();
+            var retVal = new string[drives.Length];
+            int idx = 0;
+
+            foreach (var drive in drives)
             {
-                garminFound = true;
-            };
-
-            return garminFound;
-        }
-
-        public bool isSdCardConnected()
-        {
-            sdCardFound = false;
-
-            if (Directory.Exists(sdCardRootDir + "garmin\\gpx"))
-            {
-                sdCardFound = true;
-            };
-
-            return sdCardFound;
-        }
-
-        public string[] getDriveNames()
-        {
-            DriveInfo[] drives = DriveInfo.GetDrives();
-            string[] retVal = new string[drives.Length];
-            int i = 0;
-
-            foreach (DriveInfo drive in drives)
-            {
-                string name = drive.Name;
+                var name = drive.Name;
                 if (drive.IsReady)
                 {
                     name += " " + drive.VolumeLabel;
                 }
                 name += " (" + drive.DriveType.ToString() + ")";
 
-                retVal[i++] = name;
+                retVal[idx++] = name;
             }
 
             return retVal;
         }
 
-        public bool autoDetectGarmin()
+        public bool AutoDetectGarmin()
         {
-            garminFound = false;
-            sdCardFound = false;
-            DriveInfo[] drives = DriveInfo.GetDrives();
+            var garminFound = false;
+            var drives = DriveInfo.GetDrives();
 
-            foreach (DriveInfo drive in drives)
+            foreach (var drive in drives)
             {
-                string rootPath = drive.Name;
+                var rootPath = drive.Name;
                 if (drive.IsReady && (drive.DriveType == DriveType.Removable))
                 {
                     if (    (File.Exists(rootPath + "garmin\\GarminDevice.xml"))
@@ -158,61 +103,60 @@ namespace GcDownload
                         )
                     {
                         garminFound = true;
-                        garminRootDir = rootPath;
+                        GarminRootDir = rootPath;
                         break;
                     }
                 }
             }
 
-            if (garminFound)
-            {
-                foreach (DriveInfo drive in drives)
-                {
-                    if (drive.Name == garminRootDir) continue;
+            if (!garminFound) return false;
 
-                    string rootPath = drive.Name;
-                    if (drive.IsReady && (drive.DriveType == DriveType.Removable))
+            foreach (var drive in drives)
+            {
+                if (drive.Name == GarminRootDir) continue;
+
+                var rootPath = drive.Name;
+                if (drive.IsReady && (drive.DriveType == DriveType.Removable))
+                {
+                    if (!Directory.Exists(rootPath + "garmin\\gpx"))
                     {
-                        if (Directory.Exists(rootPath + "garmin\\gpx"))
-                        {
-                            sdCardFound = true;
-                            sdCardRootDir = rootPath;
-                            break;
-                        }
+                        continue;
                     }
+
+                    SdCardRootDir = rootPath;
+                    break;
                 }
             }
 
-            return garminFound;
+            return true;
         }
 
-        public void readSettings()
+        public void ReadSettings()
         {
             Microsoft.Win32.RegistryKey rKeyRoot = Microsoft.Win32.Registry.CurrentUser;
             Microsoft.Win32.RegistryKey rKeySoftware = rKeyRoot.CreateSubKey("SOFTWARE");
             Microsoft.Win32.RegistryKey rKeyWb = rKeySoftware.CreateSubKey("wb");
             Microsoft.Win32.RegistryKey rKeyGpxDownload = rKeyWb.CreateSubKey("GpxDownload");
 
-
-            garminRootDir = (string)rKeyGpxDownload.GetValue("garminRootDir", "");
-            sdCardRootDir = (string)rKeyGpxDownload.GetValue("sdCardRootDir", "");
-            archivePath = (string)rKeyGpxDownload.GetValue("archivepath", "");
+            GarminRootDir = (string)rKeyGpxDownload.GetValue("garminRootDir", "");
+            SdCardRootDir = (string)rKeyGpxDownload.GetValue("sdCardRootDir", "");
+            ArchivePath = (string)rKeyGpxDownload.GetValue("archivepath", "");
 
             rKeySoftware.Close();
             rKeyWb.Close();
             rKeyGpxDownload.Close();
         }
 
-        public void saveSettings()
+        public void SaveSettings()
         {
             Microsoft.Win32.RegistryKey rKeyRoot = Microsoft.Win32.Registry.CurrentUser;
             Microsoft.Win32.RegistryKey rKeySoftware = rKeyRoot.CreateSubKey("SOFTWARE");
             Microsoft.Win32.RegistryKey rKeyWb = rKeySoftware.CreateSubKey("wb");
             Microsoft.Win32.RegistryKey rKeyGpxDownload = rKeyWb.CreateSubKey("GpxDownload");
 
-            rKeyGpxDownload.SetValue("garminRootDir", garminRootDir);
-            rKeyGpxDownload.SetValue("sdCardRootDir", sdCardRootDir);
-            rKeyGpxDownload.SetValue("archivepath", archivePath);
+            rKeyGpxDownload.SetValue("garminRootDir", GarminRootDir);
+            rKeyGpxDownload.SetValue("sdCardRootDir", SdCardRootDir);
+            rKeyGpxDownload.SetValue("archivepath", ArchivePath);
 
             rKeySoftware.Close();
             rKeyWb.Close();

@@ -51,7 +51,7 @@ namespace GcDownload
 
         public void UpdateDriveLists()
         {
-            string[] driveNames = settings.getDriveNames();
+            string[] driveNames = settings.GetDriveNames();
 
             comboBoxGarminDrive.ResetText();
             comboBoxSdCardDrive.ResetText();
@@ -93,7 +93,7 @@ namespace GcDownload
             {
                 UpdateDriveLists();
 
-                if (settings.autoDetectGarmin())
+                if (settings.AutoDetectGarmin())
                 {
                     SelectConfiguredDrives();
                 }
@@ -128,24 +128,24 @@ namespace GcDownload
             settings.GarminRootDir = GetDriveName(ref comboBoxGarminDrive);
             settings.SdCardRootDir = GetDriveName(ref comboBoxSdCardDrive);
             settings.StoreCachesOnSdCard = checkBoxStoreCachesOnSdCard.Checked;
-            if (!settings.isGarminConnected())
+            if (!settings.IsGarminConnected)
             {
                 MessageBox.Show(GcDownload.Strings.ErrorGarminNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;
             }
-            if (settings.StoreCachesOnSdCard && (!settings.isSdCardConnected()))
+            if (settings.StoreCachesOnSdCard && (!settings.IsSdCardConnected))
             {
                 MessageBox.Show(GcDownload.Strings.ErrorSdCardNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;
             }
-            if (!settings.isArchivePathValid())
+            if (!settings.IsArchivePathValid)
             {
                 MessageBox.Show(GcDownload.Strings.ErrorArchiveDirectoryNotFound, GcDownload.Strings.TitleSettings, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 cancel = true;
             }
             if (!cancel)
             {
-                settings.saveSettings();
+                settings.SaveSettings();
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 Close();
             }

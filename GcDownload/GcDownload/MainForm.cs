@@ -103,8 +103,8 @@ namespace GcDownload
             m_logger.Debug(System.Environment.OSVersion.VersionString);
             m_logger.Debug(System.Environment.Version.ToString());
 
-            settings.readSettings();
-            settings.autoDetectGarmin();
+            settings.ReadSettings();
+            settings.AutoDetectGarmin();
         }
 
         private void Search(string geocacheId)
@@ -474,11 +474,11 @@ namespace GcDownload
                                     {
                                         if (MessageBox.Show(GcDownload.Strings.PromptArchive, GcDownload.Strings.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                         {
-                                            if (!settings.isArchivePathValid())
+                                            if (!settings.IsArchivePathValid)
                                             {
                                                 ShowSettings();
                                             }
-                                            if (settings.isArchivePathValid())
+                                            if (settings.IsArchivePathValid)
                                             {
                                                 foreach (string GeocacheId in fieldLogForm.FoundCacheIds)
                                                 {
@@ -606,8 +606,8 @@ namespace GcDownload
 
         private bool EnsureGarminAvailable()
         {
-            if (settings.isGarminConnected()) return true;
-            if (settings.autoDetectGarmin()) return true;
+            if (settings.IsGarminConnected) return true;
+            if (settings.AutoDetectGarmin()) return true;
             if (ShowSettings()) return true;
             return false;
         }
