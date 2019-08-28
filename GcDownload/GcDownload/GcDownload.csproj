@@ -63,7 +63,11 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.6.7\lib\net35\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -73,22 +77,28 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldLogEntry.cs" />
     <Compile Include="FieldLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FieldLogForm.Designer.cs">
       <DependentUpon>FieldLogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GeocacheGpx.cs" />
     <Compile Include="ListCaches.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ListCaches.Designer.cs">
       <DependentUpon>ListCaches.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogEntry.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,6 +161,7 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -199,18 +210,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="homenet.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="search.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="folderopen.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="HomeHS.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HomeHS.png" />

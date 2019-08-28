@@ -60,7 +60,7 @@
             this.webBrowserPreview.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserPreview.Name = "webBrowserPreview";
             this.webBrowserPreview.ScriptErrorsSuppressed = true;
-            this.webBrowserPreview.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowserPreview_DocumentCompleted);
+            this.webBrowserPreview.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.WebBrowserPreview_DocumentCompleted);
             // 
             // labelWebSite
             // 
@@ -76,7 +76,7 @@
             resources.GetString("comboBoxWebsite.Items"),
             resources.GetString("comboBoxWebsite.Items1")});
             this.comboBoxWebsite.Name = "comboBoxWebsite";
-            this.comboBoxWebsite.SelectedIndexChanged += new System.EventHandler(this.comboBoxWebsite_SelectedIndexChanged);
+            this.comboBoxWebsite.SelectedIndexChanged += new System.EventHandler(this.ComboBoxWebsite_SelectedIndexChanged);
             // 
             // buttonBack
             // 
@@ -84,7 +84,7 @@
             this.buttonBack.Image = global::GcDownload.Properties.Resources.NavBack;
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.UseVisualStyleBackColor = true;
-            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
+            this.buttonBack.Click += new System.EventHandler(this.ButtonBack_Click);
             // 
             // buttonHome
             // 
@@ -92,7 +92,7 @@
             this.buttonHome.Image = global::GcDownload.Properties.Resources.HomeHS;
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.UseVisualStyleBackColor = true;
-            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            this.buttonHome.Click += new System.EventHandler(this.ButtonHome_Click);
             // 
             // buttonSearch
             // 
@@ -100,7 +100,7 @@
             this.buttonSearch.Image = global::GcDownload.Properties.Resources.SearchWebHS;
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.UseVisualStyleBackColor = true;
-            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            this.buttonSearch.Click += new System.EventHandler(this.ButtonSearch_Click);
             // 
             // buttonDownload
             // 
@@ -108,7 +108,7 @@
             this.buttonDownload.Image = global::GcDownload.Properties.Resources.saveHS;
             this.buttonDownload.Name = "buttonDownload";
             this.buttonDownload.UseVisualStyleBackColor = true;
-            this.buttonDownload.Click += new System.EventHandler(this.buttonDownload_Click);
+            this.buttonDownload.Click += new System.EventHandler(this.ButtonDownload_Click);
             // 
             // buttonFieldLog
             // 
@@ -116,7 +116,7 @@
             this.buttonFieldLog.Image = global::GcDownload.Properties.Resources.book_reportHS;
             this.buttonFieldLog.Name = "buttonFieldLog";
             this.buttonFieldLog.UseVisualStyleBackColor = true;
-            this.buttonFieldLog.Click += new System.EventHandler(this.buttonFieldLog_Click);
+            this.buttonFieldLog.Click += new System.EventHandler(this.ButtonFieldLog_Click);
             // 
             // buttonBrowseCaches
             // 
@@ -124,21 +124,21 @@
             this.buttonBrowseCaches.Image = global::GcDownload.Properties.Resources.openfolderHS;
             this.buttonBrowseCaches.Name = "buttonBrowseCaches";
             this.buttonBrowseCaches.UseVisualStyleBackColor = true;
-            this.buttonBrowseCaches.Click += new System.EventHandler(this.buttonBrowseCaches_Click);
+            this.buttonBrowseCaches.Click += new System.EventHandler(this.ButtonBrowseCaches_Click);
             // 
             // buttonSettings
             // 
             resources.ApplyResources(this.buttonSettings, "buttonSettings");
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.UseVisualStyleBackColor = true;
-            this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
+            this.buttonSettings.Click += new System.EventHandler(this.ButtonSettings_Click);
             // 
             // linkLabelProjectHomepage
             // 
             resources.ApplyResources(this.linkLabelProjectHomepage, "linkLabelProjectHomepage");
             this.linkLabelProjectHomepage.Name = "linkLabelProjectHomepage";
             this.linkLabelProjectHomepage.TabStop = true;
-            this.linkLabelProjectHomepage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelProjectHomepage_LinkClicked);
+            this.linkLabelProjectHomepage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelProjectHomepage_LinkClicked);
             // 
             // MainForm
             // 

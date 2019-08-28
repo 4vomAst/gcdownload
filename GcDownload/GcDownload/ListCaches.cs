@@ -1,7 +1,7 @@
 ﻿/*
-Copyright (c) 2010-2012 Wolfgang Wallhaeuser
+Copyright (c) 2010-2019 Wolfgang Wallhaeuser
 
-http://code.google.com/p/gcdownload/
+https://github.com/4vomast/gcdownload
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,13 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace GcDownload
 {
     public partial class ListCachesForm : Form
     {
-        public List<MainForm.GeocacheGpx> geocacheList = new List<MainForm.GeocacheGpx>();
+        public List<GeocacheGpx> geocacheList = new List<GeocacheGpx>();
         public string cacheIdToSearch = "";
         public List<string> deletedCacheIds = new List<string>();
         public List<string> updateCacheIds = new List<string>();
@@ -55,17 +50,13 @@ namespace GcDownload
 
             if (geocacheList.Count > 0)
             {
-                foreach (MainForm.GeocacheGpx geocache in geocacheList)
+                foreach (GeocacheGpx geocache in geocacheList)
                 {
                     ListViewItem item = new ListViewItem(geocache.GcId);
-                    //item.SubItems.Add(logEntry.Timestamp.ToLocalTime().ToShortDateString() + " " + logEntry.Timestamp.ToLocalTime().ToShortTimeString());
-                    //item.SubItems.Add(logEntry.Type);
                     item.SubItems.Add(geocache.Name);
                     item.SubItems.Add(geocache.Author);
                     item.SubItems.Add(geocache.FileTimestamp.ToShortDateString());
                     item.SubItems.Add(geocache.ShortDescription);
-
-                    //item.Checked = false;
 
                     listViewCaches.Items.Add(item);
                 }
@@ -81,60 +72,63 @@ namespace GcDownload
             buttonUpdateAll.Enabled = listViewCaches.Items.Count > 0;
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void ButtonClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
-            Close();
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
+        private void ButtonSearch_Click(object sender, EventArgs e)
         {
-            if (listViewCaches.SelectedItems.Count > 0)
+            if (listViewCaches.SelectedItems.Count == 0)
             {
-                cacheIdToSearch = listViewCaches.SelectedItems[0].Text;
-                DialogResult = DialogResult.OK;
-                Close();
+                return;
+            }
+
+            cacheIdToSearch = listViewCaches.SelectedItems[0].Text;
+            DialogResult = DialogResult.OK;
+        }
+
+        private void ButtonDeleteEntry_Click(object sender, EventArgs e)
+        {
+            if (listViewCaches.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listViewCaches.SelectedItems)
+            {
+                deletedCacheIds.Add(item.Text);
+                listViewCaches.Items.Remove(item);
             }
         }
 
-        private void buttonDeleteEntry_Click(object sender, EventArgs e)
-        {
-            if (listViewCaches.SelectedItems.Count > 0)
-            {
-                foreach (ListViewItem item in listViewCaches.SelectedItems)
-                {
-                    deletedCacheIds.Add(item.Text);
-                    listViewCaches.Items.Remove(item);
-                }
-            }
-        }
-
-        private void listViewCaches_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewCaches_SelectedIndexChanged(object sender, EventArgs e)
         {
             buttonSearch.Enabled = (listViewCaches.SelectedItems.Count == 1);
             buttonDeleteEntry.Enabled = (listViewCaches.SelectedItems.Count > 0);
             buttonUpdateAll.Enabled = listViewCaches.Items.Count > 0;
         }
 
-        private void listViewCaches_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListViewCaches_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (listViewCaches.SelectedItems.Count == 1)
+            if (listViewCaches.SelectedItems.Count != 1)
             {
-                cacheIdToSearch = listViewCaches.SelectedItems[0].Text;
-                DialogResult = DialogResult.OK;
-                Close();
+                return;
             }
+
+            cacheIdToSearch = listViewCaches.SelectedItems[0].Text;
+            DialogResult = DialogResult.OK;
         }
 
-        private void buttonUpdateAll_Click(object sender, EventArgs e)
+        private void ButtonUpdateAll_Click(object sender, EventArgs e)
         {
             updateCacheIds.Clear();
             foreach (ListViewItem item in listViewCaches.SelectedItems)
             {
                 updateCacheIds.Add(item.Text);
             };
+
             DialogResult = DialogResult.OK;
-            Close();
         }
     }
 }

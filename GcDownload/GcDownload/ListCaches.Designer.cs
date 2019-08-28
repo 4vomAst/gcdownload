@@ -55,8 +55,8 @@
             this.listViewCaches.Name = "listViewCaches";
             this.listViewCaches.UseCompatibleStateImageBehavior = false;
             this.listViewCaches.View = System.Windows.Forms.View.Details;
-            this.listViewCaches.SelectedIndexChanged += new System.EventHandler(this.listViewCaches_SelectedIndexChanged);
-            this.listViewCaches.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewCaches_MouseDoubleClick);
+            this.listViewCaches.SelectedIndexChanged += new System.EventHandler(this.ListViewCaches_SelectedIndexChanged);
+            this.listViewCaches.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListViewCaches_MouseDoubleClick);
             // 
             // columnHeaderId
             // 
@@ -83,7 +83,7 @@
             resources.ApplyResources(this.buttonClose, "buttonClose");
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            this.buttonClose.Click += new System.EventHandler(this.ButtonClose_Click);
             // 
             // buttonSearch
             // 
@@ -91,7 +91,7 @@
             this.buttonSearch.Image = global::GcDownload.Properties.Resources.SearchWebHS;
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.UseVisualStyleBackColor = true;
-            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            this.buttonSearch.Click += new System.EventHandler(this.ButtonSearch_Click);
             // 
             // buttonDeleteEntry
             // 
@@ -99,7 +99,7 @@
             this.buttonDeleteEntry.Image = global::GcDownload.Properties.Resources.DeleteHS;
             this.buttonDeleteEntry.Name = "buttonDeleteEntry";
             this.buttonDeleteEntry.UseVisualStyleBackColor = true;
-            this.buttonDeleteEntry.Click += new System.EventHandler(this.buttonDeleteEntry_Click);
+            this.buttonDeleteEntry.Click += new System.EventHandler(this.ButtonDeleteEntry_Click);
             // 
             // buttonUpdateAll
             // 
@@ -107,7 +107,7 @@
             this.buttonUpdateAll.Image = global::GcDownload.Properties.Resources.RefreshDocViewHS;
             this.buttonUpdateAll.Name = "buttonUpdateAll";
             this.buttonUpdateAll.UseVisualStyleBackColor = true;
-            this.buttonUpdateAll.Click += new System.EventHandler(this.buttonUpdateAll_Click);
+            this.buttonUpdateAll.Click += new System.EventHandler(this.ButtonUpdateAll_Click);
             // 
             // ListCachesForm
             // 

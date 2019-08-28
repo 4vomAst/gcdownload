@@ -1,7 +1,7 @@
 ﻿/*
-Copyright (c) 2010-2012 Wolfgang Wallhaeuser
+Copyright (c) 2010-2019 Wolfgang Wallhaeuser
 
-http://code.google.com/p/gcdownload/
+https://github.com/4vomast/gcdownload
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,13 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace GcDownload
 {
     public partial class FieldLogForm : Form
     {
-        public List<MainForm.FieldLogEntry> FieldLog = new List<MainForm.FieldLogEntry>();
+        public List<FieldLogEntry> FieldLog = new List<FieldLogEntry>();
         public string CacheIdToSearch = "";
         static HashSet<string> VisitedCacheIds = new HashSet<string>();
         public HashSet<string> FoundCacheIds = new HashSet<string>();
@@ -52,7 +47,7 @@ namespace GcDownload
 
             if (FieldLog.Count > 0)
             {
-                foreach (MainForm.FieldLogEntry logEntry in FieldLog)
+                foreach (FieldLogEntry logEntry in FieldLog)
                 {
                     ListViewItem item = new ListViewItem(logEntry.CacheId);
                     item.SubItems.Add(logEntry.Timestamp.ToLocalTime().ToShortDateString() + " " + logEntry.Timestamp.ToLocalTime().ToShortTimeString());
@@ -67,45 +62,46 @@ namespace GcDownload
                 listViewFieldLog.Columns[3].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
 
-            updateButtonStates();
+            UpdateButtonStates();
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
+        private void ButtonSearch_Click(object sender, EventArgs e)
         {
-            if (listViewFieldLog.SelectedItems.Count > 0)
+            if (listViewFieldLog.SelectedItems.Count == 0)
             {
-                CacheIdToSearch = listViewFieldLog.SelectedItems[0].Text;
-                VisitedCacheIds.Add(CacheIdToSearch);
-                DialogResult = DialogResult.OK;
-                Close();
+                return;
             }
+
+            CacheIdToSearch = listViewFieldLog.SelectedItems[0].Text;
+            VisitedCacheIds.Add(CacheIdToSearch);
+            DialogResult = DialogResult.OK;
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void ButtonClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
-            Close();
         }
 
-        private void listViewFieldLog_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewFieldLog_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateButtonStates();
+            UpdateButtonStates();
         }
 
-        private void listViewFieldLog_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListViewFieldLog_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (listViewFieldLog.SelectedItems.Count == 1)
+            if (listViewFieldLog.SelectedItems.Count != 1)
             {
-                CacheIdToSearch = listViewFieldLog.SelectedItems[0].Text;
-                VisitedCacheIds.Add(CacheIdToSearch);
-                DialogResult = DialogResult.OK;
-                Close();
+                return;
             }
+
+            CacheIdToSearch = listViewFieldLog.SelectedItems[0].Text;
+            VisitedCacheIds.Add(CacheIdToSearch);
+            DialogResult = DialogResult.OK;
         }
 
-        private void buttonDeleteLog_Click(object sender, EventArgs e)
+        private void ButtonDeleteLog_Click(object sender, EventArgs e)
         {
-            foreach (MainForm.FieldLogEntry logEntry in FieldLog)
+            foreach (FieldLogEntry logEntry in FieldLog)
             {
                 if (logEntry.Type.ToLower() == "found it")
                 {
@@ -115,12 +111,11 @@ namespace GcDownload
 
             FieldLog.Clear();
             DialogResult = DialogResult.OK;
-            Close();
         }
 
-        private void buttonDeleteEntry_Click(object sender, EventArgs e)
+        private void ButtonDeleteEntry_Click(object sender, EventArgs e)
         {
-            bool removedSomething = false;
+            var removedSomething = false;
 
             do
             {
@@ -128,33 +123,38 @@ namespace GcDownload
 
                 foreach (ListViewItem item in listViewFieldLog.Items)
                 {
-                    if (item.Checked)
+                    if (!item.Checked)
                     {
-                        listViewFieldLog.Items.Remove(item);
+                        continue;
+                    }
 
-                        foreach (MainForm.FieldLogEntry logEntry in FieldLog)
+                    listViewFieldLog.Items.Remove(item);
+
+                    foreach (FieldLogEntry logEntry in FieldLog)
+                    {
+                        if (logEntry.CacheId != item.Text)
                         {
-                            if (logEntry.CacheId == item.Text)
-                            {
-                                if (logEntry.Type.ToLower() == "found it")
-                                {
-                                    FoundCacheIds.Add(logEntry.CacheId);
-                                }
-                                FieldLog.Remove(logEntry);
-                                break;
-                            }
+                            continue;
                         }
 
-                        removedSomething = true;
+                        if (logEntry.Type.ToLower() == "found it")
+                        {
+                            FoundCacheIds.Add(logEntry.CacheId);
+                        }
+
+                        FieldLog.Remove(logEntry);
                         break;
                     }
+
+                    removedSomething = true;
+                    break;
                 }
             } while (removedSomething);
 
-            updateButtonStates();
+            UpdateButtonStates();
         }
 
-        private void listViewFieldLog_ItemChecked(object sender, ItemCheckedEventArgs e)
+        private void ListViewFieldLog_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             if (e.Item.Checked)
             {
@@ -164,13 +164,15 @@ namespace GcDownload
             {
                 VisitedCacheIds.Remove(e.Item.Text);
             }
-            updateButtonStates();
+
+            UpdateButtonStates();
         }
 
-        private void updateButtonStates()
+        private void UpdateButtonStates()
         {
             buttonDeleteLog.Enabled = listViewFieldLog.Items.Count > 0;
             buttonDeleteEntry.Enabled = false;
+
             foreach (ListViewItem item in listViewFieldLog.Items)
             {
                 if (item.Checked)
@@ -179,6 +181,7 @@ namespace GcDownload
                     break;
                 }
             }
+
             buttonSearch.Enabled = (listViewFieldLog.SelectedItems.Count == 1);
         }
     }

@@ -133,7 +133,7 @@
     <value>Die Geocache-Datei {0} ist fehlerhaft oder kann nicht geöffnet werden.</value>
   </data>
   <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
-    <value>Fehler beim Speichern des Geocaches. Navigieren Sie zu einer Detailseite eines Geocaches und klicken Sie dann auf die "Speichern" Schaltfläche. Falls das Problem weiterhin besteht, hat der Anbieter eventuell das Layout der Webseiten geändert. Das Programm ist ggf. nicht mehr kompatibel zur Webseite. Weitere Hinweise zum Fehler finden Sie in der Log-Datei: {0}</value>
+    <value>Fehler beim Speichern des Geocaches. Navigieren Sie zu einer Detailseite eines Geocaches und klicken Sie dann auf die "Speichern" Schaltfläche. Falls das Problem weiterhin besteht, hat der Anbieter eventuell das Layout der Webseiten geändert. Das Programm ist ggf. nicht mehr kompatibel zur Webseite.</value>
   </data>
   <data name="ErrorSdCardNotFound" xml:space="preserve">
     <value>Wählen Sie das Laufwerk, welches der internen SD-Karte Ihres GPS-Gerätes zugeordnet ist. Wenn das Laufwerk nicht angezeigt wird, klicken Sie auf die Schaltfläche "Erkennen". Stellen Sie sicher, dass auf der SD-Karte das Verzeichnis "Garmin\gpx" vorhanden ist.</value>

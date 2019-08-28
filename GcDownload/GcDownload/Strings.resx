@@ -133,7 +133,7 @@
     <value>Geocache file {0} is invalid or cannot be opened.</value>
   </data>
   <data name="ErrorNoGeocachePageSelected" xml:space="preserve">
-    <value>Could not download Geocache file. Browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the application is no longer compatible. For more detailed error information please refer to the log file: {0}</value>
+    <value>Could not download Geocache file. Browse to the details page of a geocache and then press the download button. If the problem persists, the provider might have changed the layout of the geocache pages so that the application is no longer compatible.</value>
   </data>
   <data name="ErrorSdCardNotFound" xml:space="preserve">
     <value>Select the drive that is assigned to the internal SD card of your GPS device. If the drive is not listed, click the 'Detect' button. Ensure that the directory 'garmin\gpx' does exist on the SD card.</value>

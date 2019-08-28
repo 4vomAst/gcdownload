@@ -55,9 +55,9 @@
             this.listViewFieldLog.Name = "listViewFieldLog";
             this.listViewFieldLog.UseCompatibleStateImageBehavior = false;
             this.listViewFieldLog.View = System.Windows.Forms.View.Details;
-            this.listViewFieldLog.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listViewFieldLog_ItemChecked);
-            this.listViewFieldLog.SelectedIndexChanged += new System.EventHandler(this.listViewFieldLog_SelectedIndexChanged);
-            this.listViewFieldLog.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewFieldLog_MouseDoubleClick);
+            this.listViewFieldLog.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.ListViewFieldLog_ItemChecked);
+            this.listViewFieldLog.SelectedIndexChanged += new System.EventHandler(this.ListViewFieldLog_SelectedIndexChanged);
+            this.listViewFieldLog.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListViewFieldLog_MouseDoubleClick);
             // 
             // columnHeaderId
             // 
@@ -80,7 +80,7 @@
             resources.ApplyResources(this.buttonClose, "buttonClose");
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            this.buttonClose.Click += new System.EventHandler(this.ButtonClose_Click);
             // 
             // buttonSearch
             // 
@@ -88,7 +88,7 @@
             this.buttonSearch.Image = global::GcDownload.Properties.Resources.SearchWebHS;
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.UseVisualStyleBackColor = true;
-            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            this.buttonSearch.Click += new System.EventHandler(this.ButtonSearch_Click);
             // 
             // buttonDeleteLog
             // 
@@ -96,7 +96,7 @@
             this.buttonDeleteLog.Image = global::GcDownload.Properties.Resources.DeleteFolderHS;
             this.buttonDeleteLog.Name = "buttonDeleteLog";
             this.buttonDeleteLog.UseVisualStyleBackColor = true;
-            this.buttonDeleteLog.Click += new System.EventHandler(this.buttonDeleteLog_Click);
+            this.buttonDeleteLog.Click += new System.EventHandler(this.ButtonDeleteLog_Click);
             // 
             // buttonDeleteEntry
             // 
@@ -104,7 +104,7 @@
             this.buttonDeleteEntry.Image = global::GcDownload.Properties.Resources.DeleteHS;
             this.buttonDeleteEntry.Name = "buttonDeleteEntry";
             this.buttonDeleteEntry.UseVisualStyleBackColor = true;
-            this.buttonDeleteEntry.Click += new System.EventHandler(this.buttonDeleteEntry_Click);
+            this.buttonDeleteEntry.Click += new System.EventHandler(this.ButtonDeleteEntry_Click);
             // 
             // FieldLogForm
             // 
