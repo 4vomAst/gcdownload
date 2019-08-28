@@ -24,8 +24,10 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using NLog;
 
 namespace GcDownload
 {
@@ -37,9 +39,29 @@ namespace GcDownload
         [STAThread]
         static void Main()
         {
+            ConfigureLogging();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+        private static void ConfigureLogging()
+        {
+            var logPath = Path.Combine(Path.GetTempPath(), "GcDownload\\logs");
+
+            Directory.CreateDirectory(logPath);
+
+            var config = new NLog.Config.LoggingConfiguration();
+            config.AddRule(
+                LogLevel.Debug, 
+                LogLevel.Fatal, 
+                new NLog.Targets.FileTarget("logfile")
+                {
+                    FileName = Path.Combine(logPath, "GcDownload.log")
+                });
+
+            LogManager.Configuration = config;
         }
     }
 }
