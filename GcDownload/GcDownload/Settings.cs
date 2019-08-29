@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-using System;
 using System.IO;
 
 namespace GcDownload
@@ -57,7 +56,6 @@ namespace GcDownload
         }
 
         public string ArchivePath { get; set; } = string.Empty;
-
         public bool IsArchivePathValid => Directory.Exists(ArchivePath);
 
         public bool IsGarminConnected => File.Exists(GarminRootDir + "garmin\\GarminDevice.xml")

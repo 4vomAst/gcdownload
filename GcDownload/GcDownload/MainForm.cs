@@ -26,240 +26,136 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using System.Threading;
 using System.IO;
-using System.Xml;
 using NLog;
 
 namespace GcDownload
 {
-
     public partial class MainForm : Form
     {
         private static Logger m_logger = LogManager.GetCurrentClassLogger();
-        private CSettings settings = new CSettings();
-        private Provider provider = Provider.ProviderGeocachingCom;
-        private List<string> updateCacheIds = new List<string>();
+        private CSettings m_settings = new CSettings();
+        private List<string> m_chacheIdsToBeDownloaded = new List<string>();
 
         enum Provider
         {
             ProviderGeocachingCom,
-            ProviderOpencachingDe
-        }
-
-        static void MasqueradeUnwantedDelimeters(bool masquerade, char delimeter, ref string s)
-        {
-            if (masquerade)
-            {
-                //preserve double quotation marks, replace them with formfeeds
-                s = s.Replace("\"\"", "\f");
-
-                bool withinQuotedString = false;
-                for (int i = 0; i < s.Length; i++)
-                {
-                    if (!withinQuotedString)
-                    {
-                        if (s[i] == '"')
-                        {
-                            withinQuotedString = true;
-                        }
-                    }
-                    else
-                    {
-                        if (s[i] == '"')
-                        {
-                            withinQuotedString = false;
-                        }
-                        else if (s[i] == delimeter)
-                        {
-                            char[] sz = s.ToCharArray();
-                            sz[i] = '\n';
-                            s = new string(sz);
-                        }
-                    }
-                }
-                //restore double quotation marks
-                s = s.Replace("\f", "\"\"");
-
-            }
-            else
-            {
-                s = s.Replace('\n', delimeter);
-            }
+            ProviderOpencachingDe,
+            ProviderUnknown
         }
 
         public MainForm()
         {
-            m_logger.Debug("Starting...", false);
-            InitializeComponent();
-
-            webBrowserPreview.ScriptErrorsSuppressed = true;
-            SelectProvider(Provider.ProviderOpencachingDe);
-            NavigateHome();
-
-            this.Text += "    V" + GetType().Assembly.GetName().Version.ToString(3);
-
-            m_logger.Debug(this.Text);
+            m_logger.Debug(GetType().Assembly.GetName().Version.ToString(3));
             m_logger.Debug(System.Environment.OSVersion.VersionString);
             m_logger.Debug(System.Environment.Version.ToString());
 
-            settings.ReadSettings();
-            settings.AutoDetectGarmin();
-        }
+            InitializeComponent();
 
-        private void Search(string geocacheId)
-        {
-            string url = "";
+            webBrowserPreview.ScriptErrorsSuppressed = true;
 
-            if (geocacheId.ToLower().StartsWith("gc"))
-            {
-                SelectProvider(Provider.ProviderGeocachingCom);
-            }
-            else if (geocacheId.ToLower().StartsWith("oc"))
-            {
-                SelectProvider(Provider.ProviderOpencachingDe);
-            }
+            comboBoxWebsite.SelectedIndex = 1;
 
-            switch (provider)
-            {
-                case Provider.ProviderGeocachingCom:
-                    url = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + geocacheId;
-                    break;
-
-                case Provider.ProviderOpencachingDe:
-                    url = "http://www.opencaching.de/viewcache.php?wp=" + geocacheId;
-                    break;
-            }
-
-            m_logger.Debug("Url: " + url);
-            webBrowserPreview.Navigate(url);
+            m_settings.ReadSettings();
+            m_settings.AutoDetectGarmin();
         }
 
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
-            m_logger.Debug("buttonSearch_Click");
+            if (string.IsNullOrEmpty(textBoxGeocacheId.Text)) return;
 
-            if (textBoxGeocacheId.Text != "")
+            Search(textBoxGeocacheId.Text);
+        }
+
+        private void Search(string geocacheId)
+        {
+            m_logger.Debug($"{geocacheId}");
+
+            var url = GetCacheUrlFromId(geocacheId);
+
+            m_logger.Debug($"Url: {url}");
+            webBrowserPreview.Navigate(url);
+        }
+
+        private string GetCacheUrlFromId(string geocacheId)
+        {
+            if (geocacheId.ToLower().StartsWith("gc"))
             {
-                Search(textBoxGeocacheId.Text);
+                return "http://www.geocaching.com/seek/cache_details.aspx?wp=" + geocacheId;
             }
-            else
+            else if (geocacheId.ToLower().StartsWith("oc"))
             {
-                MessageBox.Show(GcDownload.Strings.ErrorEnterGeocacheId, GcDownload.Strings.TitleSearch, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return "http://www.opencaching.de/viewcache.php?wp=" + geocacheId;
             }
+
+            return string.Empty;
         }
 
         private void ButtonDownload_Click(object sender, EventArgs e)
         {
-            m_logger.Debug("buttonDownload_Click");
-
             if (!EnsureGarminAvailable()) return;
 
             Download(true);
-
-        }
-
-        string GetFullGpxFilePath(bool promptForFilename, string gcid)
-        {
-            string fullGpxFilePath = "";
-            if (promptForFilename)
-            {
-                System.Windows.Forms.SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog();
-                fileDialog.InitialDirectory = settings.GpxPath;
-                fileDialog.AddExtension = true;
-                fileDialog.AutoUpgradeEnabled = true;
-                fileDialog.CheckPathExists = true;
-                fileDialog.DefaultExt = "gpx";
-                fileDialog.FileName = gcid + ".gpx";
-                fileDialog.OverwritePrompt = true;
-                fileDialog.ValidateNames = true;
-                fileDialog.Filter = GcDownload.Strings.FilterGpxFiles;
-                fileDialog.FilterIndex = 1;
-
-                if (fileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    fullGpxFilePath = fileDialog.FileName;
-                }
-            }
-            else
-            {
-                fullGpxFilePath = System.IO.Path.Combine(settings.GpxPath, gcid + ".gpx");
-            }
-
-            return fullGpxFilePath;
         }
 
         private void Download(bool promptForFilename)
         {
-            m_logger.Debug("doGeocacheDownload");
+            m_logger.Debug($"({promptForFilename})");
 
             if (!EnsureGarminAvailable()) return;
 
-
-            switch (provider)
+            switch (GetProviderFromUrl(webBrowserPreview.Url.ToString()))
             {
                 case Provider.ProviderGeocachingCom:
                     {
-                        GeocacheGpx geocacheGpx = new GeocacheGpx();
+                        var geocacheGpx = new GeocacheGpx();
+
                         geocacheGpx.ImportFromGeocachingCom(webBrowserPreview.Document);
 
-                        if (geocacheGpx.IsValid())
-                        {
-                            string fileContent = geocacheGpx.ExportToGpx();
-
-                            try
-                            {
-                                string fullGpxFilePath = GetFullGpxFilePath(promptForFilename, geocacheGpx.GcId);
-
-                                if (!string.IsNullOrEmpty(fullGpxFilePath))
-                                {
-                                    try
-                                    {
-                                        m_logger.Debug("Write to file: " + fullGpxFilePath);
-                                        StreamWriter writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8);
-                                        writer.Write(fileContent);
-                                        writer.Close();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        m_logger.Debug("Writing to file failed: " + ex.Message);
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                m_logger.Debug("Save gpx to file failed: " + ex.Message);
-                            }
-                        }
-                        else
+                        if (!geocacheGpx.IsValid())
                         {
                             string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected);
                             MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            return;
+                        }
+
+                        var fullGpxFilePath = GetFullGpxFilePath(promptForFilename, geocacheGpx.GcId);
+
+                        if (string.IsNullOrEmpty(fullGpxFilePath)) return;
+
+                        try
+                        {
+                            m_logger.Debug("Write to file: " + fullGpxFilePath);
+
+                            using (var writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8))
+                            {
+                                writer.Write(geocacheGpx.ExportToGpx());
+                                writer.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            m_logger.Debug("Writing to file failed: " + ex.Message);
                         }
                     }
                     break;
 
                 case Provider.ProviderOpencachingDe:
                     {
-                        string title = webBrowserPreview.Document.Title;
+                        var title = webBrowserPreview.Document.Title;
                         if (!title.StartsWith("OC")) return;
+
                         int posBlank = title.IndexOf(" ");
                         if (posBlank == -1) return;
 
                         string ocCacheId = title.Substring(0, posBlank);
+                        string filename = GetFullGpxFilePath(promptForFilename, ocCacheId);
 
-                        DownloadViaOkapi(ocCacheId, promptForFilename);
+                        DownloadViaOkapi(ocCacheId, filename);
                     }
                     break;
             }
-        }
-
-        public void DownloadViaOkapi(string cacheId, bool promptForFilename)
-        {
-            string filename = GetFullGpxFilePath(promptForFilename, cacheId);
-
-            DownloadViaOkapi(cacheId, filename);
-
         }
 
         public void DownloadViaOkapi(string cacheId, string filename)
@@ -274,243 +170,158 @@ namespace GcDownload
             webClient.DownloadFile(url, filename);
         }
 
+        string GetFullGpxFilePath(bool promptForFilename, string gcid)
+        {
+            string fullGpxFilePath = string.Empty;
 
+            if (promptForFilename)
+            {
+                SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog
+                {
+                    InitialDirectory = m_settings.GpxPath,
+                    AddExtension = true,
+                    AutoUpgradeEnabled = true,
+                    CheckPathExists = true,
+                    DefaultExt = "gpx",
+                    FileName = gcid + ".gpx",
+                    OverwritePrompt = true,
+                    ValidateNames = true,
+                    Filter = GcDownload.Strings.FilterGpxFiles,
+                    FilterIndex = 1
+                };
+
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    fullGpxFilePath = fileDialog.FileName;
+                }
+            }
+            else
+            {
+                fullGpxFilePath = System.IO.Path.Combine(m_settings.GpxPath, gcid + ".gpx");
+            }
+
+            return fullGpxFilePath;
+        }
 
         private void NavigateHome()
         {
             m_logger.Debug("navigateHome");
-            switch (provider)
-            {
-                case Provider.ProviderGeocachingCom:
-                    m_logger.Debug("http://www.geocaching.com/login/");
-                    webBrowserPreview.Navigate("http://www.geocaching.com/login/");
-                    break;
 
-                case Provider.ProviderOpencachingDe:
-                    m_logger.Debug("http://www.opencaching.de/");
-                    webBrowserPreview.Navigate("http://www.opencaching.de/");
-                    break;
-            }
+            var url = comboBoxWebsite.SelectedItem.ToString();
+
+            if (string.IsNullOrEmpty(url)) return;
+
+            m_logger.Debug($"URL: {url}");
+            webBrowserPreview.Navigate(url);
         }
 
-        private void WebBrowserPreview_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void WebBrowserPreview_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs eventArgs)
         {
-            if (e.Url.ToString().ToLower().Contains("opencaching"))
-            {
-                SelectProvider(Provider.ProviderOpencachingDe);
-            }
-            else if (e.Url.ToString().ToLower().Contains("geocaching.com"))
-            {
-                SelectProvider(Provider.ProviderGeocachingCom);
-            }
-
-            TriggerAutoDownload(e.Url.ToString());
+            TriggerAutoDownload(eventArgs.Url.ToString());
         }
 
         private void ButtonHome_Click(object sender, EventArgs e)
         {
-            m_logger.Debug("buttonHome_Click");
             NavigateHome();
         }
 
         private void ButtonBack_Click(object sender, EventArgs e)
         {
-            m_logger.Debug("buttonBack_Click");
             webBrowserPreview.GoBack();
         }
 
-        private void SelectProvider(Provider newprovider)
+        private Provider GetProviderFromUrl(string url)
         {
-            switch (newprovider)
+            if (url.ToLower().Contains("opencaching"))
             {
-                case Provider.ProviderGeocachingCom:
-                    comboBoxWebsite.Text = "www.geocaching.com";
-                    break;
-
-                case Provider.ProviderOpencachingDe:
-                    comboBoxWebsite.Text = "www.opencaching.de";
-                    break;
+                return Provider.ProviderOpencachingDe;
+            }
+            else if (url.ToLower().Contains("geocaching.com"))
+            {
+                return Provider.ProviderGeocachingCom;
             }
 
-            provider = newprovider;
+            return Provider.ProviderUnknown;
         }
 
         private void ComboBoxWebsite_SelectedIndexChanged(object sender, EventArgs e)
         {
-            m_logger.Debug("comboBoxWebsite_SelectedIndexChanged");
-
-            if (comboBoxWebsite.Text == "www.geocaching.com")
-            {
-                provider = Provider.ProviderGeocachingCom;
-            }
-            else if (comboBoxWebsite.Text == "www.opencaching.de")
-            {
-                provider = Provider.ProviderOpencachingDe;
-            }
-
             NavigateHome();
         }
 
         private void ButtonFieldLog_Click(object sender, EventArgs e)
         {
-            m_logger.Debug("buttonFieldLog_Click");
-
             if (!EnsureGarminAvailable()) return;
 
-            List<FieldLogEntry> FieldLog = new List<FieldLogEntry>();
+            var fieldLogEntries = FieldLogReader.ReadFieldLog(m_settings.FieldLogPath);
 
-            try
+            using (FieldLogForm fieldLogForm = new FieldLogForm
             {
-                m_logger.Debug("Open log file: " + settings.FieldLogPath);
-                StreamReader reader = new StreamReader(settings.FieldLogPath, Encoding.Unicode);
+                FieldLog = fieldLogEntries
+            })
+            {
+                int count = fieldLogEntries.Count;
 
-                string logLine = reader.ReadLine();
+                if (fieldLogForm.ShowDialog() != DialogResult.OK) return;
 
-                while (logLine != null)
+                if (fieldLogForm.CacheIdToSearch.Length > 0)
                 {
-                    if (logLine.Length > 0)
+                    textBoxGeocacheId.Text = fieldLogForm.CacheIdToSearch;
+                    Search(fieldLogForm.CacheIdToSearch);
+                }
+
+                if (fieldLogEntries.Count == count) return;
+
+                string prompt = GcDownload.Strings.PromptDeleteFieldLog;
+
+                if (fieldLogEntries.Count > 0)
+                {
+                    prompt = string.Format(GcDownload.Strings.PromptDeleteFieldLogEntries, count - fieldLogEntries.Count);
+                }
+
+                if (MessageBox.Show(prompt, GcDownload.Strings.TitleDeleteFieldLog, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    StreamWriter writer = new StreamWriter(m_settings.FieldLogPath, false, Encoding.Unicode);
+
+                    foreach (FieldLogEntry LogEntry in fieldLogEntries)
                     {
-                        //danger: the split method does not care about quoted strings
-                        //replace delimeter characters within quoted strings by \n
-                        try
-                        {
-                            MasqueradeUnwantedDelimeters(true, ',', ref logLine);
-                        }
-                        catch
-                        {
-                        }
-
-                        string[] values = logLine.Split(new Char[] { ',' });
-
-                        try
-                        {
-                            //re-concatenate quoted strings that got splitted because they contained delimeter chars
-                            for (int i = 0; i < values.GetLength(0); i++)
-                            {
-                                values[i] = values[i].Trim();
-
-                                if ((values[i].Length > 1)
-                                    && (values[i].StartsWith("\""))
-                                    && (values[i].EndsWith("\"")))
-                                {
-                                    //string enclosed with "
-                                    values[i] = values[i].Substring(1, values[i].Length - 2);
-                                    values[i] = values[i].Replace("\"\"", "\"");
-                                    values[i] = values[i].Trim();
-                                }
-                                //replace \n again with the delimeter character
-                                MasqueradeUnwantedDelimeters(false, ',', ref values[i]);
-                            }
-                        }
-                        catch
-                        {
-                        }
-
-                        if (values.Length >= 4)
-                        {
-                            FieldLogEntry LogEntry = new FieldLogEntry();
-
-                            LogEntry.CacheId = values[0];
-
-                            try
-                            {
-                                System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                                LogEntry.Timestamp = DateTime.Parse(values[1], usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                            }
-                            catch (Exception ex)
-                            {
-                                m_logger.Debug("Parsing log timestamp failed: " + ex.Message);
-                            }
-
-                            LogEntry.Type = values[2];
-                            LogEntry.Text = values[3];
-
-                            FieldLog.Add(LogEntry);
-                        }
+                        writer.WriteLine(LogEntry.CacheId + "," + LogEntry.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mmZ") + "," + LogEntry.Type + ",\"" + LogEntry.Text + "\"");
                     }
 
-                    logLine = reader.ReadLine();
-                }
+                    writer.Close();
 
-                reader.Close();
 
-                FieldLogForm fieldLogForm = new FieldLogForm();
-                fieldLogForm.FieldLog = FieldLog;
-
-                int count = FieldLog.Count;
-
-                switch (fieldLogForm.ShowDialog())
-                {
-                    case DialogResult.OK:
+                    if (fieldLogForm.FoundCacheIds.Count > 0)
+                    {
+                        if (MessageBox.Show(GcDownload.Strings.PromptArchive, GcDownload.Strings.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            if (fieldLogForm.CacheIdToSearch.Length > 0)
+                            if (!m_settings.IsArchivePathValid)
                             {
-                                textBoxGeocacheId.Text = fieldLogForm.CacheIdToSearch;
-                                Search(fieldLogForm.CacheIdToSearch);
+                                ShowSettings();
                             }
-
-                            if (FieldLog.Count != count)
+                            if (m_settings.IsArchivePathValid)
                             {
-                                string prompt = GcDownload.Strings.PromptDeleteFieldLog;
-
-                                if (FieldLog.Count > 0)
+                                foreach (string GeocacheId in fieldLogForm.FoundCacheIds)
                                 {
-                                    prompt = string.Format(GcDownload.Strings.PromptDeleteFieldLogEntries, count - FieldLog.Count);
-                                }
+                                    string source = System.IO.Path.Combine(m_settings.GpxPath, GeocacheId + ".gpx");
+                                    string target = System.IO.Path.Combine(m_settings.ArchivePath, GeocacheId + ".gpx");
 
-                                if (MessageBox.Show(prompt, GcDownload.Strings.TitleDeleteFieldLog, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                                {
-                                    StreamWriter writer = new StreamWriter(settings.FieldLogPath, false, Encoding.Unicode);
-
-                                    foreach (FieldLogEntry LogEntry in FieldLog)
+                                    try
                                     {
-                                        writer.WriteLine(LogEntry.CacheId + "," + LogEntry.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mmZ") + "," + LogEntry.Type + ",\"" + LogEntry.Text + "\"");
+                                        System.IO.File.Move(source, target);
                                     }
-
-                                    writer.Close();
-
-
-                                    if (fieldLogForm.FoundCacheIds.Count > 0)
+                                    catch (Exception ex)
                                     {
-                                        if (MessageBox.Show(GcDownload.Strings.PromptArchive, GcDownload.Strings.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                                        {
-                                            if (!settings.IsArchivePathValid)
-                                            {
-                                                ShowSettings();
-                                            }
-                                            if (settings.IsArchivePathValid)
-                                            {
-                                                foreach (string GeocacheId in fieldLogForm.FoundCacheIds)
-                                                {
-                                                    string source = System.IO.Path.Combine(settings.GpxPath, GeocacheId + ".gpx");
-                                                    string target = System.IO.Path.Combine(settings.ArchivePath, GeocacheId + ".gpx");
-
-                                                    try
-                                                    {
-                                                        System.IO.File.Move(source, target);
-                                                    }
-                                                    catch (Exception ex)
-                                                    {
-                                                        m_logger.Debug("Archiving file failed: " + source + ", " + ex.Message);
-                                                    }
-                                                }
-
-                                                string message = String.Format(GcDownload.Strings.MessageArchivedToDirectory, fieldLogForm.FoundCacheIds.Count, settings.ArchivePath);
-                                                MessageBox.Show(message, GcDownload.Strings.TitleArchive, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                            };
-                                        }
+                                        m_logger.Debug("Archiving file failed: " + source + ", " + ex.Message);
                                     }
                                 }
-                            }
 
+                                string message = String.Format(GcDownload.Strings.MessageArchivedToDirectory, fieldLogForm.FoundCacheIds.Count, m_settings.ArchivePath);
+                                MessageBox.Show(message, GcDownload.Strings.TitleArchive, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            };
                         }
-                        break;
+                    }
                 }
-
-            }
-            catch (Exception ex)
-            {
-                m_logger.Debug("Reading log file failed: " + ex.Message);
             }
         }
 
@@ -522,15 +333,20 @@ namespace GcDownload
 
             try
             {
-                string[] gcFiles = System.IO.Directory.GetFiles(settings.GpxPath, "gc*.gpx");
-                string[] ocFiles = System.IO.Directory.GetFiles(settings.GpxPath, "oc*.gpx");
+                string[] gcFiles = System.IO.Directory.GetFiles(m_settings.GpxPath, "gc*.gpx");
+                string[] ocFiles = System.IO.Directory.GetFiles(m_settings.GpxPath, "oc*.gpx");
 
-                List<GeocacheGpx> geocacheList = new List<GeocacheGpx>();
+                string[] gpxFiles = new string[gcFiles.Length + ocFiles.Length];
+                gcFiles.CopyTo(gpxFiles, 0);
+                ocFiles.CopyTo(gpxFiles, gcFiles.Length);
 
-                foreach (string filename in gcFiles)
+                var geocacheList = new List<GeocacheGpx>();
+
+                foreach (string filename in gpxFiles)
                 {
-                    GeocacheGpx geocache = new GeocacheGpx();
+                    var geocache = new GeocacheGpx();
                     geocache.ImportFromGpxFile(filename);
+
                     if (geocache.IsValid())
                     {
                         geocacheList.Add(geocache);
@@ -540,57 +356,42 @@ namespace GcDownload
                         MessageBox.Show(string.Format(GcDownload.Strings.ErrorInvalidGpxFile, filename), GcDownload.Strings.TitleGeneric, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     };
                 }
-                foreach (string filename in ocFiles)
+
+                var listCachesForm = new ListCachesForm
                 {
-                    GeocacheGpx geocache = new GeocacheGpx();
-                    geocache.ImportFromGpxFile(filename);
-                    if (geocache.IsValid())
-                    {
-                        geocacheList.Add(geocache);
-                    }
-                    else
-                    {
-                        MessageBox.Show(string.Format(GcDownload.Strings.ErrorInvalidGpxFile, filename), GcDownload.Strings.TitleGeneric, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    };
+                    geocacheList = geocacheList
+                };
+
+                if (listCachesForm.ShowDialog() != DialogResult.OK) return;
+
+                m_chacheIdsToBeDownloaded = listCachesForm.updateCacheIds;
+
+                if (listCachesForm.cacheIdToSearch.Length > 0)
+                {
+                    textBoxGeocacheId.Text = listCachesForm.cacheIdToSearch;
+                    Search(listCachesForm.cacheIdToSearch);
                 }
 
-                ListCachesForm listCachesForm = new ListCachesForm();
-                listCachesForm.geocacheList = geocacheList;
-                switch (listCachesForm.ShowDialog())
+                if (listCachesForm.deletedCacheIds.Count > 0)
                 {
-                    case DialogResult.OK:
+                    if (MessageBox.Show(string.Format(GcDownload.Strings.PromptDeleteGeocacheFiles, listCachesForm.deletedCacheIds.Count.ToString()), GcDownload.Strings.TitleDeleteGeocache, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        foreach (var cacheId in listCachesForm.deletedCacheIds)
                         {
-                            updateCacheIds = listCachesForm.updateCacheIds;
-
-                            if (listCachesForm.cacheIdToSearch.Length > 0)
+                            try
                             {
-                                textBoxGeocacheId.Text = listCachesForm.cacheIdToSearch;
-                                Search(listCachesForm.cacheIdToSearch);
+                                string filename = System.IO.Path.Combine(m_settings.GpxPath, cacheId + ".gpx");
+                                System.IO.File.Delete(filename);
                             }
-
-                            if (listCachesForm.deletedCacheIds.Count > 0)
+                            catch (Exception ex)
                             {
-                                if (MessageBox.Show(string.Format(GcDownload.Strings.PromptDeleteGeocacheFiles, listCachesForm.deletedCacheIds.Count.ToString()), GcDownload.Strings.TitleDeleteGeocache, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                                {
-                                    foreach (string cacheId in listCachesForm.deletedCacheIds)
-                                    {
-                                        try
-                                        {
-                                            string filename = System.IO.Path.Combine(settings.GpxPath, cacheId + ".gpx");
-                                            System.IO.File.Delete(filename);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            m_logger.Debug("Delete file failed: " + ex.Message);
-                                        }
-                                    }
-                                }
+                                m_logger.Debug("Delete file failed: " + ex.Message);
                             }
-
-                            TriggerAutoSearch();
                         }
-                        break;
+                    }
                 }
+
+                TriggerAutoSearch();
             }
             catch (Exception ex)
             {
@@ -606,22 +407,18 @@ namespace GcDownload
 
         private bool EnsureGarminAvailable()
         {
-            if (settings.IsGarminConnected) return true;
-            if (settings.AutoDetectGarmin()) return true;
-            if (ShowSettings()) return true;
-            return false;
+            if (m_settings.IsGarminConnected) return true;
+            if (m_settings.AutoDetectGarmin()) return true;
+
+            return ShowSettings();
         }
 
         private bool ShowSettings()
         {
-            SettingsForm settingsForm = new SettingsForm(ref settings);
-
-            if (settingsForm.ShowDialog() == DialogResult.OK)
+            using (var settingsForm = new SettingsForm(ref m_settings))
             {
-                return true;
+                return (settingsForm.ShowDialog() == DialogResult.OK);
             }
-
-            return false;
         }
 
         private void LinkLabelProjectHomepage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -631,29 +428,25 @@ namespace GcDownload
 
         private void TriggerAutoSearch()
         {
-            if (updateCacheIds.Count > 0)
-            {
-                Search(updateCacheIds[0]);
-            };
+            if (m_chacheIdsToBeDownloaded.Count == 0) return;
+
+            Search(m_chacheIdsToBeDownloaded[0]);
         }
 
         private void TriggerAutoDownload(string url)
         {
-            if (updateCacheIds.Count > 0)
-            {
-                if (url.ToLower().Contains(updateCacheIds[0].ToLower()))
-                {
-                    updateCacheIds.RemoveAt(0);
-                    Download(false);
+            if (m_chacheIdsToBeDownloaded.Count == 0) return;
+            if (!url.ToLower().Contains(m_chacheIdsToBeDownloaded[0].ToLower())) return;
 
-                    if (updateCacheIds.Count > 0)
-                    {
-                        System.Threading.Thread.Sleep(5000);
-                        TriggerAutoSearch();
-                    }
-                }
-            };
+            m_chacheIdsToBeDownloaded.RemoveAt(0);
+            Download(false);
+
+            if (m_chacheIdsToBeDownloaded.Count == 0) return;
+
+            System.Threading.Thread.Sleep(5000);
+            TriggerAutoSearch();
         }
+
     }
 }
 
