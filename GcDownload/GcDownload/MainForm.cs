@@ -46,9 +46,9 @@ namespace GcDownload
 
         public MainForm()
         {
-            m_logger.Debug(GetType().Assembly.GetName().Version.ToString(3));
-            m_logger.Debug(System.Environment.OSVersion.VersionString);
-            m_logger.Debug(System.Environment.Version.ToString());
+            m_logger.Info(GetType().Assembly.GetName().Version.ToString(3));
+            m_logger.Info(System.Environment.OSVersion.VersionString);
+            m_logger.Info(System.Environment.Version.ToString());
 
             InitializeComponent();
 
@@ -69,11 +69,9 @@ namespace GcDownload
 
         private void Search(string geocacheId)
         {
-            m_logger.Debug($"{geocacheId}");
-
             var url = GetCacheUrlFromId(geocacheId);
 
-            m_logger.Debug($"Url: {url}");
+            m_logger.Debug($"ID: {geocacheId}, Url: {url}");
             webBrowserPreview.Navigate(url);
         }
 
@@ -107,55 +105,61 @@ namespace GcDownload
             switch (GetProviderFromUrl(webBrowserPreview.Url.ToString()))
             {
                 case Provider.ProviderGeocachingCom:
-                    {
-                        var geocacheGpx = new GeocacheGpx();
-
-                        geocacheGpx.ImportFromGeocachingCom(webBrowserPreview.Document);
-
-                        if (!geocacheGpx.IsValid())
-                        {
-                            string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected);
-                            MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                            return;
-                        }
-
-                        var fullGpxFilePath = GetFullGpxFilePath(promptForFilename, geocacheGpx.GcId);
-
-                        if (string.IsNullOrEmpty(fullGpxFilePath)) return;
-
-                        try
-                        {
-                            m_logger.Debug("Write to file: " + fullGpxFilePath);
-
-                            using (var writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8))
-                            {
-                                writer.Write(geocacheGpx.ExportToGpx());
-                                writer.Close();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            m_logger.Debug("Writing to file failed: " + ex.Message);
-                        }
-                    }
+                    DownloadFromGeocachingDotCom(promptForFilename);
                     break;
 
                 case Provider.ProviderOpencachingDe:
-                    {
-                        var title = webBrowserPreview.Document.Title;
-                        if (!title.StartsWith("OC")) return;
-
-                        int posBlank = title.IndexOf(" ");
-                        if (posBlank == -1) return;
-
-                        string ocCacheId = title.Substring(0, posBlank);
-                        string filename = GetFullGpxFilePath(promptForFilename, ocCacheId);
-
-                        DownloadViaOkapi(ocCacheId, filename);
-                    }
+                    DownloadFromOpenCachingDe(promptForFilename);
                     break;
             }
+        }
+
+        private void DownloadFromGeocachingDotCom(bool promptForFilename)
+        {
+            var geocacheGpx = new GeocacheGpx();
+
+            geocacheGpx.ImportFromGeocachingCom(webBrowserPreview.Document);
+
+            if (!geocacheGpx.IsValid())
+            {
+                string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected);
+                MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
+            var fullGpxFilePath = GetFullGpxFilePath(promptForFilename, geocacheGpx.GcId);
+
+            if (string.IsNullOrEmpty(fullGpxFilePath)) return;
+
+            try
+            {
+                m_logger.Debug("Write to file: " + fullGpxFilePath);
+
+                using (var writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8))
+                {
+                    writer.Write(geocacheGpx.ExportToGpx());
+                    writer.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                m_logger.Error(ex, "Writing to file failed");
+            }
+        }
+
+        private void DownloadFromOpenCachingDe(bool promptForFilename)
+        {
+            var title = webBrowserPreview.Document.Title;
+            if (!title.StartsWith("OC")) return;
+
+            int posBlank = title.IndexOf(" ");
+            if (posBlank == -1) return;
+
+            string ocCacheId = title.Substring(0, posBlank);
+            string filename = GetFullGpxFilePath(promptForFilename, ocCacheId);
+
+            DownloadViaOkapi(ocCacheId, filename);
         }
 
         public void DownloadViaOkapi(string cacheId, string filename)
@@ -176,7 +180,7 @@ namespace GcDownload
 
             if (promptForFilename)
             {
-                SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog
+                var fileDialog = new SaveFileDialog
                 {
                     InitialDirectory = m_settings.GpxPath,
                     AddExtension = true,
@@ -205,8 +209,6 @@ namespace GcDownload
 
         private void NavigateHome()
         {
-            m_logger.Debug("navigateHome");
-
             var url = comboBoxWebsite.SelectedItem.ToString();
 
             if (string.IsNullOrEmpty(url)) return;
@@ -253,7 +255,7 @@ namespace GcDownload
         {
             if (!EnsureGarminAvailable()) return;
 
-            var fieldLogEntries = FieldLogReader.ReadFieldLog(m_settings.FieldLogPath);
+            var fieldLogEntries = FieldLogSerializer.ReadFieldLog(m_settings.FieldLogPath);
 
             using (FieldLogForm fieldLogForm = new FieldLogForm
             {
@@ -285,7 +287,7 @@ namespace GcDownload
 
                     foreach (FieldLogEntry LogEntry in fieldLogEntries)
                     {
-                        writer.WriteLine(LogEntry.CacheId + "," + LogEntry.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mmZ") + "," + LogEntry.Type + ",\"" + LogEntry.Text + "\"");
+                        writer.WriteLine(LogEntry.code + "," + LogEntry.time + "," + LogEntry.result + ",\"" + LogEntry.comment + "\"");
                     }
 
                     writer.Close();

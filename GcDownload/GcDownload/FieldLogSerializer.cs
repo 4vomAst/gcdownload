@@ -6,7 +6,7 @@ using NLog;
 
 namespace GcDownload
 {
-    public class FieldLogReader
+    public class FieldLogSerializer
     {
         private static Logger m_logger = LogManager.GetCurrentClassLogger();
         public static List<FieldLogEntry> ReadFieldLog(string fieldLogPath)
@@ -59,21 +59,12 @@ namespace GcDownload
                     {
                         var LogEntry = new FieldLogEntry
                         {
-                            CacheId = values[0]
+                            code = values[0],
+                            time = values[1],
+                            result = values[2],
+                            comment = values[3]
                         };
 
-                        try
-                        {
-                            System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                            LogEntry.Timestamp = DateTime.Parse(values[1], usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                        }
-                        catch (Exception ex)
-                        {
-                            m_logger.Debug("Parsing log timestamp failed: " + ex.Message);
-                        }
-
-                        LogEntry.Type = values[2];
-                        LogEntry.Text = values[3];
 
                         fieldLogEntries.Add(LogEntry);
                     }

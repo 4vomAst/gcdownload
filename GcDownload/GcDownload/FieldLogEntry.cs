@@ -28,10 +28,10 @@ namespace GcDownload
 {
     public class FieldLogEntry
     {
-        public string CacheId = "";
-        public DateTime Timestamp = DateTime.Now;
-        public string Type = "Unattempted";
-        public string Text = "";
+        public string code { get; set; }
+        public string time { get; set; }
+        public string result { get; set; }
+        public string comment { get; set; }
     }
 }
 

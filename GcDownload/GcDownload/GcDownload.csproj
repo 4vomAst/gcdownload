@@ -93,7 +93,7 @@
     <Compile Include="FieldLogForm.Designer.cs">
       <DependentUpon>FieldLogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FieldLogReader.cs" />
+    <Compile Include="FieldLogSerializer.cs" />
     <Compile Include="GeocacheGpx.cs" />
     <Compile Include="ListCaches.cs">
       <SubType>Form</SubType>

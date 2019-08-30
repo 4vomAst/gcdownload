@@ -49,12 +49,12 @@ namespace GcDownload
             {
                 foreach (FieldLogEntry logEntry in FieldLog)
                 {
-                    ListViewItem item = new ListViewItem(logEntry.CacheId);
-                    item.SubItems.Add(logEntry.Timestamp.ToLocalTime().ToShortDateString() + " " + logEntry.Timestamp.ToLocalTime().ToShortTimeString());
-                    item.SubItems.Add(logEntry.Type);
-                    item.SubItems.Add(logEntry.Text);
+                    ListViewItem item = new ListViewItem(logEntry.code);
+                    item.SubItems.Add(logEntry.time);
+                    item.SubItems.Add(logEntry.result);
+                    item.SubItems.Add(logEntry.comment);
 
-                    item.Checked = VisitedCacheIds.Contains(logEntry.CacheId);
+                    item.Checked = VisitedCacheIds.Contains(logEntry.code);
 
                     listViewFieldLog.Items.Add(item);
                 }
@@ -103,9 +103,9 @@ namespace GcDownload
         {
             foreach (FieldLogEntry logEntry in FieldLog)
             {
-                if (logEntry.Type.ToLower() == "found it")
+                if (logEntry.result.ToLower() == "found it")
                 {
-                    FoundCacheIds.Add(logEntry.CacheId);
+                    FoundCacheIds.Add(logEntry.code);
                 }
             }
 
@@ -132,14 +132,14 @@ namespace GcDownload
 
                     foreach (FieldLogEntry logEntry in FieldLog)
                     {
-                        if (logEntry.CacheId != item.Text)
+                        if (logEntry.code != item.Text)
                         {
                             continue;
                         }
 
-                        if (logEntry.Type.ToLower() == "found it")
+                        if (logEntry.result.ToLower() == "found it")
                         {
-                            FoundCacheIds.Add(logEntry.CacheId);
+                            FoundCacheIds.Add(logEntry.code);
                         }
 
                         FieldLog.Remove(logEntry);
