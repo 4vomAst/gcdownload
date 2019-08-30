@@ -255,75 +255,69 @@ namespace GcDownload
         {
             if (!EnsureGarminAvailable()) return;
 
-            var fieldLogEntries = FieldLogSerializer.ReadFieldLog(m_settings.FieldLogPath);
+            var fieldLog = new FieldLog();
+            fieldLog.ReadFieldLogXml(m_settings.FieldLogXml);
 
             using (FieldLogForm fieldLogForm = new FieldLogForm
             {
-                FieldLog = fieldLogEntries
+                LogList = fieldLog.LogList
             })
             {
-                int count = fieldLogEntries.Count;
+                int count = fieldLog.LogList.Count;
 
                 if (fieldLogForm.ShowDialog() != DialogResult.OK) return;
 
-                if (fieldLogForm.CacheIdToSearch.Length > 0)
+                if (!string.IsNullOrEmpty(fieldLogForm.CacheIdToSearch))
                 {
                     textBoxGeocacheId.Text = fieldLogForm.CacheIdToSearch;
                     Search(fieldLogForm.CacheIdToSearch);
                 }
 
-                if (fieldLogEntries.Count == count) return;
+                if (fieldLog.LogList.Count == count) return;
 
-                string prompt = GcDownload.Strings.PromptDeleteFieldLog;
+                string prompt;
 
-                if (fieldLogEntries.Count > 0)
+                if (fieldLog.LogList.Count > 0)
                 {
-                    prompt = string.Format(GcDownload.Strings.PromptDeleteFieldLogEntries, count - fieldLogEntries.Count);
+                    prompt = string.Format(GcDownload.Strings.PromptDeleteFieldLogEntries, count - fieldLog.LogList.Count);
+                }
+                else
+                {
+                    prompt = GcDownload.Strings.PromptDeleteFieldLog;
                 }
 
-                if (MessageBox.Show(prompt, GcDownload.Strings.TitleDeleteFieldLog, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(prompt, GcDownload.Strings.TitleDeleteFieldLog, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
+                fieldLog.WriteFieldLogXml(m_settings.FieldLogXml);
+                fieldLog.WriteFieldLogCsv(m_settings.FieldLogCsv);
+
+                if (fieldLogForm.CacheIdsToBeArchived.Count == 0) return;
+
+                if (MessageBox.Show(GcDownload.Strings.PromptArchive, GcDownload.Strings.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
+                if (!m_settings.IsArchivePathValid)
                 {
-                    StreamWriter writer = new StreamWriter(m_settings.FieldLogPath, false, Encoding.Unicode);
+                    if (!ShowSettings()) return;
+                    if (!m_settings.IsArchivePathValid) return;
+                }
 
-                    foreach (FieldLogEntry LogEntry in fieldLogEntries)
+                foreach (string GeocacheId in fieldLogForm.CacheIdsToBeArchived)
+                {
+                    string source = System.IO.Path.Combine(m_settings.GpxPath, GeocacheId + ".gpx");
+                    string target = System.IO.Path.Combine(m_settings.ArchivePath, GeocacheId + ".gpx");
+
+                    try
                     {
-                        writer.WriteLine(LogEntry.code + "," + LogEntry.time + "," + LogEntry.result + ",\"" + LogEntry.comment + "\"");
+                        System.IO.File.Move(source, target);
                     }
-
-                    writer.Close();
-
-
-                    if (fieldLogForm.FoundCacheIds.Count > 0)
+                    catch (Exception ex)
                     {
-                        if (MessageBox.Show(GcDownload.Strings.PromptArchive, GcDownload.Strings.TitleArchive, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        {
-                            if (!m_settings.IsArchivePathValid)
-                            {
-                                ShowSettings();
-                            }
-                            if (m_settings.IsArchivePathValid)
-                            {
-                                foreach (string GeocacheId in fieldLogForm.FoundCacheIds)
-                                {
-                                    string source = System.IO.Path.Combine(m_settings.GpxPath, GeocacheId + ".gpx");
-                                    string target = System.IO.Path.Combine(m_settings.ArchivePath, GeocacheId + ".gpx");
-
-                                    try
-                                    {
-                                        System.IO.File.Move(source, target);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        m_logger.Debug("Archiving file failed: " + source + ", " + ex.Message);
-                                    }
-                                }
-
-                                string message = String.Format(GcDownload.Strings.MessageArchivedToDirectory, fieldLogForm.FoundCacheIds.Count, m_settings.ArchivePath);
-                                MessageBox.Show(message, GcDownload.Strings.TitleArchive, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            };
-                        }
+                        m_logger.Debug("Archiving file failed: " + source + ", " + ex.Message);
                     }
                 }
+
+                string message = String.Format(GcDownload.Strings.MessageArchivedToDirectory, fieldLogForm.CacheIdsToBeArchived.Count, m_settings.ArchivePath);
+                MessageBox.Show(message, GcDownload.Strings.TitleArchive, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

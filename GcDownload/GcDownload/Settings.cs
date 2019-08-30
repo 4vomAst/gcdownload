@@ -51,7 +51,23 @@ namespace GcDownload
         {
             get
             {
-                return GarminRootDir + "garmin\\geocache_visits.txt";
+                return Path.Combine(GarminRootDir, "garmin");
+            }
+        }
+
+        public string FieldLogCsv
+        {
+            get
+            {
+                return Path.Combine(FieldLogPath, "geocache_visits.txt");
+            }
+        }
+
+        public string FieldLogXml
+        {
+            get
+            {
+                return Path.Combine(FieldLogPath, "geocache_logs.xml");
             }
         }
 

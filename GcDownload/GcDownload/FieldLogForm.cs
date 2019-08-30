@@ -30,10 +30,10 @@ namespace GcDownload
 {
     public partial class FieldLogForm : Form
     {
-        public List<FieldLogEntry> FieldLog = new List<FieldLogEntry>();
+        public List<FieldLogEntry> LogList = new List<FieldLogEntry>();
         public string CacheIdToSearch = "";
         static HashSet<string> VisitedCacheIds = new HashSet<string>();
-        public HashSet<string> FoundCacheIds = new HashSet<string>();
+        public HashSet<string> CacheIdsToBeArchived = new HashSet<string>();
 
         public FieldLogForm()
         {
@@ -45,9 +45,9 @@ namespace GcDownload
             CacheIdToSearch = "";
             listViewFieldLog.Items.Clear();
 
-            if (FieldLog.Count > 0)
+            if (LogList.Count > 0)
             {
-                foreach (FieldLogEntry logEntry in FieldLog)
+                foreach (FieldLogEntry logEntry in LogList)
                 {
                     ListViewItem item = new ListViewItem(logEntry.code);
                     item.SubItems.Add(logEntry.time);
@@ -101,15 +101,15 @@ namespace GcDownload
 
         private void ButtonDeleteLog_Click(object sender, EventArgs e)
         {
-            foreach (FieldLogEntry logEntry in FieldLog)
+            foreach (FieldLogEntry logEntry in LogList)
             {
                 if (logEntry.result.ToLower() == "found it")
                 {
-                    FoundCacheIds.Add(logEntry.code);
+                    CacheIdsToBeArchived.Add(logEntry.code);
                 }
             }
 
-            FieldLog.Clear();
+            LogList.Clear();
             DialogResult = DialogResult.OK;
         }
 
@@ -130,7 +130,7 @@ namespace GcDownload
 
                     listViewFieldLog.Items.Remove(item);
 
-                    foreach (FieldLogEntry logEntry in FieldLog)
+                    foreach (FieldLogEntry logEntry in LogList)
                     {
                         if (logEntry.code != item.Text)
                         {
@@ -139,10 +139,10 @@ namespace GcDownload
 
                         if (logEntry.result.ToLower() == "found it")
                         {
-                            FoundCacheIds.Add(logEntry.code);
+                            CacheIdsToBeArchived.Add(logEntry.code);
                         }
 
-                        FieldLog.Remove(logEntry);
+                        LogList.Remove(logEntry);
                         break;
                     }
 
