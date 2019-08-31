@@ -6,7 +6,7 @@ using NLog;
 
 namespace GcDownload
 {
-    public class FieldLog
+    internal class FieldLog
     {
         private static Logger m_logger = LogManager.GetCurrentClassLogger();
 
@@ -20,7 +20,7 @@ namespace GcDownload
             }
         }
 
-        public bool ReadFieldLogXml(string fieldLogXmlFile)
+        internal bool ReadFieldLogXml(string fieldLogXmlFile)
         {
             do
             {
@@ -53,7 +53,7 @@ namespace GcDownload
             return false;
         }
 
-        public bool WriteFieldLogXml(string fieldLogXmlFile)
+        internal bool WriteFieldLogXml(string fieldLogXmlFile)
         {
             if (m_fieldLogEntries?.LogList == null) return true;
 
@@ -76,7 +76,7 @@ namespace GcDownload
             return false;
         }
 
-        public bool WriteFieldLogCsv(string fieldLogCsvFile)
+        internal bool WriteFieldLogCsv(string fieldLogCsvFile)
         {
             if (m_fieldLogEntries?.LogList == null) return true;
 

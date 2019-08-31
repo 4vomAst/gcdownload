@@ -105,20 +105,18 @@ namespace GcDownload
             switch (GetProviderFromUrl(webBrowserPreview.Url.ToString()))
             {
                 case Provider.ProviderGeocachingCom:
-                    DownloadFromGeocachingDotCom(promptForFilename);
+                    DownloadFromGeocaching(promptForFilename);
                     break;
 
                 case Provider.ProviderOpencachingDe:
-                    DownloadFromOpenCachingDe(promptForFilename);
+                    DownloadFromOpenCaching(promptForFilename);
                     break;
             }
         }
 
-        private void DownloadFromGeocachingDotCom(bool promptForFilename)
+        private void DownloadFromGeocaching(bool promptForFilename)
         {
-            var geocacheGpx = new GeocacheGpx();
-
-            geocacheGpx.ImportFromGeocachingCom(webBrowserPreview.Document);
+            var geocacheGpx = GeocachingDownload.ImportFromGeocaching(webBrowserPreview.Document);
 
             if (!geocacheGpx.IsValid())
             {
@@ -148,7 +146,7 @@ namespace GcDownload
             }
         }
 
-        private void DownloadFromOpenCachingDe(bool promptForFilename)
+        private void DownloadFromOpenCaching(bool promptForFilename)
         {
             var title = webBrowserPreview.Document.Title;
             if (!title.StartsWith("OC")) return;
@@ -170,8 +168,10 @@ namespace GcDownload
             url += "&cache_codes=";
             url += cacheId;
 
-            System.Net.WebClient webClient = new System.Net.WebClient();
-            webClient.DownloadFile(url, filename);
+            using (var webClient = new System.Net.WebClient())
+            {
+                webClient.DownloadFile(url, filename);
+            }
         }
 
         string GetFullGpxFilePath(bool promptForFilename, string gcid)

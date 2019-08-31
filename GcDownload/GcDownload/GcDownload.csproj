@@ -96,6 +96,8 @@
     </Compile>
     <Compile Include="FieldLog.cs" />
     <Compile Include="GeocacheGpx.cs" />
+    <Compile Include="GeocachingDownload.cs" />
+    <Compile Include="gpx.cs" />
     <Compile Include="ListCaches.cs">
       <SubType>Form</SubType>
     </Compile>
