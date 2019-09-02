@@ -23,6 +23,27 @@ namespace GcDownload
 
         [XmlElement("wpt")]
         public Waypoint Wpt { get; set; }
+
+        [XmlIgnore]
+        public bool IsValid
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Wpt.Extension.Cache.Name)
+                    || string.IsNullOrEmpty(Wpt.GeocacheID)
+                    || string.IsNullOrEmpty(Wpt.Extension.Cache.PlacedBy)
+                    || string.IsNullOrEmpty(Wpt.Lat)
+                    || string.IsNullOrEmpty(Wpt.Lon)
+                    || (string.IsNullOrEmpty(Wpt.Extension.Cache.ShortDescription.Text) &&
+                       string.IsNullOrEmpty(Wpt.Extension.Cache.LongDescription.Text))
+                    )
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
     }
 
     public class Waypoint
@@ -61,18 +82,16 @@ namespace GcDownload
             Cache = new CacheExtension();
         }
 
-        public CacheExtension Cache {get; set;}
+        [XmlElement("cache", Namespace = "http://www.groundspeak.com/cache/1/0")]
+        public CacheExtension Cache { get; set; }
     }
 
-    [XmlRoot(Namespace = "http://www.groundspeak.com/cache/1/0",
-         ElementName = "cache",
-         IsNullable = false)]
     public class CacheExtension
     {
         public CacheExtension()
         {
-            ShortDescription = new CacheDescription() { IsHtmlContent = "False" };
-            LongDescription = new CacheDescription() { IsHtmlContent = "False" };
+            ShortDescription = new CacheDescription();
+            LongDescription = new CacheDescription();
             Logs = new List<Log>();
         }
 
@@ -85,54 +104,67 @@ namespace GcDownload
         [XmlAttribute(AttributeName = "archived")]
         public string Archived { get; set; }
 
-        [XmlElement("time")]
+        [XmlElement("time", Order = 1)]
         public string Time { get; set; }
 
-        [XmlElement("name")]
+        [XmlElement("name", Order = 2)]
         public string Name { get; set; }
 
-        [XmlElement("placed_by")]
+        [XmlElement("placed_by", Order = 3)]
         public string PlacedBy { get; set; }
 
-        [XmlElement("type")]
+        [XmlElement("type", Order = 4)]
         public string GeocacheType { get; set; }
 
-        [XmlElement("container")]
+        [XmlElement("container", Order = 5)]
         public string Container { get; set; }
 
-        [XmlElement("difficulty")]
+        [XmlElement("difficulty", Order = 6)]
         public string Difficulty { get; set; }
 
-        [XmlElement("terrain")]
+        [XmlElement("terrain", Order = 7)]
         public string Terrain { get; set; }
 
-        [XmlElement("short_description")]
+        [XmlElement("short_description", Order = 8)]
         public CacheDescription ShortDescription { get; set; }
 
-        [XmlElement("long_description")]
+        [XmlElement("long_description", Order = 9)]
         public CacheDescription LongDescription { get; set; }
 
-        [XmlElement("encoded_hints")]
+        [XmlElement("encoded_hints", Order = 10)]
         public string EncodedHints { get; set; }
 
-        [XmlElement("logs")]
+        [XmlArrayItem(ElementName = "log", IsNullable = true, Type = typeof(Log))]
+        [XmlArray(ElementName = "logs", Order = 11)]
         public List<Log> Logs;
     }
 
     public class CacheDescription
     {
-        [XmlAttribute(AttributeName = "html")]
-        public string IsHtmlContent;
+        private string html;
+        private string element_text;
 
-        public string Content;
+        [XmlAttribute(AttributeName = "html")]
+        public string Html
+        {
+            get { return html; }
+            set { html = value; }
+        }
+
+        [XmlText()]
+        public string Text
+        {
+            get { return element_text; }
+            set { element_text = value; }
+        }
     }
 
     public class Log
     {
         public Log()
         {
+            Text = new LogDescription();
             Finder = new LogFinder();
-            Text = new LogText() { Encoded = "False" };
         }
 
         [XmlAttribute(AttributeName = "id")]
@@ -148,18 +180,46 @@ namespace GcDownload
         public LogFinder Finder { get; set; }
 
         [XmlElement("text")]
-        public LogText Text { get; set; }
+        public LogDescription Text { get; set; }
+    }
+
+    public class LogDescription
+    {
+        private string encoded;
+        private string element_text;
+
+        [XmlAttribute("encoded")]
+        public string Encoded
+        {
+            get { return encoded; }
+            set { encoded = value; }
+        }
+
+        [XmlText()]
+        public string Text
+        {
+            get { return element_text; }
+            set { element_text = value; }
+        }
     }
 
     public class LogFinder
     {
-        [XmlAttribute(AttributeName = "id")]
-        public string Id;
-    }
+        private string id;
+        private string element_text;
 
-    public class LogText
-    {
-        [XmlAttribute(AttributeName = "encoded")]
-        public string Encoded;
+        [XmlAttribute(AttributeName = "id")]
+        public string Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
+        [XmlText()]
+        public string Name
+        {
+            get { return element_text; }
+            set { element_text = value; }
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace GcDownload
 {
     public partial class ListCachesForm : Form
     {
-        public List<GeocacheGpx> geocacheList = new List<GeocacheGpx>();
+        internal List<GeocacheGpx> geocacheList = new List<GeocacheGpx>();
         public string cacheIdToSearch = "";
         public List<string> deletedCacheIds = new List<string>();
         public List<string> updateCacheIds = new List<string>();

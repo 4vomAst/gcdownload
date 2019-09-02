@@ -118,7 +118,7 @@ namespace GcDownload
         {
             var geocacheGpx = GeocachingDownload.ImportFromGeocaching(webBrowserPreview.Document);
 
-            if (!geocacheGpx.IsValid())
+            if (!geocacheGpx.IsValid)
             {
                 string message = String.Format(GcDownload.Strings.ErrorNoGeocachePageSelected);
                 MessageBox.Show(message, GcDownload.Strings.TitleDownload, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -133,12 +133,7 @@ namespace GcDownload
             try
             {
                 m_logger.Debug("Write to file: " + fullGpxFilePath);
-
-                using (var writer = new StreamWriter(fullGpxFilePath, false, Encoding.UTF8))
-                {
-                    writer.Write(geocacheGpx.ExportToGpx());
-                    writer.Close();
-                }
+                geocacheGpx.WriteGpxFile(fullGpxFilePath);
             }
             catch (Exception ex)
             {
@@ -340,10 +335,9 @@ namespace GcDownload
 
                 foreach (string filename in gpxFiles)
                 {
-                    var geocache = new GeocacheGpx();
-                    geocache.ImportFromGpxFile(filename);
+                    var geocache = new GeocacheGpx(filename);
 
-                    if (geocache.IsValid())
+                    if (geocache.IsValid)
                     {
                         geocacheList.Add(geocache);
                     }

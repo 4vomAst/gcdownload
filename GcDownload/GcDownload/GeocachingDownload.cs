@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NLog;
@@ -21,7 +22,7 @@ namespace GcDownload
             {
                 try
                 {
-                    geocacheGpx.Name = document.GetElementById("ctl00_ContentBody_CacheName").InnerText;
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Name = document.GetElementById("ctl00_ContentBody_CacheName").InnerText;
                 }
                 catch (Exception ex)
                 {
@@ -32,7 +33,7 @@ namespace GcDownload
                 {
                     //GcId = document.GetElementById("ctl00_uxWaypointName").InnerText;
                     //GcId = document.GetElementById("ctl00_ContentBody_uxWaypointName").InnerText;
-                    geocacheGpx.GcId = document.GetElementById("ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode").InnerText;
+                    geocacheGpx.m_gpx.Wpt.GeocacheID = document.GetElementById("ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode").InnerText;
                 }
                 catch (Exception ex)
                 {
@@ -44,8 +45,8 @@ namespace GcDownload
                     bool foundDifficulty = false;
                     bool foundTerrain = false;
 
-                    geocacheGpx.Difficulty = "1";
-                    geocacheGpx.Terrain = "1";
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Difficulty = "1";
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Terrain = "1";
 
                     foreach (HtmlElement element in document.GetElementsByTagName("img"))
                     {
@@ -61,12 +62,12 @@ namespace GcDownload
                             {
                                 if (!foundDifficulty)
                                 {
-                                    geocacheGpx.Difficulty = alternate.Substring(0, alternate.Length - searchStringAlt.Length);
+                                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Difficulty = alternate.Substring(0, alternate.Length - searchStringAlt.Length);
                                     foundDifficulty = true;
                                 }
                                 else if (!foundTerrain)
                                 {
-                                    geocacheGpx.Terrain = alternate.Substring(0, alternate.Length - searchStringAlt.Length);
+                                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Terrain = alternate.Substring(0, alternate.Length - searchStringAlt.Length);
                                     foundTerrain = true;
                                 }
                                 else
@@ -86,15 +87,18 @@ namespace GcDownload
 
                 try
                 {
-                    geocacheGpx.Container = "Small";
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Container = "Small";
                     foreach (HtmlElement element in document.GetElementsByTagName("img"))
                     {
-                        string alternate = element.GetAttribute("alt");
-                        string searchString = "Size: ";
+                        string src = element.GetAttribute("src");
 
-                        if (alternate.StartsWith(searchString))
+                        var regEx = new Regex(@"/images/icons/container/(?<containerSize>[a-zA-Z]+).gif");
+                        var matches = regEx.Matches(src);
+
+                        if (matches.Count > 0)
                         {
-                            geocacheGpx.Container = alternate.Substring(searchString.Length);
+                            Match match = matches[0];
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.Container = match.Groups["containerSize"].Value;
                             break;
                         }
                     }
@@ -106,7 +110,7 @@ namespace GcDownload
 
                 try
                 {
-                    geocacheGpx.Type = "Traditional Cache";
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.GeocacheType = "Traditional Cache";
 
                     var cacheImage = document.GetElementById("uxCacheImage").InnerHtml;
                     var posTitle = cacheImage.IndexOf("<title>");
@@ -114,18 +118,20 @@ namespace GcDownload
 
                     if ((posTitle != -1) && (posTitleEnd != -1))
                     {
-                        geocacheGpx.Type = cacheImage.Substring(posTitle + 7, posTitleEnd - posTitle - 7);
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.GeocacheType = cacheImage.Substring(posTitle + 7, posTitleEnd - posTitle - 7);
                     }
-
                 }
                 catch (Exception ex)
                 {
                     m_logger.Debug("Extract type failed: " + ex.Message);
                 }
 
+                geocacheGpx.m_gpx.Wpt.WaypointType = "Geocache|" + geocacheGpx.m_gpx.Wpt.Extension.Cache.GeocacheType;
+                geocacheGpx.m_gpx.Wpt.WaypointSymbol = "Geocache";
+
                 try
                 {
-                    geocacheGpx.NumericCacheId = "";
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber = "";
                     foreach (HtmlElement element in document.Links)
                     {
                         string alternate = element.GetAttribute("href");
@@ -134,22 +140,22 @@ namespace GcDownload
 
                         if (alternate.StartsWith(searchString))
                         {
-                            geocacheGpx.NumericCacheId = alternate.Substring(searchString.Length);
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber = alternate.Substring(searchString.Length);
                             break;
                         }
                         else if (alternate.StartsWith(searchString2))
                         {
-                            geocacheGpx.NumericCacheId = alternate.Substring(searchString2.Length);
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber = alternate.Substring(searchString2.Length);
                             break;
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(geocacheGpx.NumericCacheId) && geocacheGpx.NumericCacheId.Contains("&"))
+                    if (!string.IsNullOrEmpty(geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber) && geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber.Contains("&"))
                     {
-                        geocacheGpx.NumericCacheId = geocacheGpx.NumericCacheId.Substring(0, geocacheGpx.NumericCacheId.IndexOf("&"));
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber = geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber.Substring(0, geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber.IndexOf("&"));
                     }
 
-                    if (string.IsNullOrEmpty(geocacheGpx.NumericCacheId)) geocacheGpx.NumericCacheId = geocacheGpx.Name;
+                    if (string.IsNullOrEmpty(geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber)) geocacheGpx.m_gpx.Wpt.Extension.Cache.IdNumber = geocacheGpx.m_gpx.Wpt.GeocacheID;
                 }
                 catch (Exception ex)
                 {
@@ -158,15 +164,16 @@ namespace GcDownload
 
                 try
                 {
-                    if (document.Body.InnerText.Contains("This cache is temporarily unavailable."))
+                    if (document.Body.InnerText.Contains("This cache is temporarily unavailable.")
+                        || document.Body.InnerText.Contains("This cache has been archived"))
                     {
-                        geocacheGpx.Available = false;
-                        geocacheGpx.Archived = true;
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.Available = "False";
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.Archived = "True";
                     }
-                    else if (document.Body.InnerText.Contains("This cache has been archived"))
+                    else
                     {
-                        geocacheGpx.Available = false;
-                        geocacheGpx.Archived = false;
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.Available = "True";
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.Archived = "False";
                     }
                 }
                 catch (Exception ex)
@@ -176,7 +183,7 @@ namespace GcDownload
 
                 try
                 {
-                    geocacheGpx.Author = "";
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.PlacedBy = "";
                     foreach (HtmlElement element in document.Links)
                     {
                         string url = element.GetAttribute("href");
@@ -185,12 +192,12 @@ namespace GcDownload
 
                         if (url.StartsWith(searchString))
                         {
-                            geocacheGpx.Author = element.InnerText;
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.PlacedBy = element.InnerText;
                             break;
                         }
                         else if (url.StartsWith(searchString2))
                         {
-                            geocacheGpx.Author = element.InnerText;
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.PlacedBy = element.InnerText;
                             break;
                         }
                     }
@@ -209,9 +216,10 @@ namespace GcDownload
                     if (document.Body.InnerText.IndexOf(searchString) == -1) searchString = "Versteckt : ";
                     int posDate = document.Body.InnerText.IndexOf(searchString) + searchString.Length;
                     int lenDate = document.Body.InnerText.IndexOf(" ", posDate) - posDate;
-                    string Date = document.Body.InnerText.Substring(posDate, lenDate);
+                    string dateString = document.Body.InnerText.Substring(posDate, lenDate);
                     System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                    geocacheGpx.Timestamp = DateTime.Parse(Date, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
+                    var timestamp = DateTime.Parse(dateString, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.Time = timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z");
                 }
                 catch (Exception ex)
                 {
@@ -222,13 +230,18 @@ namespace GcDownload
                 {
                     var mapLinks = document.GetElementById("ctl00_ContentBody_MapLinks_MapLinks");
                     var mapLink = mapLinks.FirstChild.FirstChild;
-                    geocacheGpx.LatLon = mapLink.InnerHtml;
 
                     //"<a href=\"https://www.geocaching.com/play/map?lat=49.03842&amp;lng=8.38852\" target=\"_blank\" rel=\"noopener noreferrer\">Geocaching.com-Karte</a>"
 
-                    geocacheGpx.LatLon = geocacheGpx.LatLon.Replace("<a href=\"https://www.geocaching.com/play/map?lat=", "lat=\"");
-                    geocacheGpx.LatLon = geocacheGpx.LatLon.Replace("&amp;lng=", "\" lon=\"");
-                    geocacheGpx.LatLon = geocacheGpx.LatLon.Substring(0, geocacheGpx.LatLon.IndexOf(" target="));
+                    var regEx = new Regex(@"lat=(?<latitude>[\d\.]+).*lng=(?<longitude>[\d\.]+)");
+                    var matches = regEx.Matches(mapLink.InnerHtml);
+
+                    if (matches.Count > 0)
+                    {
+                        Match match = matches[0];
+                        geocacheGpx.m_gpx.Wpt.Lat = match.Groups["latitude"].Value;
+                        geocacheGpx.m_gpx.Wpt.Lon = match.Groups["longitude"].Value;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -248,7 +261,8 @@ namespace GcDownload
                         }
                         if (weAreClose && (metaEntry.GetAttribute("name") == "description"))
                         {
-                            geocacheGpx.ShortDescription = metaEntry.GetAttribute("content");
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.ShortDescription.Text = metaEntry.GetAttribute("content");
+                            geocacheGpx.m_gpx.Wpt.Extension.Cache.ShortDescription.Html = "False";
                             break;
                         }
                     }
@@ -261,7 +275,8 @@ namespace GcDownload
 
                 try
                 {
-                    geocacheGpx.LongDescription = document.GetElementById("ctl00_ContentBody_LongDescription").InnerText;
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.LongDescription.Text = document.GetElementById("ctl00_ContentBody_LongDescription").InnerText;
+                    geocacheGpx.m_gpx.Wpt.Extension.Cache.LongDescription.Html = "False";
                 }
                 catch (Exception ex)
                 {
@@ -273,14 +288,15 @@ namespace GcDownload
                     HtmlElement element = document.GetElementById("div_hint");
                     if ((element != null) && (element.InnerText != null))
                     {
-                        string EncryptedHint = element.InnerText;
-                        geocacheGpx.Hint = Decrypt(EncryptedHint);
+                        geocacheGpx.m_gpx.Wpt.Extension.Cache.EncodedHints = Decrypt(element.InnerText);
                     }
                 }
                 catch (Exception ex)
                 {
                     m_logger.Debug("Extract hint failed: " + ex.Message);
                 }
+
+                geocacheGpx.m_gpx.Wpt.WaypointDesc = $"{geocacheGpx.Name} by {geocacheGpx.Author}, {geocacheGpx.m_gpx.Wpt.Extension.Cache.GeocacheType}";
 
                 try
                 {
@@ -305,52 +321,47 @@ namespace GcDownload
                         {
                             try
                             {
-                                LogEntry logEntry = new LogEntry();
+                                var logEntry = new Log();
                                 int startValPos = pos + logTypeMagic.Length;
                                 int endValPos = logsString.IndexOf("\",", startValPos);
-                                logEntry.Type = logsString.Substring(startValPos, endValPos - startValPos);
+                                logEntry.LogType = logsString.Substring(startValPos, endValPos - startValPos);
 
                                 pos = logsString.IndexOf(logTextMagic, pos);
                                 startValPos = pos + logTextMagic.Length;
                                 endValPos = logsString.IndexOf("\",", startValPos);
-                                logEntry.Text = logsString.Substring(startValPos, endValPos - startValPos);
+                                logEntry.Text.Text = logsString.Substring(startValPos, endValPos - startValPos);
 
                                 pos = logsString.IndexOf(logTimestampMagic, pos);
                                 startValPos = pos + logTimestampMagic.Length;
                                 endValPos = logsString.IndexOf("\",", startValPos);
 
-                                try
-                                {
-                                    System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
-                                    logEntry.Timestamp = DateTime.Parse(logsString.Substring(startValPos, endValPos - startValPos), usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                                }
-                                catch (Exception ex)
-                                {
-                                    m_logger.Debug("Extract log timestamp failed: " + ex.Message);
-                                };
+                                string dateString = logsString.Substring(startValPos, endValPos - startValPos);
+                                System.Globalization.DateTimeFormatInfo usDateTimeformat = new System.Globalization.CultureInfo("en-US", false).DateTimeFormat;
+                                var timestamp = DateTime.Parse(dateString, usDateTimeformat, System.Globalization.DateTimeStyles.AssumeUniversal);
+                                logEntry.LogDate = timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.0Z");
 
                                 pos = logsString.IndexOf(logUserNameMagic, pos);
                                 startValPos = pos + logUserNameMagic.Length;
                                 endValPos = logsString.IndexOf("\",", startValPos);
-                                logEntry.FinderName = logsString.Substring(startValPos, endValPos - startValPos);
+                                logEntry.Finder.Name = logsString.Substring(startValPos, endValPos - startValPos);
 
                                 pos = logsString.IndexOf(logIsEncodedMagic, pos);
                                 startValPos = pos + logIsEncodedMagic.Length;
                                 endValPos = logsString.IndexOf(",", startValPos);
-                                logEntry.TextEncoded = logsString.Substring(startValPos, endValPos - startValPos);
+                                logEntry.Text.Encoded = logsString.Substring(startValPos, endValPos - startValPos);
 
-                                if (logEntry.TextEncoded == "True")
+                                if (logEntry.Text.Encoded == "True")
                                 {
-                                    if (logEntry.Text.EndsWith("(decrypt)"))
+                                    if (logEntry.Text.Text.EndsWith("(decrypt)"))
                                     {
-                                        logEntry.Text = logEntry.Text.Substring(0, logEntry.Text.Length - 9);
+                                        logEntry.Text.Text = logEntry.Text.Text.Substring(0, logEntry.Text.Text.Length - 9);
                                     }
-                                    logEntry.Text = Decrypt(logEntry.Text);
+                                    logEntry.Text.Text = Decrypt(logEntry.Text.Text);
                                 };
 
                                 logEntry.Id = iLogId.ToString();
-                                logEntry.FinderId = iFinderId.ToString();
-                                geocacheGpx.Log.Add(logEntry);
+                                logEntry.Finder.Id = iFinderId.ToString();
+                                geocacheGpx.m_gpx.Wpt.Extension.Cache.Logs.Add(logEntry);
                                 iLogId++;
                                 iFinderId++;
                             }
